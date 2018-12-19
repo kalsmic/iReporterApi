@@ -7,4 +7,7 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
 
 [![Build Status](https://travis-ci.com/kalsmic/iReporterApi.svg?branch=api)](https://travis-ci.com/kalsmic/iReporterApi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2b2df2ba4fc8d8138ab4/maintainability)](https://codeclimate.com/github/kalsmic/iReporterApi/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/kalsmic/iReporterApi/badge.svg?branch=develop)](https://coveralls.io/github/kalsmic/iReporterApi?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/kalsmic/iReporterApi/badge.svg?branch=api)](https://coveralls.io/github/kalsmic/iReporterApi?branch=api)
+
+
+ [Link to api on Herokuo api](https://ireporterapiv1.herokuapp.com/)
