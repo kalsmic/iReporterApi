@@ -1,7 +1,7 @@
 from flask import (
     Blueprint, jsonify, request, json
 )
-from api.models.user import User, check_if_user_exists, sign_up_user
+from api.models.user import User, check_if_user_exists, sign_up_user,is_valid_credentials
 
 users_bp = Blueprint('users_bp', __name__, url_prefix='/api/v1')
 
@@ -71,3 +71,45 @@ def register():
         "status": 201,
         "data": new_user.get_user_details()
     }), 201
+
+@users_bp.route("/auth/login", methods=['POST'])
+def login():
+    """Expects Parameters:
+        username: String
+        password:string
+    """
+
+    if not request.data:
+        return jsonify({
+            'error': "Please provide valid data",
+            "status": 400
+        }), 400
+
+    user_credentials = json.loads(request.data)
+    try:
+        username = user_credentials['username']
+        password = user_credentials['password']
+
+        # submit credentials
+        data = is_valid_credentials(username,password)
+        if data:
+            return jsonify({
+                'data':{"userid":data},
+                "status": 200,
+                "message":"Logged in successfully"
+            }), 200
+        return jsonify({
+            'error': "Invalid credentials",
+            "status": 401
+        }), 401
+
+       
+    except KeyError:
+       return jsonify({
+            'error': "Please provide the correct keys for the data",
+            "status": 400
+        }), 400
+
+    
+
+
