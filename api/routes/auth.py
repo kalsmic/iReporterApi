@@ -1,8 +1,13 @@
 from flask import (
     Blueprint, jsonify, request, json
 )
-from api.models.user import User, check_if_user_exists, sign_up_user,is_valid_credentials
-
+from api.models.user import(
+     User,
+      check_if_user_exists,
+       sign_up_user,
+       is_valid_credentials
+)
+from api.auth_helpers import encode_token
 users_bp = Blueprint('users_bp', __name__, url_prefix='/api/v1')
 
 
@@ -94,7 +99,7 @@ def login():
         data = is_valid_credentials(username,password)
         if data:
             return jsonify({
-                'data':{"userid":data},
+                "access_token":data,
                 "status": 200,
                 "message":"Logged in successfully"
             }), 200

@@ -6,13 +6,15 @@ from flask import (
     jsonify,
     json
 )
+
+
 from werkzeug.security import (
     generate_password_hash,
     check_password_hash
 )
 
 from datetime import date
-
+from api.auth_helpers import encode_token
 
 class User:
     """class defines the user data structure"""
@@ -85,7 +87,7 @@ class User:
         elif not re.search("[A-Z]", self.password):
             error= "Password must contain atleast one upper case letter"
         elif not re.search("[0-9]", self.password):
-            error "Password must contain atleast one number"
+            error ="Password must contain atleast one number"
         elif not re.search("[a-z]", self.password):
             error= "Password must contain atleast lower case letter"
         return error
@@ -119,3 +121,9 @@ def sign_up_user(user_obj):
     # Add user object to the list
     users.append(user_obj)
 
+def is_valid_credentials(username,password):
+    for user in users:
+        if user.username == username and check_password_hash(user.password,password):
+            return str(encode_token(user.id))
+ 
+  
