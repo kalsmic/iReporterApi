@@ -39,7 +39,8 @@ class User:
             "phoneNumber": self.phoneNumber,
             "username": self.username,
             "registered":self.registered,
-            "isAdmin": self.isAdmin
+            "isAdmin": self.isAdmin,
+        
         }
 
     def set_user_id(self, value):
@@ -85,11 +86,14 @@ class User:
             return "Password must contain atleast one number"
         elif not re.search("[a-z]", self.password):
             return "Password must contain atleast lower case letter"
+    
+
+   
 
 
+        
 #  or not re.search("[0-9]", self.password)
 users = []
-username_object_dictionary = {user.userName: user for user in users}
 email_object_dictionary = {user.email: user for user in users}
 
 user_id_object_dictionary = {user.id: user for user in users}
@@ -114,4 +118,13 @@ def sign_up_user(user_obj):
 
     # Add user object to the list
     users.append(user_obj)
+
+
+def is_valid_credentials(username,password):
+    for user in users:
+        if user.username == username and check_password_hash(user.password,password):
+            print(username)
+            return user.id
+       
+
 

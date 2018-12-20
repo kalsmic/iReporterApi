@@ -1,5 +1,4 @@
 from flask import json
-from api.models.user import users,User,username_object_dictionary
 
 mimetype = 'application/json'
 headers = {
