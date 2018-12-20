@@ -8,3 +8,4 @@ def test_index(client):
         data = json.loads(response.data.decode())
         expected = "Welcome to iReporter"
         assert data['welcome'] == expected
+
