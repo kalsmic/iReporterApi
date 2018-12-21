@@ -1,7 +1,9 @@
 """Contains function that creates the app"""
 from flask import Flask, jsonify
-from config import Config
+
 from api.routes.auth import users_bp
+from api.routes.incidents import red_flags_bp
+from config import Config
 
 
 def create_app(config="None"):
@@ -14,6 +16,7 @@ def create_app(config="None"):
         return jsonify({"welcome": "Welcome to iReporter"""}), 200
 
     app.register_blueprint(users_bp)
+    app.register_blueprint(red_flags_bp)
 
     return app
 
