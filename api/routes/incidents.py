@@ -9,7 +9,7 @@ from api.helpers import (
     request_data_required)
 
 red_flags_bp = Blueprint('red_flags_bp', __name__, url_prefix='/api/v1')
-from api.models.incident import RedFlag, check_if_red_flag_exists
+from api.models.incident import RedFlag, check_if_red_flag_exists,get_all_record
 
 
 @red_flags_bp.route('/red-flags', methods=['POST'])
@@ -34,4 +34,12 @@ def new_red_flag():
         return jsonify({"status": 400, "error": "Red-flag record already exists"}), 400
     red_flags_data.add_red_flag()
 
-    return jsonify({"status": 200, "data": red_flags_data.get_details()}), 200
+    return jsonify({"status": 201, "data": red_flags_data.get_details(), "message":"success"}), 201
+
+@red_flags_bp.route('/red-flags', methods=['GET'])
+@token_required
+def get_all_red_flags():
+    return jsonify({
+        "status": 200,
+        "data": get_all_record()}), 200
+
