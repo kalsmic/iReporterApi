@@ -49,7 +49,6 @@ def token_required(func):
 
     return wrapper
 
-
 def request_data_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -64,10 +63,3 @@ def request_data_required(func):
 
 def get_current_identity():
     return decode_token(extract_token_from_header())['userid']
-
-
-if __name__ == "__main__":
-    token = encode_token(1)
-    print("Bearer " + str(token))
-    print(token)
-    print(decode_token(str(token)))
