@@ -7,14 +7,16 @@ from werkzeug.security import (
     check_password_hash
 )
 
-from api.helpers import encode_token
+from api.helpers import encode_token,get_current_identity,decode_token
 
+users = []
 
 class User:
     """class defines the user data structure"""
+    Id = 0
 
     def __init__(self, **kwargs):
-        self.id = None
+        self.id = User.Id + 1
         self.firstname = kwargs['firstname']
         self.lastname = kwargs['lastname']
         self.othernames = kwargs['othernames']
@@ -23,7 +25,7 @@ class User:
         self.password = kwargs['password']
         self.username = kwargs["username"]
         self.registered = date.today()
-        self.isAdmin = False
+        self.isAdmin = 0
 
     def get_user_details(self):
         return {
@@ -86,11 +88,6 @@ class User:
         return error
 
 
-users = []
-username_object_dictionary = {user.userName: user for user in users}
-email_object_dictionary = {user.email: user for user in users}
-
-user_id_object_dictionary = {user.id: user for user in users}
 
 
 def check_if_user_exists(new_user_object):
@@ -107,7 +104,7 @@ def sign_up_user(user_obj):
     # hash user's password
     user_obj.password = generate_password_hash(user_obj.password, method='sha256')
     # assign user id
-    user_obj.id = len(users) + 1
+    User.Id += 1
 
     # Add user object to the list
     users.append(user_obj)
@@ -116,10 +113,32 @@ def sign_up_user(user_obj):
 def is_valid_credentials(username, password):
     for user in users:
         if user.username == username and check_password_hash(user.password, password):
-            return encode_token(user.id)
+            if user.isAdmin==1:
+                return encode_token(user.id,1)
+            return encode_token(user.id,0)
+
 
 # create an adnin user since there's no option for signing him up
 admin = User(firstname='Administrator',lastname='admin',email='admin@ireporter.com',phoneNumber='07731235678',
              password='Password123', username='admin',othernames="")
-admin.isAdmin =  True
+admin.isAdmin =  1
 sign_up_user(admin)
+
+user1 = User(firstname='userOne',lastname='userone',email='userOne@ireporter.com',phoneNumber='07731235678',
+             password='Password123', username='user1',othernames="")
+sign_up_user(user1)
+user2 = User(firstname='userTwo',lastname='usertwo',email='userTwo@ireporter.com',phoneNumber='07731235678',
+             password='Password123', username='user2',othernames="")
+sign_up_user(user2)
+
+def check_if_is_admin():
+    user_id =get_current_identity()
+    for user in users:
+        if user.id == user_id and  user.username =="admin":
+            return  True
+    return False
+
+
+user_object_by_id_dict = {user.id: user for user in users}
+email_object_dictionary = {user.email: user for user in users}
+username_object_dictionary = {user.username: user for user in users}
