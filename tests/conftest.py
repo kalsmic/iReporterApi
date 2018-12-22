@@ -20,3 +20,7 @@ def client(app):
       application without running the server.
     """
     return app.test_client()
+
+
+
+

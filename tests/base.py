@@ -1,31 +1,40 @@
 from flask import json
-from api.helpers import encode_token
-from api.models.user import users, User
+from api.app import create_app
+from api.helpers import decode_token
 
-user1 = User(firstname='Micheal',lastname='kan',othernames='Omoding',email='user1@email.com',
-             phoneNumber='07731245678',password='Password123', username='user1')
-user2 = User(firstname='Joan',lastname='Atim',othernames='Keira',email='user2@email.com',
-             phoneNumber='07731354678',password='Password123', username='user2')
-user3 = User(firstname='Micheal',lastname='kan',othernames='Omoding',email='user1@email.com',
-             phoneNumber='077312940678',password='Password123', username='user3')
-user1_id = user1.id
-user2_id = user2.id
-user3_id = user3.id
+app = create_app({'TESTING': True})
+client = app.test_client()
 
-users.extend([user1,user2,user3])
+admin_response = client.post('/api/v1/auth/login', data=json.dumps({"username": "admin", "password": "Password123"}))
+admin_token = json.loads(admin_response.data.decode())["token"]
+mimetype = 'application/json'
 
+admin_header = {
+    'Content-Type': mimetype,
+    'Authorization': 'Bearer ' + admin_token
+}
 
-def generate_token(id):
-    token = encode_token(id)
-    mimetype = 'application/json'
+user1_response = client.post('/api/v1/auth/login',
+                             data=json.dumps({"username": "user1", "password": "Password123"}))
+user1_token = json.loads(user1_response.data.decode())["token"]
 
-    headers = {
-        'Content-Type': mimetype,
-        'Authorization': 'Bearer ' + token
-    }
-    return headers
-user1_header = generate_token(user1_id)
-user2_header = generate_token(user2_id)
-user3_header = generate_token(user3_id)
-# admin_header = generate_token(users[0])
+user1_header = {
+    'Content-Type': mimetype,
+    'Authorization': 'Bearer ' + user1_token
+}
 
+user2_response = client.post('/api/v1/auth/login',
+                             data=json.dumps({"username": "user2", "password": "Password123"}))
+user2_token = json.loads(user1_response.data.decode())["token"]
+
+user2_header = {
+    'Content-Type': mimetype,
+    'Authorization': 'Bearer ' + user2_token
+}
+
+admin_user_id = decode_token(admin_token)['userid']
+user1_id = decode_token(user1_token)['userid']
+user2_id = decode_token(user2_token)['userid']
+client.post("api/v1/red-flags",
+            headers=user1_header,
+            data=json.dumps({"location": "12.767 277", "comment": "my first red flag incident"}))
