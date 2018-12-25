@@ -2,7 +2,7 @@ from flask import json
 
 from api.helpers.responses import wrong_description
 from .base import admin_header, user2_header, user1_header
-
+from api.models.incident import red_flags
 new_record = {
         "title":"My First red flag",
         "description":"Lorem ipsum eiusmod temport labore et dolore magna",
@@ -150,9 +150,60 @@ def test_get_a_red_flag(client):
     assert data["data"][0][0]["comments"][0]["body"] == "Lorem ipsum dolor sit amet, consectetur adipiscing"
     assert data["data"][0][0]["comments"][0]["commentBy"] == 1
 
-def test_get_a_red_flag_with_invvalid_id(client):
+def test_get_a_red_flag_with_invalid_id(client):
     response = client.get("api/v1/red-flags/fs", headers=user2_header)
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
     assert data["error"] == "Red-flag id must be an integer"
+
+def test_edit_a_red_flag_location_without_a_token(client):
+    response = client.patch("api/v1/red-flags/1/location")
+    assert response.status_code == 401
+    data = json.loads(response.data.decode())
+    assert data["status"] == 401
+    assert data["error"] == "Invalid Token verification failed"
+
+def test_edit_a_red_flag_location_which_does_not_exist(client):
+    response = client.patch("api/v1/red-flags/12/location",headers=user1_header,data=json.dumps({"location": [12,12]}))
+    assert response.status_code == 404
+    data = json.loads(response.data.decode())
+    assert data["status"] == 404
+    assert data["error"] == "Red-flag record does not exist"
+
+def test_edit_a_red_flag_location_which_does_not_belong_to_user(client):
+    response = client.patch("api/v1/red-flags/1/location",headers=user2_header,data=json.dumps({"location": [12,12]}))
+    assert response.status_code == 403
+    data = json.loads(response.data.decode())
+    assert data["status"] == 403
+    assert data["error"] == "You're not allowed to modify this resource"
+
+def test_edit_a_red_flag_location_with_invalir_red_flag_id(client):
+    response = client.patch("api/v1/red-flags/df/location",headers=user2_header,data=json.dumps({"location": [12,12]}))
+    assert response.status_code == 400
+    data = json.loads(response.data.decode())
+    assert data["status"] == 400
+    assert data["error"] == "Red-flag id must be an number"
+
+def test_edit_a_red_flag_location_status_of_draft(client):
+    response = client.patch("api/v1/red-flags/1/location",headers=user1_header,data=json.dumps({"location": [12,12]}))
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert data["data"][0]["message"] == "Updated red-flag record’s location"
+    assert data["data"][0]["id"] == 1
+
+def test_edit_a_red_flag_location_with_invalid_location_coordinates(client):
+    response = client.patch("api/v1/red-flags/1/location",headers=user1_header,data=json.dumps({"location": [-90,12]}))
+    assert response.status_code == 400
+    data = json.loads(response.data.decode())
+    assert data["status"] == 400
+    assert data["error"] ==  "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
+
+def test_edit_a_red_flag_location_status_other_than_draft(client):
+    red_flags[0].status = "under investigation"
+    response = client.patch("api/v1/red-flags/1/location",headers=user1_header,data=json.dumps({"location": [12,12]}))
+    assert response.status_code == 403
+    data = json.loads(response.data.decode())
+    assert data["status"] == 403
+    assert data["error"] == "You're not allowed to modify this resource"

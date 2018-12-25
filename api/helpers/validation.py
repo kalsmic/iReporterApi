@@ -2,7 +2,7 @@
 import re
 from functools import wraps
 
-from flask import jsonify, request
+from flask import jsonify, request, json
 
 from api.helpers.responses import (
     expected_new_incident_format,
@@ -11,7 +11,6 @@ from api.helpers.responses import (
     wrong_email,
     wrong_phone_number,
     wrong_name,
-    wrong_title,
     wrong_description,
 )
 
@@ -27,6 +26,15 @@ def request_data_required(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def is_valid_id(record_id):
+    try:
+        int(record_id)
+    except ValueError:
+        return False
+    return True
+
 
 def is_number(num_value):
     """Checks if num_value is a number"""
@@ -229,3 +237,12 @@ def validate_new_incident(**kwargs):
             400,
         )
     return None
+
+
+def validate_edit_location(data):
+    error = None
+    if not data:
+        error = "Please provide a valid location"
+    else:
+        error = validate_location(json.loads(data).get("location"))
+    return error
