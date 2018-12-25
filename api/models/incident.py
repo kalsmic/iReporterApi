@@ -1,109 +1,129 @@
 from datetime import datetime
 
-from api.helpers import get_current_identity
-from api.models.user import check_if_is_admin
+red_flag_id = 1
+red_flags = []
+comment_id = 1
+comments = []
+
+time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
 
 class Incident:
-
-    def __init__(self, **kwargs):
-        self.id = None
-        self.location = kwargs['location']
-        self.Images = []
-        self.Videos = []
-        self.createdOn = datetime.utcnow()
-        self.createdBy = get_current_identity()
-        self.type = None
+    def __init__(self, title, description, **kwargs):
+        self.title = title
+        self.description = description
+        self.tags = kwargs.get("tags", [])
+        self.images = kwargs.get("images", [])
+        self.videos = kwargs.get("videos", [])
+        self.location = kwargs.get("location", {"Lat": "", "Long": ""})
+        self.created_on = time_now
+        self.created_by = kwargs.get("user_id")
         self.status = "draft"
-        self.comment = kwargs['comment']
+        # self.comment = kwargs.get('comment')
 
     def get_details(self):
         return {
-            "id": self.id,
-            "createdOn": self.createdOn,
-            "createdBy": self.createdBy,
-            "type": self.type,
+            "title": self.title,
+            "description": self.description,
+            "createdOn": self.created_on,
+            "createdBy": self.created_by,
             "location": self.location,
             "status": self.status,
-            "Images": self.Images,
-            "Videos": self.Videos,
-            "comment": self.comment
-
+            "Images": self.images,
+            "Videos": self.videos,
+            "tags": self.tags,
         }
-
-    def validate_location(self):
-        location = str(self.location)
-        error = None
-        coordinates = self.location.split(' ')
-
-        if not location or not isinstance(location, str):
-            error = "Provide a location"
-        elif not len(coordinates) == 2:
-            error = "location must contain both latitude and longitude"
-        return error
-
-    def validate_comment(self):
-        error = None
-
-        if not self.comment:
-            error = "Please provide a comment"
-        elif not isinstance(self.comment, str):
-            error = "Comment must be a string"
-        return error
 
 
 class RedFlag(Incident):
-    flags_id = 1
+    def __init__(self, title, description, **kwargs):
+        global red_flag_id
+        self.incident_id = red_flag_id
+        self.incident_type = "Red-flag"
+        super().__init__(title, description, **kwargs)
+        red_flag_id += 1
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.type = "Red-flags"
+    def get_details(self):
+        details = super().get_details()
+        details["id"] = self.incident_id
+        details["type"] = self.incident_type
+        details["comments"] = get_incident_comments(self.incident_id)
 
-
-    def add_red_flag(self):
-        self.id = RedFlag.flags_id
-
-        red_flags.append(self)
-        RedFlag.flags_id += 1
-
-
-red_flags = []
-
-
-def check_if_new_red_flag_exists(red_flag_obj):
-    for red_flag in red_flags:
-        if red_flag.comment == red_flag_obj.comment and red_flag.location == red_flag_obj.location:
-            return True
-    return False
-
-def get_all_record():
-    user_id = get_current_identity()
-
-    if check_if_is_admin():
-        records =  [red_flag.get_details() for red_flag in red_flags ]
-    else:
-        records =  [red_flag.get_details() for red_flag in red_flags
-                    if red_flag.createdBy == user_id]
-    return records
+        return details
 
 
-def get_a_specific_red_flag(id):
-    # isAdmin = check_if_is_admin()
-    # user_id = get_current_identity()
+class Comment:
+    def __init__(self, incident_id, owner_id, body):
+        global comment_id
+        self.comment_id = comment_id
+        self.incident_id = incident_id
+        self.owner = owner_id
+        self.body = body
+        self.created_on = time_now
+        comment_id += 1
 
-    for red_flag in red_flags:
-        if red_flag.id == id:# and isAdmin==1:
-            return  red_flag.get_details()
-    return None
-            # break
-        # elif red_flag.id and not isAdmin==1 and red_flag.createdBy == user_id:
-        #     record = red_flag.get_details()
-        # else:
-        #     record = None
-    # return record
+    def get_details(self):
+        return {
+            "id": self.comment_id,
+            "incidentId": self.incident_id,
+            "commentBy": self.owner,
+            "body": self.body,
+            "createOn": self.created_on,
+        }
 
 
-red_flags_id_table = {red_flag.id: red_flag for red_flag in red_flags}
-def record_exists(id):
-    if id in red_flags_id_table.keys():
-        return True
+records = {"red-flag": {"db": red_flags, "id": red_flag_id}}
+
+
+def get_incident_record(record_id, collection):
+    """Returns a redflag or Intervention record"""
+    return [
+        record.get_details() for record in collection if record.incident_id == record_id
+    ]
+
+
+def get_all_incident_records(collection):
+    """ Parameter:Expects Intervention collection
+        Returns: all red-flags if collection is red-flags else
+        Returns: interventions if collection is interventions
+    """
+    return [record.get_details() for record in collection]
+
+
+def get_incident_obj_by_id(incident_id, collection):
+    return [record for record in collection if record.incident_id == incident_id]
+
+
+def incident_record_exists(title, description, collection):
+    return [
+        record
+        for record in collection
+        if record.title == title and record.description == description
+    ]
+
+
+def get_comment_obj_by_id(comment_id, incident_id):
+    return [
+        comment_obj
+        for comment_obj in comments
+        if comment_obj.incident_id == incident_id
+        and comment_obj.comment_id == comment_id
+    ]
+
+
+def get_incident_comments(incident_id):
+    """Returns comments for a given incident record"""
+    return [
+        comment.get_details()
+        for comment in comments
+        if comment.incident_id == incident_id
+    ]
+
+
+def get_incident_comments(incident_id):
+    """Returns comments for a given incident record"""
+    return [
+        comment.get_details()
+        for comment in comments
+        if comment.incident_id == incident_id
+    ]

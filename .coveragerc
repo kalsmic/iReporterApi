@@ -10,4 +10,4 @@ omit =
     */__init__.py
     tests/*
     */api/models/*
-    */api/auth_helpers.py
+    */api/helpers/*
