@@ -28,15 +28,6 @@ def request_data_required(func):
 
     return wrapper
 
-
-def is_valid_id(record_id):
-    try:
-        int(record_id)
-    except ValueError:
-        return False
-    return True
-
-
 def is_number(num_value):
     """Checks if num_value is a number"""
     if isinstance(num_value, int) or isinstance(num_value, float):
@@ -135,13 +126,6 @@ def validate_comment(comment, edit=0):
         error = "Comment can not be blank"
     elif not is_string(comment):
         error = "Comment must be a string"
-    return error
-
-
-def validate_title(title):
-    error = wrong_title
-    if title != "" and is_string(title):
-        error = None
     return error
 
 
