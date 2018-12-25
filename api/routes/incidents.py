@@ -11,8 +11,14 @@ from api.models.incident import (
     comments,
     get_incident_record,
     get_all_incident_records,
+    get_incident_obj_by_id,
 )
-from api.helpers.validation import validate_new_incident
+from api.helpers.validation import (
+    validate_new_incident,
+    request_data_required,
+    is_valid_id,
+    validate_edit_location,
+)
 
 from api.helpers.responses import expected_new_incident_format
 
@@ -109,3 +115,49 @@ def get_a_red_flag(red_flag_id):
     if results:
         return jsonify({"status": 200, "data": [results]}), 200
     return (jsonify({"status": 404, "error": "Red-flag record does not exist"}), 404)
+
+
+@red_flags_bp.route("/red-flags/<red_flag_id>/location", methods=["PATCH"])
+@token_required
+def edit_red_flag_location(red_flag_id):
+    record_id = red_flag_id
+
+    if not is_valid_id(record_id):
+        return jsonify({"error": "Red-flag id must be an number", "status": 400}), 400
+
+    data = request.data
+    is_invalid = validate_edit_location(data)
+
+    if is_invalid:
+        return (jsonify({"error": is_invalid, "status": 400}), 400)
+
+    results = get_incident_obj_by_id(int(record_id), red_flags)
+
+    if not results:
+        return (
+            jsonify({"status": 404, "error": "Red-flag record does not exist"}),
+            404,
+        )
+
+    if results.created_by == get_current_identity() and results.status == "draft":
+        location = json.loads(data).get("location")
+
+        results.location = location
+        return (
+            jsonify(
+                {
+                    "status": 200,
+                    "data": [
+                        {
+                            "id": results.incident_id,
+                            "message": "Updated red-flag record’s location",
+                        }
+                    ],
+                }
+            ),
+            200,
+        )
+    return (
+        jsonify({"status": 403, "error": "You're not allowed to modify this resource"}),
+        403,
+    )
