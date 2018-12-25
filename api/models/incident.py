@@ -91,7 +91,10 @@ def get_all_incident_records(collection):
 
 
 def get_incident_obj_by_id(incident_id, collection):
-    return [record for record in collection if record.incident_id == incident_id]
+    for record in collection:
+        if record.incident_id == incident_id:
+            return record
+    return None
 
 
 def incident_record_exists(title, description, collection):
