@@ -1,232 +1,91 @@
 from flask import json
 
-mimetype = 'application/json'
-headers = {
-    'Content-Type': mimetype,
-    'Accept': mimetype
-}
+from api.helpers.responses import (
+    wrong_name,
+    wrong_password,
+    wrong_phone_number,
+    duplicate_user_name,
+    duplicate_email
 
-valid_user ={
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"kalule@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "kalsmic",
-        "password":"Password123"
-    }
-duplicate_username ={
-    "firstname":"arthur",
-    "lastname":"kalule",
-    "othernames":"Gerald",
-    "email":"kaluse@gmail.com",
-    "phoneNumber": "0772019937",
-    "username": "kalsmic",
-    "password":"Password123"
+)
+
+mimetype = "application/json"
+headers = {"Content-Type": mimetype, "Accept": mimetype}
+
+new_user_data =  {
+    "firstname":"3",
+    "lastname":"John David",
+    "email":"userOnehireporter.com",
+    "phoneNumber":"07f73125678",
+    "password":"password",
+    "username":"ur1",
+    "othernames":"4"
 }
-duplicate_email ={
-    "firstname":"arthur",
-    "lastname":"kalule",
-    "othernames":"Gerald",
-    "email":"kalule@gmail.com",
-    "phoneNumber": "0772019937",
-    "username": "Nelson",
-    "password":"Password123"
-}
+data_with_wrong_keys ={
+                "firstname": "Arthur",
+                "lastname": "kalule",
+                "otherames": "Gerald",
+                "email": "kalulearthur@gmail.com",
+                "firstname": "Arthur",
+                "lastname": "Kalule",
+                "othernames": "Gerald",
+                "phoneNumber": "0772019937",
+                "username": "arthur",
+            }
 
 def test_register_with_no_data(client):
-    response = client.post('api/v1/auth/register',headers=headers)
+    response = client.post("api/v1/auth/register", headers=headers)
     assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data["error"] == "Provide provide valid data"
+    data = json.loads(response.data.decode())
+    assert data["error"] == "Provide provide valid data to register"
 
 
 def test_register_with_wrong_key(client):
-    """test register with wrong key in data"""
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"Arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"kalulearthur@gmail.com",
-        "firstname": "Arthur",
-        "lastname": "Kalule",
-        "othernames":"Gerald",
-        "phoneNumber": "0772019937",
-        "username": "arthur"
-    }))
+    response = client.post("api/v1/auth/register", headers=headers, data=json.dumps(data_with_wrong_keys)  )
+    assert response.status_code == 422
+    data = json.loads(response.data.decode())
+    assert data["error"] == "Please provide the correct keys for the data"
+#
+#
+def test_register_with_wrong_invalid_format_data(client):
+
+    response = client.post("api/v1/auth/register", headers=headers, data=json.dumps(new_user_data))
     assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] == "Please provide the correct keys for the data"
+    data = json.loads(response.data.decode())
+    assert (data["error"]["firstname"] == wrong_name)
+    assert (data["error"]["lastname"] == wrong_name)
+    assert (data["error"]["othernames"] == wrong_name)
+    assert (data["error"]["password"] == wrong_password)
+    assert (data["error"]["phoneNumber"] == wrong_phone_number)
 
-def test_register_with_invalid_or_missing(client):
-    """test register with missing or invalid"""
-    # blank first name
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"kalulearthur@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "arthur",
-        "password":"Password123"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] ==f"""Name fields cannot be empty or contain any space or number character"""
+def test_register_with_wrong_valid_format_data(client):
 
-    # number in lastname
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"k5alule",
-        "othernames":"Gerald",
-        "email":"kalulearthur@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "arthur",
-        "password":"Password123"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] ==f"""Name fields cannot be empty or contain any space or number character"""
+    new_user_data["firstname"] = "John"
+    new_user_data["lastname"] = "David"
+    new_user_data["othernames"] = "Mark"
+    new_user_data["username"] = "JDMark123"
+    new_user_data["email"] = "jdmark@email.com"
+    new_user_data["phoneNumber"] = "0772123123"
+    new_user_data["password"] = "Password123"
 
-    # no username
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"kalulearthur@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "",
-        "password":"Password123"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] ==f"""username cannot be empty or contain any a space in it"""
-
-    # wrong email
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "username",
-        "password":"Password123"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] ==f"""please provide a valid email"""
+    response = client.post("api/v1/auth/register", headers=headers, data=json.dumps(new_user_data))
+    assert response.status_code == 201
+    data = json.loads(response.data.decode())
+    # assert data["data"]["email"] == "email@gmail.com"
+    # assert data["data"]["is_admin"] == False
+    assert data["data"][0]["message"]== "Account created Successfully"
+    assert data["data"][0]["id"]== 4
 
 
-    # test phonenumber with characters in it
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"email@gmail.com",
-        "phoneNumber": "0u72019937",
-        "username": "username",
-        "password":"Password123"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] ==f"phoneNumber must be a string of ten numbers only"
+def test_register_duplicate_user(client):
 
-# test password has less than 8 characters 
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"email@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "username",
-        "password":""
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] =="Password Must contain a Minimum 8 characters."
+    response = client.post("api/v1/auth/register", headers=headers, data=json.dumps(new_user_data))
+    assert response.status_code == 409
+    data = json.loads(response.data.decode())
+    assert data["error"] == duplicate_email
 
-    # test password combination 
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"email@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "username",
-        "password":"uhhjhhjj"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] == "Password must contain atleast one upper case letter"
-
-    # test password is a combination of letters and numbers
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"email@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "username",
-        "password":"Passssword"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] =="Password must contain atleast one number"
-
-    # test password contains lower case letter
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"email@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "username",
-        "password":"PASSWORD1223"
-    }))
-    assert response.status_code == 400
-    data= json.loads(response.data.decode()) 
-    assert data['error'] =="Password must contain atleast lower case letter"
-
-    # test register user with correct data
-def test_register_with_valid(client):
-  
-    response = client.post('api/v1/auth/register',headers=headers,
-    data=json.dumps( {
-        "firstname":"arthur",
-        "lastname":"kalule",
-        "othernames":"Gerald",
-        "email":"kalule@gmail.com",
-        "phoneNumber": "0772019937",
-        "username": "kalsmic",
-        "password":"Password123"
-    }))
-    assert response.status_code ==201
-    data= json.loads(response.data.decode()) 
-    assert data['data']['email'] == "kalule@gmail.com"
-    assert data['data']['isAdmin'] == False
-    assert data['data']['phoneNumber'] == "0772019937"
-
- # test register user 
-def test_register_with_duplicate_user(client):
-  
-    response = client.post('api/v1/auth/register',headers=headers,
-     data=json.dumps( duplicate_username))
-    assert response.status_code ==403
-    data= json.loads(response.data.decode()) 
-    assert data['error']== 'Username already taken'
-    response = client.post('api/v1/auth/register',headers=headers,
-     data=json.dumps( duplicate_email))
-    assert response.status_code ==403
-    data= json.loads(response.data.decode()) 
-    assert data['error']== "Email address exists"
-
+    new_user_data["email"] = "jdmark2@email.com"
+    response = client.post("api/v1/auth/register", headers=headers, data=json.dumps(new_user_data))
+    assert response.status_code == 409
+    data = json.loads(response.data.decode())
+    assert data["error"] == duplicate_user_name
