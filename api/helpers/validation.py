@@ -209,7 +209,6 @@ def validate_location(location):
 
 def validate_new_user(*args, **kwargs):
     errors = {}
-    not_valid = {}
     errors["firstname"] = validate_name(kwargs["first_name"])
     errors["lastname"] = validate_name(kwargs["last_name"])
     errors["othernames"] = validate_name(kwargs["other_names"], 0)
@@ -225,7 +224,6 @@ def validate_new_user(*args, **kwargs):
 
 def validate_new_incident(**kwargs):
     errors = {}
-    not_valid = {}
     errors["title"] = validate_sentence(kwargs.get("title"), 1, 4, 100)
     errors["description"] = validate_description(kwargs.get("description"))
     errors["location"] = validate_location(kwargs.get("location"))
@@ -247,6 +245,3 @@ def validate_new_incident(**kwargs):
             400,
         )
     return None
-
-
-print(validate_sentence("", 1, 4, 100))
