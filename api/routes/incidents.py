@@ -5,14 +5,11 @@ from api.helpers.auth_token import token_required, non_admin, get_current_identi
 red_flags_bp = Blueprint("red_flags_bp", __name__, url_prefix="/api/v1")
 from api.models.incident import (
     RedFlag,
-    Comment,
     incident_record_exists,
     red_flags,
-    comments,
     get_incident_record,
     get_all_incident_records,
     get_incident_obj_by_id,
-    get_comment_obj_by_id,
 )
 from api.helpers.validation import (
     validate_new_incident,
@@ -42,43 +39,27 @@ def new_red_flag():
         )
     data = json.loads(request.data)
 
-    title = data.get("title")
-    tags = data.get("tags")
-    description = data.get("description")
-    images = data.get("Images", "")
-    videos = data.get("Videos", "")
-    location = data.get("location", "")
-    comment = data.get("comment", "")
 
-    not_valid = validate_new_incident(
-        title=title,
-        description=description,
-        location=location,
-        comment=comment,
-        tags=tags,
-        images=images,
-        videos=videos,
-    )
+    new_red_flag_data = {
+        "title" : data.get("title"),
+        "description" : data.get("description"),
+        "location":data.get("location"),
+        "comment" : data.get("comment"),
+        "tags" :data.get("tags"),
+        "images" : data.get("Images"),
+        "videos" :data.get("Videos")
+    }
+
+
+    not_valid = validate_new_incident(**new_red_flag_data)
 
     if not_valid:
         return not_valid
 
-    if not incident_record_exists(title, description, red_flags):
-        new_record = RedFlag(
-            title=title,
-            description=description,
-            location=location,
-            tags=tags,
-            videos=videos,
-            images=images,
-            user_id=get_current_identity(),
-        )
+    if not incident_record_exists(new_red_flag_data["title"], new_red_flag_data["description"], red_flags):
+        new_red_flag_data["user_id"] = get_current_identity()
+        new_record = RedFlag(**new_red_flag_data)
         red_flags.append(new_record)
-        if comment:
-            new_comment = Comment(
-                new_record.incident_id, get_current_identity(), comment
-            )
-            comments.append(new_comment)
 
         return (
             jsonify(
@@ -96,6 +77,7 @@ def new_red_flag():
         )
 
     return jsonify({"status": 409, "error": "Red-flag record already exists"}), 409
+
 
 
 @red_flags_bp.route("/red-flags", methods=["GET"])
@@ -169,10 +151,10 @@ def edit_red_flag_location(red_flag_id):
     )
 
 
-@red_flags_bp.route("/red-flags/<red_flag_id>/comment/<comment_id>", methods=["PATCH"])
+@red_flags_bp.route("/red-flags/<red_flag_id>/comment", methods=["PATCH"])
 @token_required
 @request_data_required
-def edit_red_flag_comment(red_flag_id, comment_id):
+def edit_red_flag_comment(red_flag_id):
     record_id = red_flag_id
     if not is_valid_id(record_id):
         return jsonify({"error": "Red-flag id must be an number", "status": 400}), 400
@@ -187,11 +169,8 @@ def edit_red_flag_comment(red_flag_id, comment_id):
     if is_invalid:
         return (jsonify({"error": is_invalid, "status": 400}), 400)
 
-    comment_id, incident_id = int(comment_id), int(red_flag_id)
-    comment_results = get_comment_obj_by_id(
-        comment_id=comment_id, incident_id=incident_id
-    )
-    incident_results = get_incident_obj_by_id(int(record_id), red_flags)
+    incident_id = int(red_flag_id)
+    incident_results = get_incident_obj_by_id(int(incident_id), red_flags)
 
     response = None
     if not incident_results or not incident_results.incident_id == incident_id:
@@ -199,7 +178,13 @@ def edit_red_flag_comment(red_flag_id, comment_id):
             jsonify({"status": 404, "error": "Red-flag record does not exist"}),
             404,
         )
-
+    elif not incident_results.created_by == get_current_identity():
+        response = (
+            jsonify(
+                {"status": 403, "error": "You can only edit comments created by you"}
+            ),
+            403,
+        )
     elif not incident_results.status == "draft":
         response = (
             jsonify(
@@ -210,11 +195,9 @@ def edit_red_flag_comment(red_flag_id, comment_id):
             ),
             403,
         )
-    elif not comment_results:
-        response = (jsonify({"status": 404, "error": "Comment does not exist"}), 404)
-    elif comment_results.comment_by == get_current_identity():
+    else:
         comment = json.loads(data).get("comment")
-        comment_results.body = comment
+        incident_results.comment = comment
 
         response = (
             jsonify(
@@ -222,8 +205,7 @@ def edit_red_flag_comment(red_flag_id, comment_id):
                     "status": 200,
                     "data": [
                         {
-                            "commentId": comment_results.comment_id,
-                            "redFlagId": comment_results.incident_id,
+                            "id": incident_results.incident_id,
                             "message": "Updated red-flag record’s comment",
                         }
                     ],
@@ -232,12 +214,5 @@ def edit_red_flag_comment(red_flag_id, comment_id):
             200,
         )
 
-    else:
-        response = (
-            jsonify(
-                {"status": 403, "error": "You can only edit comments created by you"}
-            ),
-            403,
-        )
-
     return response
+#

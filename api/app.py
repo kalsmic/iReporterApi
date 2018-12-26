@@ -1,5 +1,5 @@
 """Contains function that creates the app"""
-from flask import Flask, jsonify
+from flask import Flask
 
 from api.routes.auth import users_bp
 from api.routes.incidents import red_flags_bp
