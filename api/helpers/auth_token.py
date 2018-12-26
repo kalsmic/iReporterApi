@@ -30,7 +30,10 @@ def decode_token(token):
 def extract_token_from_header():
     authorizaton_header = request.headers.get("Authorization")
     if not authorizaton_header or "Bearer" not in authorizaton_header:
-        return (jsonify({"error": "Bad authorization header", "status": 400}), 400)
+        return (
+            jsonify({"error": "Bad authorization header", "status": 400}),
+            400,
+        )
     token = str(authorizaton_header).split(" ")[1]
     return token
 
@@ -45,15 +48,24 @@ def token_required(func):
             response = func(*args, **kwargs)
         except jwt.DecodeError:
             response = (
-                jsonify({"error": "Missing access token in header", "status": 401}),
+                jsonify(
+                    {"error": "Missing access token in header", "status": 401}
+                ),
                 401,
             )
-
         except jwt.ExpiredSignatureError:
-            response = (jsonify({"error": "Signature has expired", "status": 401}), 401)
+            response = (
+                jsonify({"error": "Signature has expired", "status": 401}),
+                401,
+            )
         except jwt.InvalidTokenError:
             response = (
-                jsonify({"error": "Invalid Token verification failed", "status": 401}),
+                jsonify(
+                    {
+                        "error": "Invalid Token verification failed",
+                        "status": 401,
+                    }
+                ),
                 401,
             )
         return response
@@ -75,7 +87,12 @@ def non_admin(func):
 
         if get_current_role():
             return (
-                jsonify({"error": "Admin cannot access this resource", "status": 403}),
+                jsonify(
+                    {
+                        "error": "Admin cannot access this resource",
+                        "status": 403,
+                    }
+                ),
                 403,
             )
         return func(*args, **kwargs)
