@@ -40,8 +40,8 @@ Open the terminal and run the following commands
    
 ## How to run tests
 
-* Open terminal from root folder of the project.
-* Enter the command below in the terminal to run the tests with coverage using pytest
+  * Open terminal from root folder of the project.
+  * Enter the command below in the terminal to run the tests with coverage using pytest
 
 ```bash
   pytest --cov
