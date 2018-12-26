@@ -2,8 +2,6 @@ from datetime import datetime
 
 red_flag_id = 1
 red_flags = []
-comment_id = 1
-comments = []
 
 time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -19,7 +17,7 @@ class Incident:
         self.created_on = time_now
         self.created_by = kwargs.get("user_id")
         self.status = "draft"
-        # self.comment = kwargs.get('comment')
+        self.comment = kwargs.get('comment')
 
     def get_details(self):
         return {
@@ -28,6 +26,7 @@ class Incident:
             "createdOn": self.created_on,
             "createdBy": self.created_by,
             "location": self.location,
+            "comment":self.comment,
             "status": self.status,
             "Images": self.images,
             "Videos": self.videos,
@@ -47,30 +46,8 @@ class RedFlag(Incident):
         details = super().get_details()
         details["id"] = self.incident_id
         details["type"] = self.incident_type
-        details["comments"] = get_incident_comments(self.incident_id)
 
         return details
-
-
-class Comment:
-    def __init__(self, incident_id, owner_id, body):
-        global comment_id
-        self.comment_id = comment_id
-        self.incident_id = incident_id
-        self.comment_by = owner_id
-        self.body = body
-        self.created_on = time_now
-        comment_id += 1
-
-    def get_details(self):
-        return {
-            "commentId": self.comment_id,
-            "incidentId": self.incident_id,
-            "commentBy": self.comment_by,
-            "body": self.body,
-            "createOn": self.created_on,
-        }
-
 
 records = {"red-flag": {"db": red_flags, "id": red_flag_id}}
 
@@ -99,26 +76,9 @@ def get_incident_obj_by_id(incident_id, collection):
 
 def incident_record_exists(title, description, incident_results):
     for incident_result in incident_results:
-        if incident_result.title == title and incident_result.description == description:
+        if (
+            incident_result.title == title
+            and incident_result.description == description
+        ):
             return True
     return False
-
-
-def get_comment_obj_by_id(comment_id, incident_id):
-    for comment_obj in comments:
-        if (
-            comment_obj.incident_id == incident_id
-            and comment_obj.comment_id == comment_id
-        ):
-            return comment_obj
-    return None
-
-
-def get_incident_comments(incident_id):
-    """Returns comments for a given incident record"""
-    return [
-        comment.get_details()
-        for comment in comments
-        if comment.incident_id == incident_id
-    ]
-

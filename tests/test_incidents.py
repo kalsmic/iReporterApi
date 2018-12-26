@@ -162,8 +162,7 @@ def test_get_a_red_flag(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert data["data"][0][0]["Images"] == ['image1.jpg', 'image2.jpg']
-    assert data["data"][0][0]["comments"][0]["body"] == "Lorem ipsum dolor sit amet, consectetur adipiscing"
-    assert data["data"][0][0]["comments"][0]["commentBy"] == 2
+    assert data["data"][0][0]["comment"] == "Lorem ipsum dolor sit amet, consectetur adipiscing"
 
 def test_get_a_red_flag_with_invalid_id(client):
     response = client.get("api/v1/red-flags/fs", headers=user2_header)
@@ -227,28 +226,28 @@ def test_edit_a_red_flag_location_status_other_than_draft(client):
 # EDIT A RED-FLAG RECORD'S COMMENT
 #
 def test_edit_a_red_flag_comment_without_a_token(client):
-    response = client.patch("api/v1/red-flags/2/comment/2",)
+    response = client.patch("api/v1/red-flags/2/comment",)
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["status"] == 401
     assert data["error"] == "Invalid Token verification failed"
 
 def test_edit_a_red_flag_comment_with_an_invalid_red_flag_id(client):
-    response = client.patch("api/v1/red-flags/f/comment/2",headers=user1_header,data = json.dumps({"comment": "I disagree"}))
+    response = client.patch("api/v1/red-flags/f/comment",headers=user1_header,data = json.dumps({"comment": "I disagree"}))
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
     assert data["error"] == "Red-flag id must be an number"
-
+#
 def test_edit_a_red_flag_comment_without_comment_data(client):
-    response = client.patch("api/v1/red-flags/f/comment/2",headers=user1_header)
+    response = client.patch("api/v1/red-flags/f/comment",headers=user1_header)
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
     assert data["error"] == "Please provide valid input data"
-
+#
 def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(client):
-    response = client.patch("api/v1/red-flags/10/comment/2",headers=user1_header,data = json.dumps({"comment": "I disagree"}))
+    response = client.patch("api/v1/red-flags/10/comment",headers=user1_header,data = json.dumps({"comment": "I disagree"}))
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["status"] == 404
@@ -256,7 +255,7 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(clie
 
 
 def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(client):
-    response = client.patch("api/v1/red-flags/2/comment/2",headers=user1_header,data = json.dumps({"comment": ""}))
+    response = client.patch("api/v1/red-flags/2/comment",headers=user1_header,data = json.dumps({"comment": ""}))
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
@@ -264,45 +263,48 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(cl
 
 
 
-def test_edit_a_red_flag_comment_for_a_red_flag_record_with_a_comment_id_which_does_not_exist(client):
+# def test_edit_a_red_flag_comment_for_a_red_flag_record_with_a_comment_id_which_does_not_exist(client):
     # create another redflag record to test editing a comment functionality
-
+#
     response = client.post("api/v1/red-flags", headers=user2_header, data=json.dumps(second_record))
     assert response.status_code == 201
     data = json.loads(response.data.decode())
-
-
-
-    response = client.patch("api/v1/red-flags/2/comment/1",headers=user2_header,data = json.dumps({"comment": "I diasgree"}))
-    assert response.status_code == 404
-    data = json.loads(response.data.decode())
-    assert data["status"] == 404
-    assert data["error"] == "Comment does not exist"
-
-
+#
+#
+#
+#     response = client.patch("api/v1/red-flags/2/comment/1",headers=user2_header,data = json.dumps({"comment": "I diasgree"}))
+#     assert response.status_code == 404
+#     data = json.loads(response.data.decode())
+#     assert data["status"] == 404
+#     assert data["error"] == "Comment does not exist"
+#
+#
 def test_edit_a_red_flag_comment_created_by_another_user(client):
 
-    response = client.patch("api/v1/red-flags/2/comment/2",headers=user1_header,data = json.dumps({"comment": "I diasgree"}))
+    response = client.patch("api/v1/red-flags/2/comment",headers=user1_header,data = json.dumps({"comment": "I diasgree"}))
     assert response.status_code == 403
     data = json.loads(response.data.decode())
     assert data["status"] == 403
     assert data["error"] == "You can only edit comments created by you"
 
-def test_edit_a_red_flag_comment_created_by_the_current_user(client):
 
-    response = client.patch("api/v1/red-flags/2/comment/2",headers=user2_header,data = json.dumps({"comment": "I diasgree"}))
+def test_edit_a_red_flag_comment_created_by_the_current_user(client):
+#
+    response = client.patch("api/v1/red-flags/2/comment",headers=user2_header,data = json.dumps({"comment": "I diasgree"}))
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert data["data"][0]["message"] == "Updated red-flag record’s comment"
-    assert data["data"][0]["commentId"] == 2
-    assert data["data"][0]["redFlagId"] == 2
 
-def test_edit_a_red_flag_comment_for_a_red_flag_with_status_other_than_draft(client):
 
-    response = client.patch("api/v1/red-flags/1/comment/1",headers=user1_header,data = json.dumps({"comment": "I diasgree"}))
+def test_edit_a_red_flag_comment_with_status_other_than_draft(client):
+#
+    response = client.patch("api/v1/red-flags/1/comment",headers=user1_header,data = json.dumps({"comment": "I diasgree"}))
     assert response.status_code == 403
     data = json.loads(response.data.decode())
     assert data["status"] == 403
     assert data["error"] == "You cannot edit a record which is under investigation"
+
+#     assert data["data"][0]["commentId"] == 2
+#     assert data["data"][0]["redFlagId"] == 2
 
