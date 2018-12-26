@@ -57,16 +57,16 @@ class Comment:
         global comment_id
         self.comment_id = comment_id
         self.incident_id = incident_id
-        self.owner = owner_id
+        self.comment_by = owner_id
         self.body = body
         self.created_on = time_now
         comment_id += 1
 
     def get_details(self):
         return {
-            "id": self.comment_id,
+            "commentId": self.comment_id,
             "incidentId": self.incident_id,
-            "commentBy": self.owner,
+            "commentBy": self.comment_by,
             "body": self.body,
             "createOn": self.created_on,
         }
@@ -106,12 +106,13 @@ def incident_record_exists(title, description, collection):
 
 
 def get_comment_obj_by_id(comment_id, incident_id):
-    return [
-        comment_obj
-        for comment_obj in comments
-        if comment_obj.incident_id == incident_id
-        and comment_obj.comment_id == comment_id
-    ]
+    for comment_obj in comments:
+        if (
+            comment_obj.incident_id == incident_id
+            and comment_obj.comment_id == comment_id
+        ):
+            return comment_obj
+    return None
 
 
 def get_incident_comments(incident_id):
@@ -130,3 +131,33 @@ def get_incident_comments(incident_id):
         for comment in comments
         if comment.incident_id == incident_id
     ]
+
+
+# rec = {
+#     "title": "first",
+#     "description": "Lorem ipsum eiusmod temport labore et dolore magna",
+#     "location": [-80, -174.4],
+#     "tags": ["crime", "rape"],
+#     "Images": ["image1.jpg", "image2.jpg"],
+#     "Videos": ["vid1.mp4", "vid2.mp4"],
+#     "user_id": 1,
+# }
+# rec2 = {
+#     "title": "third",
+#     "description": "Lorem ipsum eiusmod temport labore et dolore magna",
+#     "location": [-80, -174.4],
+#     "tags": ["crime", "rape"],
+#     "Images": ["image1.jpg", "image2.jpg"],
+#     "Videos": ["vid1.mp4", "vid2.mp4"],
+#     "user_id": 2,
+# }
+# red = RedFlag(**rec)
+# red2 = RedFlag(**rec2)
+# com = Comment(red.incident_id, 1, "Lorem ipsum dolor sit amet, consectetur adipiscing")
+# com2 = Comment(
+#     red2.incident_id, 2, "Lorem ipsum dolor sit amet, consectetur adipiscing"
+# )
+# red_flags.append(red)
+# red_flags.append(red2)
+# comments.append(com)
+# comments.append(com2)

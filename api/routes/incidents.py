@@ -12,11 +12,14 @@ from api.models.incident import (
     get_incident_record,
     get_all_incident_records,
     get_incident_obj_by_id,
+    get_comment_obj_by_id,
 )
 from api.helpers.validation import (
     validate_new_incident,
     is_valid_id,
     validate_edit_location,
+    request_data_required,
+    validate_comment,
 )
 
 from api.helpers.responses import expected_new_incident_format
@@ -72,7 +75,9 @@ def new_red_flag():
         )
         red_flags.append(new_record)
         if comment:
-            new_comment = Comment(new_record.incident_id, 1, comment)
+            new_comment = Comment(
+                new_record.incident_id, get_current_identity(), comment
+            )
             comments.append(new_comment)
 
         return (
@@ -157,6 +162,82 @@ def edit_red_flag_location(red_flag_id):
             200,
         )
     return (
-        jsonify({"status": 403, "error": "You're not allowed to modify this resource"}),
+        jsonify(
+            {"status": 403, "error": "You are not allowed to modify this resource"}
+        ),
         403,
     )
+
+
+@red_flags_bp.route("/red-flags/<red_flag_id>/comment/<comment_id>", methods=["PATCH"])
+@token_required
+@request_data_required
+def edit_red_flag_comment(red_flag_id, comment_id):
+    record_id = red_flag_id
+    if not is_valid_id(record_id):
+        return jsonify({"error": "Red-flag id must be an number", "status": 400}), 400
+
+    data = request.data
+
+    # if 'comment' not in data
+    comment = json.loads(data).get("comment")
+
+    is_invalid = validate_comment(comment, edit=1)
+
+    if is_invalid:
+        return (jsonify({"error": is_invalid, "status": 400}), 400)
+
+    comment_id, incident_id = int(comment_id), int(red_flag_id)
+    comment_results = get_comment_obj_by_id(
+        comment_id=comment_id, incident_id=incident_id
+    )
+    incident_results = get_incident_obj_by_id(int(record_id), red_flags)
+
+    response = None
+    if not incident_results or not incident_results.incident_id == incident_id:
+        response = (
+            jsonify({"status": 404, "error": "Red-flag record does not exist"}),
+            404,
+        )
+
+    elif not incident_results.status == "draft":
+        response = (
+            jsonify(
+                {
+                    "status": 403,
+                    "error": f"You cannot edit a record which is {incident_results.status }",
+                }
+            ),
+            403,
+        )
+    elif not comment_results:
+        response = (jsonify({"status": 404, "error": "Comment does not exist"}), 404)
+    elif comment_results.comment_by == get_current_identity():
+        comment = json.loads(data).get("comment")
+        comment_results.body = comment
+
+        response = (
+            jsonify(
+                {
+                    "status": 200,
+                    "data": [
+                        {
+                            "commentId": comment_results.comment_id,
+                            "redFlagId": comment_results.incident_id,
+                            "message": "Updated red-flag record’s comment",
+                        }
+                    ],
+                }
+            ),
+            200,
+        )
+
+    else:
+        response = (
+            jsonify(
+                {"status": 403, "error": "You can only edit comments created by you"}
+            ),
+            403,
+        )
+
+    return response

@@ -20,7 +20,7 @@ def request_data_required(func):
     def wrapper(*args, **kwargs):
         if not request.data:
             return (
-                jsonify({"error": "Please provide  valid input data", "status": 400}),
+                jsonify({"error": "Please provide valid input data", "status": 400}),
                 400,
             )
         return func(*args, **kwargs)
@@ -130,8 +130,8 @@ def validate_comment(comment, edit=0):
     error = None
     if comment == "" and edit == 0:
         pass
-    elif comment == "" and edit == 1:
-        error = "Comment can not be blank"
+    elif not comment and edit == 1:
+        error = "Please provide a comment"
     elif not is_string(comment):
         error = "Comment must be a string"
     return error
