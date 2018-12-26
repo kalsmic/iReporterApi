@@ -57,16 +57,16 @@ class Comment:
         global comment_id
         self.comment_id = comment_id
         self.incident_id = incident_id
-        self.owner = owner_id
+        self.comment_by = owner_id
         self.body = body
         self.created_on = time_now
         comment_id += 1
 
     def get_details(self):
         return {
-            "id": self.comment_id,
+            "commentId": self.comment_id,
             "incidentId": self.incident_id,
-            "commentBy": self.owner,
+            "commentBy": self.comment_by,
             "body": self.body,
             "createOn": self.created_on,
         }
@@ -97,21 +97,21 @@ def get_incident_obj_by_id(incident_id, collection):
     return None
 
 
-def incident_record_exists(title, description, collection):
-    return [
-        record
-        for record in collection
-        if record.title == title and record.description == description
-    ]
+def incident_record_exists(title, description, incident_results):
+    for incident_result in incident_results:
+        if incident_result.title == title and incident_result.description == description:
+            return True
+    return False
 
 
 def get_comment_obj_by_id(comment_id, incident_id):
-    return [
-        comment_obj
-        for comment_obj in comments
-        if comment_obj.incident_id == incident_id
-        and comment_obj.comment_id == comment_id
-    ]
+    for comment_obj in comments:
+        if (
+            comment_obj.incident_id == incident_id
+            and comment_obj.comment_id == comment_id
+        ):
+            return comment_obj
+    return None
 
 
 def get_incident_comments(incident_id):
@@ -122,11 +122,3 @@ def get_incident_comments(incident_id):
         if comment.incident_id == incident_id
     ]
 
-
-def get_incident_comments(incident_id):
-    """Returns comments for a given incident record"""
-    return [
-        comment.get_details()
-        for comment in comments
-        if comment.incident_id == incident_id
-    ]

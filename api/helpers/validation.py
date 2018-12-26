@@ -20,7 +20,7 @@ def request_data_required(func):
     def wrapper(*args, **kwargs):
         if not request.data:
             return (
-                jsonify({"error": "Please provide  valid input data", "status": 400}),
+                jsonify({"error": "Please provide valid input data", "status": 400}),
                 400,
             )
         return func(*args, **kwargs)
@@ -130,8 +130,8 @@ def validate_comment(comment, edit=0):
     error = None
     if comment == "" and edit == 0:
         pass
-    elif comment == "" and edit == 1:
-        error = "Comment can not be blank"
+    elif not comment and edit == 1:
+        error = "Please provide a comment"
     elif not is_string(comment):
         error = "Comment must be a string"
     return error
@@ -159,31 +159,35 @@ def validate_description(description):
         error = wrong_description
     return error
 
+media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
+
+def is_validate_media_type(collection,media_type):
+    for media in collection:
+        if not media.endswith(media_format.get(media_type)[0]):
+            return False
+    return True
 
 def validate_media(media_collection, media_type):
     media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
     error = None
     if not isinstance(media_collection, list):
         error = f"Please provide an empty list of {media_type} if none"
-    else:
-        for media in media_collection:
-            if not media.endswith(media_format.get(media_type)[0]):
-                error = (
-                    f"Only {media_format.get(media_type)[1]} {media_type} are supported"
-                )
-                break
+    elif not is_validate_media_type(media_collection,media_type):
+        error = f"Only {media_format.get(media_type)[1]} {media_type} are supported"
     return error
 
+def is_a_valid_tag(tags):
+    for tag in tags:
+        if not is_string(tag):
+            return False
+    return True
 
 def validate_tags(tags):
     error = None
     if not isinstance(tags, list):
         error = "Please provide a list of tags i.e ['crime','rape'] or an empty list"
-    else:
-        for tag in tags:
-            if not is_string(tag):
-                error = "Tags must be of string type i.e ['crime','rape']"
-                break
+    elif not is_a_valid_tag(tags):
+        error = "Tags must be of string type i.e ['crime','rape']"
     return error
 
 
