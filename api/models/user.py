@@ -55,9 +55,8 @@ def is_valid_credentials(user_name, password):
         if user.user_name == user_name and check_password_hash(
             user.password, password
         ):
-            if user.is_admin == 1:
-                return encode_token(user.user_id, 1)
-            return encode_token(user.user_id, 0)
+            return encode_token(user.user_id, user.is_admin)
+    return None
 
 
 # create an adnin user since there's no option for signing him up

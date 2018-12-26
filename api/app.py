@@ -13,4 +13,5 @@ def create_app(config="None"):
     app.register_blueprint(users_bp)
     app.register_blueprint(red_flags_bp)
 
+
     return app

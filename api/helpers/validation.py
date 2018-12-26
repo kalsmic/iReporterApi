@@ -86,17 +86,8 @@ def validate_user_name(user_name):
 
 def validate_name(name, required=1):
     error = wrong_name
-    if (
-        required
-        and is_string(name)
-        and not contains_space(name)
-        and not contains_number(name)
-    ):
+    if not required and name == "":
         error = None
-
-    elif not required and name == "":
-        error = None
-
     elif (
         name
         and is_string(name)
