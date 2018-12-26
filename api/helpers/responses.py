@@ -34,11 +34,11 @@ duplicate_user_name = "Username already exists"
 delete_not_allowed = "You are not allowed to delete this resource"
 red_flag_deleted = "red-flag record has been deleted"
 supported_end_points = [
-    "POST /auth/signup",
-    "POST /auth/login",
-    "GET /red-flags",
-    "GET /red-flags/<red-flag-id>",
-    "PATCH /red-flags/<red-flag-id>/location",
-    "PATCH /red-flags/<red-flag-id>/comment",
-    "DELETE /red-flags/<red-flag-id> - Delete a redflag",
+    "POST /api/v1/auth/signup",
+    "POST /api/v1/auth/login",
+    "GET /api/v1/red-flags",
+    "GET /api/v1/red-flags/<red-flag-id>",
+    "PATCH /api/v1/red-flags/<red-flag-id>/location",
+    "PATCH /api/v1/red-flags/<red-flag-id>/comment",
+    "DELETE /api/v1/red-flags/<red-flag-id> - Delete a redflag",
 ]
