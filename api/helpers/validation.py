@@ -20,7 +20,9 @@ def request_data_required(func):
     def wrapper(*args, **kwargs):
         if not request.data:
             return (
-                jsonify({"error": "Please provide valid input data", "status": 400}),
+                jsonify(
+                    {"error": "Please provide valid input data", "status": 400}
+                ),
                 400,
             )
         return func(*args, **kwargs)
@@ -71,7 +73,6 @@ def contains_number(str_value):
 
 
 def validate_email(email):
-
     if not email and not re.match("[^@]+@[^@]+\.[^@]+", email):
         return wrong_email
     return None
@@ -176,7 +177,11 @@ def validate_media(media_collection, media_type):
     if not isinstance(media_collection, list):
         error = f"Please provide an empty list of {media_type} if none"
     elif not is_validate_media_type(media_collection, media_type):
-        error = f"Only {media_format.get(media_type)[1]} {media_type} are supported"
+        error = (
+            f"Only {media_format.get(media_type)[1]} {media_type} are "
+            "supported"
+        )
+
     return error
 
 
@@ -190,7 +195,10 @@ def is_a_valid_tag(tags):
 def validate_tags(tags):
     error = None
     if not isinstance(tags, list):
-        error = "Please provide a list of tags i.e ['crime','rape'] or an empty list"
+        error = (
+            "Please provide a list of tags i.e ['crime','rape'] or an "
+            "empty list"
+        )
     elif not is_a_valid_tag(tags):
         error = "Tags must be of string type i.e ['crime','rape']"
     return error
@@ -199,11 +207,17 @@ def validate_tags(tags):
 def validate_location(location):
     error = None
     if not isinstance(location, list) or not len(location) == 2:
-        error = "location must be a list with both Latitude and Longitude coordinates"
+        error = (
+            "location must be a list with both Latitude and Longitude "
+            "coordinates"
+        )
     elif not is_number(location[0]) or not is_number(location[1]):
         error = "location coordinates must be a number"
     elif not -90 < location[0] < 90 or not -180 < location[1] < 180:
-        error = "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
+        error = (
+            "latitude must be between -90 and 90 and longitude "
+            "coordinates must be between -180 and 180"
+        )
 
     return error
 

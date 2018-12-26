@@ -24,10 +24,9 @@ def test_user_login_with_valid_credentials_(client):
     assert data["data"][0]["id"] == 5
 
 
-
 def test_user_login_without_data_(client):
 
-    response = client.post("/api/v1/auth/login",headers=headers, )
+    response = client.post("/api/v1/auth/login", headers=headers)
     data = json.loads(response.data.decode())
     assert response.status_code == 400
     assert data["error"] == "Provide provide valid data to login"
@@ -43,6 +42,7 @@ def test_user_login_with_wrong_credentials_(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["error"] == "Invalid credentials"
+
 
 def test_user_login_with_wrong_keys_in_credentials_data(client):
     response = client.post(

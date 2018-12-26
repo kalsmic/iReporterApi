@@ -17,7 +17,7 @@ class Incident:
         self.created_on = time_now
         self.created_by = kwargs.get("user_id")
         self.status = "draft"
-        self.comment = kwargs.get('comment')
+        self.comment = kwargs.get("comment")
 
     def get_details(self):
         return {
@@ -26,7 +26,7 @@ class Incident:
             "createdOn": self.created_on,
             "createdBy": self.created_by,
             "location": self.location,
-            "comment":self.comment,
+            "comment": self.comment,
             "status": self.status,
             "Images": self.images,
             "Videos": self.videos,
@@ -49,13 +49,16 @@ class RedFlag(Incident):
 
         return details
 
+
 records = {"red-flag": {"db": red_flags, "id": red_flag_id}}
 
 
 def get_incident_record(record_id, collection):
     """Returns a redflag or Intervention record"""
     return [
-        record.get_details() for record in collection if record.incident_id == record_id
+        record.get_details()
+        for record in collection
+        if record.incident_id == record_id
     ]
 
 
