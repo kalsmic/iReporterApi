@@ -97,12 +97,11 @@ def get_incident_obj_by_id(incident_id, collection):
     return None
 
 
-def incident_record_exists(title, description, collection):
-    return [
-        record
-        for record in collection
-        if record.title == title and record.description == description
-    ]
+def incident_record_exists(title, description, incident_results):
+    for incident_result in incident_results:
+        if incident_result.title == title and incident_result.description == description:
+            return True
+    return False
 
 
 def get_comment_obj_by_id(comment_id, incident_id):
@@ -123,41 +122,3 @@ def get_incident_comments(incident_id):
         if comment.incident_id == incident_id
     ]
 
-
-def get_incident_comments(incident_id):
-    """Returns comments for a given incident record"""
-    return [
-        comment.get_details()
-        for comment in comments
-        if comment.incident_id == incident_id
-    ]
-
-
-# rec = {
-#     "title": "first",
-#     "description": "Lorem ipsum eiusmod temport labore et dolore magna",
-#     "location": [-80, -174.4],
-#     "tags": ["crime", "rape"],
-#     "Images": ["image1.jpg", "image2.jpg"],
-#     "Videos": ["vid1.mp4", "vid2.mp4"],
-#     "user_id": 1,
-# }
-# rec2 = {
-#     "title": "third",
-#     "description": "Lorem ipsum eiusmod temport labore et dolore magna",
-#     "location": [-80, -174.4],
-#     "tags": ["crime", "rape"],
-#     "Images": ["image1.jpg", "image2.jpg"],
-#     "Videos": ["vid1.mp4", "vid2.mp4"],
-#     "user_id": 2,
-# }
-# red = RedFlag(**rec)
-# red2 = RedFlag(**rec2)
-# com = Comment(red.incident_id, 1, "Lorem ipsum dolor sit amet, consectetur adipiscing")
-# com2 = Comment(
-#     red2.incident_id, 2, "Lorem ipsum dolor sit amet, consectetur adipiscing"
-# )
-# red_flags.append(red)
-# red_flags.append(red2)
-# comments.append(com)
-# comments.append(com2)
