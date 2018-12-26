@@ -11,7 +11,7 @@ new_record = {
     "tags": ["crime", "rape"],
     "Images": ["image1.jpg", "image2.jpg"],
     "Videos": ["vid1.mp4", "vid2.mp4"],
-    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing"
+    "comment": ""
 }
 second_record = {
     "title": "My Second red flag",
@@ -183,8 +183,6 @@ def test_get_a_red_flag(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert data["data"][0][0]["Images"] == ['image1.jpg', 'image2.jpg']
-    assert data["data"][0][0][
-               "comment"] == "Lorem ipsum dolor sit amet, consectetur adipiscing"
 
 
 def test_get_a_red_flag_with_invalid_id(client):
@@ -203,6 +201,13 @@ def test_edit_a_red_flag_location_without_a_token(client):
     assert data["status"] == 401
     assert data["error"] == "Missing access token in header"
 
+def test_edit_a_red_flag_location_without_location_data(client):
+    response = client.patch("api/v1/red-flags/12/location",
+                            headers=user1_header,)
+    assert response.status_code == 400
+    data = json.loads(response.data.decode())
+    assert data["status"] == 400
+    assert data["error"] == "Please provide a valid location"
 
 def test_edit_a_red_flag_location_which_does_not_exist(client):
     response = client.patch("api/v1/red-flags/12/location",
@@ -224,7 +229,7 @@ def test_edit_a_red_flag_location_which_does_not_belong_to_user(client):
     assert data["error"] == "You are not allowed to modify this resource"
 
 
-def test_edit_a_red_flag_location_with_invalir_red_flag_id(client):
+def test_edit_a_red_flag_location_with_invalid_red_flag_id(client):
     response = client.patch("api/v1/red-flags/df/location",
                             headers=user2_header,
                             data=json.dumps({"location": [12, 12]}))
