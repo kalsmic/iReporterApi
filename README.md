@@ -28,7 +28,7 @@ Open the terminal and run the following commands
 ```bash
 
     $ > git clonehttps://github.com/kalsmic/iReporterApi.git
-    $ > cd sendIT
+    $ > cd iReporterApi
     $ > git checkout api
     $ > python3 -m venv venv
     $ > source venv/bin.activate
