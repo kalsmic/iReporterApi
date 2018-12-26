@@ -23,8 +23,8 @@ wrong_password = (
     " letter, atleast on lower case letter and  atleast one number."
 )
 
-wrong_username =(
-    "Username must be string with atleast 5 characters and may" 
+wrong_username = (
+    "Username must be string with atleast 5 characters and may"
     " contain a number"
 )
 wrong_phone_number = "Phone number must be a string of ten digits only"

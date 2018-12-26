@@ -31,7 +31,7 @@ def test_create_a_red_flag_without_a_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data == {
-        "error": "Invalid Token verification failed",
+        "error": "Missing access token in header",
         "status": 401,
     }
 
@@ -157,7 +157,7 @@ def test_get_all_red_flags_without_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data == {
-        "error": "Invalid Token verification failed",
+        "error": "Missing access token in header",
         "status": 401,
     }
 
@@ -201,7 +201,7 @@ def test_edit_a_red_flag_location_without_a_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["status"] == 401
-    assert data["error"] == "Invalid Token verification failed"
+    assert data["error"] == "Missing access token in header"
 
 
 def test_edit_a_red_flag_location_which_does_not_exist(client):
@@ -252,8 +252,8 @@ def test_edit_a_red_flag_location_with_invalid_location_coordinates(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
-    assert data[
-               "error"] == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
+    assert data["error"] == ("latitude must be between -90 and 90 and longitude"
+                             " coordinates must be between -180 and 180")
 
 
 def test_edit_a_red_flag_location_status_other_than_draft(client):
@@ -274,7 +274,7 @@ def test_edit_a_red_flag_comment_without_a_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["status"] == 401
-    assert data["error"] == "Invalid Token verification failed"
+    assert data["error"] == "Missing access token in header"
 
 
 def test_edit_a_red_flag_comment_with_an_invalid_red_flag_id(client):
@@ -316,25 +316,12 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(
     assert data["status"] == 400
     assert data["error"] == "Please provide a comment"
 
-    # def test_edit_a_red_flag_comment_for_a_red_flag_record_with_a_comment_id_which_does_not_exist(client):
-    # create another redflag record to test editing a comment functionality
-    #
+    # create another redflag record to test edit a comment functionality
     response = client.post("api/v1/red-flags", headers=user2_header,
                            data=json.dumps(second_record))
     assert response.status_code == 201
     data = json.loads(response.data.decode())
 
-
-#
-#
-#
-#     response = client.patch("api/v1/red-flags/2/comment/1",headers=user2_header,data = json.dumps({"comment": "I diasgree"}))
-#     assert response.status_code == 404
-#     data = json.loads(response.data.decode())
-#     assert data["status"] == 404
-#     assert data["error"] == "Comment does not exist"
-#
-#
 def test_edit_a_red_flag_comment_created_by_another_user(client):
     response = client.patch("api/v1/red-flags/2/comment", headers=user1_header,
                             data=json.dumps({"comment": "I diasgree"}))
@@ -361,8 +348,57 @@ def test_edit_a_red_flag_comment_with_status_other_than_draft(client):
     assert response.status_code == 403
     data = json.loads(response.data.decode())
     assert data["status"] == 403
-    assert data[
-               "error"] == "You cannot edit a record which is under investigation"
+    err = "You cannot edit a record which is under investigation"
+    assert data["error"] == err
 
-#     assert data["data"][0]["commentId"] == 2
-#     assert data["data"][0]["redFlagId"] == 2
+# DELETE A RED FLAG RECORD
+
+def test_delete_red_flag_without_a_access_token(client):
+    #
+    response = client.delete("api/v1/red-flags/1")
+    assert response.status_code == 401
+    data = json.loads(response.data.decode())
+    assert data["status"] == 401
+    assert data["error"] == "Missing access token in header"
+
+
+def test_delete_red_flag_with_red_flag_id_which_does_not_exist(client):
+    # red flag id does not exist
+    response = client.delete("api/v1/red-flags/46",headers=user1_header)
+    assert response.status_code == 404
+    data = json.loads(response.data.decode())
+    assert data["status"] == 404
+    assert data["error"] == "Red-flag record does not exist"
+
+
+def test_delete_red_flag_with_invalid_format_red_flag_id(client):
+    response = client.delete("api/v1/red-flags/fdf",headers=user1_header)
+    assert response.status_code == 400
+    data = json.loads(response.data.decode())
+    assert data["status"] == 400
+    assert data["error"] == "Red-flag id must be an number"
+
+def test_delete_red_flag_for_another_user(client):
+    response = client.delete("api/v1/red-flags/1",headers=user2_header)
+    assert response.status_code == 403
+    data = json.loads(response.data.decode())
+    assert data["status"] == 403
+    assert data["error"] == "You are not allowed to delete this resource"
+
+def test_delete_red_flag_for_with_status_other_than_draft(client):
+    response = client.delete("api/v1/red-flags/1",headers=user1_header)
+    assert response.status_code == 403
+    data = json.loads(response.data.decode())
+    assert data["status"] == 403
+    assert data["error"] == (
+        "You are not allowed to delete a red-flag which is under "
+        "investigation"
+    )
+
+def test_delete_red_flag(client):
+    response = client.delete("api/v1/red-flags/2",headers=user2_header)
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert data["data"][0]["message"] == "red-flag record has been deleted"
+    assert data["data"][0]["id"] == 2

@@ -45,6 +45,14 @@ def token_required(func):
             token = extract_token_from_header()
             decode_token(token)
             return func(*args, **kwargs)
+        except jwt.DecodeError:
+            return (
+                jsonify(
+                    {"error": "Missing access token in header", "status": 401}
+                ),
+                401,
+            )
+
         except jwt.ExpiredSignatureError:
             return (
                 jsonify({"error": "Signature has expired", "status": 401}),
