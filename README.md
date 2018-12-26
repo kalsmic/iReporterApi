@@ -25,15 +25,17 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
   
 How to set up the project
 Open the terminal and run the following commands
-```bash
-
-    $ > git clonehttps://github.com/kalsmic/iReporterApi.git
-    $ > cd iReporterApi
-    $ > git checkout api
-    $ > python3 -m venv venv
-    $ > source venv/bin.activate
-    $ > pip3 install -r requirements.txt
-    $ > python deploy
+``` bash
+    git clone https://github.com/kalsmic/iReporterApi.git
+    cd iReporterApi
+    git checkout api
+    python3 -m venv venv
+    source venv/bin.activate
+    pip3 install -r requirements.txt
+    source venv/bin/activate
+    export APP_SETTINGS="config.DevelopmentConfig"
+    export SECRET_KEY="your secret key"
+    python deploy.py
    ```
    
 ## How to run tests
@@ -41,7 +43,7 @@ Open the terminal and run the following commands
 - Open terminal from root folder of the project.
 - Enter the command below in the terminal to run the tests with coverage using pytest
 ```bash
-  $ > pytest --cov
+  pytest --cov
   ```
   
 ## Author

@@ -34,3 +34,5 @@ wrong_name = (
 )
 duplicate_email = "Account with specified email address already exists"
 duplicate_user_name = "Username already exists"
+delete_not_allowed = "You are not allowed to delete this resource"
+red_flag_deleted = "red-flag record has been deleted"

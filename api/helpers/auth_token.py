@@ -41,12 +41,13 @@ def extract_token_from_header():
 def token_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        response = None
         try:
             token = extract_token_from_header()
             decode_token(token)
-            return func(*args, **kwargs)
+            response = func(*args, **kwargs)
         except jwt.DecodeError:
-            return (
+            response = (
                 jsonify(
                     {"error": "Missing access token in header", "status": 401}
                 ),
@@ -54,12 +55,12 @@ def token_required(func):
             )
 
         except jwt.ExpiredSignatureError:
-            return (
+            response = (
                 jsonify({"error": "Signature has expired", "status": 401}),
                 401,
             )
         except jwt.InvalidTokenError:
-            return (
+            response = (
                 jsonify(
                     {
                         "error": "Invalid Token verification failed",
@@ -68,6 +69,7 @@ def token_required(func):
                 ),
                 401,
             )
+        return response
 
     return wrapper
 
