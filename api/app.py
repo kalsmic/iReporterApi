@@ -1,5 +1,5 @@
 """Contains function that creates the app"""
-from flask import Flask
+from flask import Flask,jsonify
 
 from api.routes.auth import users_bp
 from api.routes.incidents import red_flags_bp
@@ -12,5 +12,6 @@ def create_app(config="None"):
     app.config.from_object(Config)
     app.register_blueprint(users_bp)
     app.register_blueprint(red_flags_bp)
+
 
     return app

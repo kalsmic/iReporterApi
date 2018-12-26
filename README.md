@@ -17,7 +17,6 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
 | POST /auth/signup                                           | Register a user                                    |
 | POST /auth/login                                            | Login a user                                       |
 | GET /red-flags                                              | Fetch all red-flag records.                        |
-| GET /red-flags                                              | Fetch all red-flag records.                        |
 | GET api/v1/red-flags/<red-flag-id>                          | Fetch a specific red-flag-record                   |
 | PATCH api/v1/red-flags/<red-flag-id>/location               | Edit the location of a specific red-flag record    |
 | PATCH api/v1/red-flags/<red-flag-id>/comment                | Edit the comment of a specific red-flag record     |
@@ -25,23 +24,25 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
   
 How to set up the project
 Open the terminal and run the following commands
-```bash
-
-    $ > git clonehttps://github.com/kalsmic/iReporterApi.git
-    $ > cd iReporterApi
-    $ > git checkout api
-    $ > python3 -m venv venv
-    $ > source venv/bin.activate
-    $ > pip3 install -r requirements.txt
-    $ > python deploy
+``` bash
+    git clone https://github.com/kalsmic/iReporterApi.git
+    cd iReporterApi
+    git checkout api
+    python3 -m venv venv
+    source venv/bin.activate
+    pip3 install -r requirements.txt
+    source venv/bin/activate
+    export APP_SETTINGS="config.DevelopmentConfig"
+    export SECRET_KEY="your secret key"
+    python deploy.py
    ```
    
 ## How to run tests
 
-- Open terminal from root folder of the project.
-- Enter the command below in the terminal to run the tests with coverage using pytest
+Enter the command below in the terminal to run the tests with coverage using
+ pytest
 ```bash
-  $ > pytest --cov
+  pytest --cov
   ```
   
 ## Author

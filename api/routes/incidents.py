@@ -23,7 +23,10 @@ from api.helpers.validation import (
     validate_comment,
 )
 
-from api.helpers.responses import expected_new_incident_format
+from api.helpers.responses import (
+    expected_new_incident_format,
+    delete_not_allowed,
+)
 
 
 @red_flags_bp.route("/red-flags", methods=["POST"])
@@ -57,7 +60,7 @@ def new_red_flag():
 
     if not_valid:
         return not_valid
-
+    response = None
     if not incident_record_exists(
         new_red_flag_data["title"], new_red_flag_data["description"], red_flags
     ):
@@ -65,7 +68,7 @@ def new_red_flag():
         new_record = RedFlag(**new_red_flag_data)
         red_flags.append(new_record)
 
-        return (
+        response = (
             jsonify(
                 {
                     "status": 201,
@@ -79,11 +82,16 @@ def new_red_flag():
             ),
             201,
         )
+    else:
 
-    return (
-        jsonify({"status": 409, "error": "Red-flag record already exists"}),
-        409,
-    )
+        response = (
+            jsonify(
+                {"status": 409, "error": "Red-flag record already exists"}
+            ),
+            409,
+        )
+
+    return response
 
 
 @red_flags_bp.route("/red-flags", methods=["GET"])
@@ -143,7 +151,7 @@ def edit_red_flag_location(red_flag_id):
             ),
             404,
         )
-
+    response = None
     if (
         results.created_by == get_current_identity()
         and results.status == "draft"
@@ -151,7 +159,7 @@ def edit_red_flag_location(red_flag_id):
         location = json.loads(data).get("location")
 
         results.location = location
-        return (
+        response = (
             jsonify(
                 {
                     "status": 200,
@@ -165,15 +173,17 @@ def edit_red_flag_location(red_flag_id):
             ),
             200,
         )
-    return (
-        jsonify(
-            {
-                "status": 403,
-                "error": "You are not allowed to modify this resource",
-            }
-        ),
-        403,
-    )
+    else:
+        response = (
+            jsonify(
+                {
+                    "status": 403,
+                    "error": "You are not allowed to modify this resource",
+                }
+            ),
+            403,
+        )
+    return response
 
 
 @red_flags_bp.route("/red-flags/<red_flag_id>/comment", methods=["PATCH"])
@@ -278,15 +288,7 @@ def delete_record(red_flag_id):
         )
     elif not results.created_by == get_current_identity():
 
-        response = (
-            jsonify(
-                {
-                    "status": 403,
-                    "error": "You are not allowed to delete this resource",
-                }
-            ),
-            403,
-        )
+        response = (jsonify({"status": 403, "error": delete_not_allowed}), 403)
     elif results.status == "draft":
         record_id = results.incident_id
         record_index = red_flags.index(results)
