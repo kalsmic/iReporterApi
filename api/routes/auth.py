@@ -1,12 +1,7 @@
 from flask import Blueprint, jsonify, request, json
 
 from api.helpers.validation import validate_new_user
-from api.models.user import (
-    User,
-    users,
-    check_if_user_exists,
-    is_valid_credentials,
-)
+from api.models.user import User, users, check_if_user_exists, is_valid_credentials
 
 users_bp = Blueprint("users_bp", __name__, url_prefix="/api/v1")
 
@@ -47,10 +42,7 @@ def register():
     except KeyError:
         return (
             jsonify(
-                {
-                    "error": "Please provide the correct keys for the data",
-                    "status": 422,
-                }
+                {"error": "Please provide the correct keys for the data", "status": 422}
             ),
             422,
         )
@@ -116,11 +108,7 @@ def login():
         if data:
             return (
                 jsonify(
-                    {
-                        "token": data,
-                        "status": 200,
-                        "message": "Logged in successfully",
-                    }
+                    {"token": data, "status": 200, "message": "Logged in successfully"}
                 ),
                 200,
             )
@@ -129,10 +117,7 @@ def login():
     except KeyError:
         return (
             jsonify(
-                {
-                    "error": "Please provide the correct keys for the data",
-                    "status": 422,
-                }
+                {"error": "Please provide the correct keys for the data", "status": 422}
             ),
             422,
         )

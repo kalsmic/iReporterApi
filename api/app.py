@@ -1,5 +1,5 @@
 """Contains function that creates the app"""
-from flask import Flask,jsonify
+from flask import Flask, jsonify
 from api.helpers.responses import supported_end_points
 
 from api.routes.auth import users_bp
@@ -17,12 +17,13 @@ def create_app(config="None"):
     @app.errorhandler(404)
     def page_not_found(e):
         return (
-            jsonify({
-                "error": "Endpoint for specified URL does not exist",
-                "supportedEndPoints": supported_end_points
-            }),
+            jsonify(
+                {
+                    "error": "Endpoint for specified URL does not exist",
+                    "supportedEndPoints": supported_end_points,
+                }
+            ),
             404,
         )
 
     return app
-

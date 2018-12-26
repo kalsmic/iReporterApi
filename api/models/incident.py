@@ -56,9 +56,7 @@ records = {"red-flag": {"db": red_flags, "id": red_flag_id}}
 def get_incident_record(record_id, collection):
     """Returns a redflag or Intervention record"""
     return [
-        record.get_details()
-        for record in collection
-        if record.incident_id == record_id
+        record.get_details() for record in collection if record.incident_id == record_id
     ]
 
 
