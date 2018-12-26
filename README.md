@@ -12,15 +12,15 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
 
 **iReporter API ENDPOINTS**
 
-| EndPoint                                                    | Functionality                                      |
-| ----------------------------------------------------------- | -------------------------------------------------- |
-| POST /auth/signup                                           | Register a user                                    |
-| POST /auth/login                                            | Login a user                                       |
-| GET /red-flags                                              | Fetch all red-flag records.                        |
-| GET api/v1/red-flags/<red-flag-id>                          | Fetch a specific red-flag-record                   |
-| PATCH api/v1/red-flags/<red-flag-id>/location               | Edit the location of a specific red-flag record    |
-| PATCH api/v1/red-flags/<red-flag-id>/comment                | Edit the comment of a specific red-flag record     |
-| DELETE /red-flags/<red-flag-id>                             | Delete a specific red flag record.                 |
+| Methods | EndPoint                                  | Functionality                                   |
+| ------- | ----------------------------------------- | ----------------------------------------------- |
+| POST    | /api/v1/auth/signup                       | Register a user                                 |
+| POST    | /api/v1auth/login                         | Login a user                                    |
+| GET     | /api/v1 /red-flags                        | Fetch all red-flag records.                     |
+| GET     | /api/v1/red-flags/<red-flag-id>           | Fetch a specific red-flag-record                |
+| PATCH   | /api/v1/red-flags/<red-flag-id>/location  | Edit the location of a specific red-flag record |
+| PATCH   | /api/v1/red-flags/<red-flag-id>/comment   | Edit the comment of a specific red-flag record  |
+| DELETE  | /api/v1/red-flags/<red-flag-id>           | Delete a specific red flag record.              |
   
 How to set up the project
 Open the terminal and run the following commands
