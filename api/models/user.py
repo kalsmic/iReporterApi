@@ -52,7 +52,9 @@ def check_if_user_exists(user_name, email):
 
 def is_valid_credentials(user_name, password):
     for user in users:
-        if user.user_name == user_name and check_password_hash(user.password, password):
+        if user.user_name == user_name and check_password_hash(
+            user.password, password
+        ):
             if user.is_admin == 1:
                 return encode_token(user.user_id, 1)
             return encode_token(user.user_id, 0)
