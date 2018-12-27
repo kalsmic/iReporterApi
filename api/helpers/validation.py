@@ -73,7 +73,7 @@ def contains_number(str_value):
 
 
 def validate_email(email):
-    if not email and not re.match("[^@]+@[^@]+\.[^@]+", email):
+    if not email or not re.match("[^@]+@[^@]+\.[^@]+", email):
         return wrong_email
     return None
 
