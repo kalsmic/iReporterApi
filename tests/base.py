@@ -1,6 +1,12 @@
 from api.helpers.auth_token import encode_token
 from api.models.incident import RedFlag, red_flags
 from api.models.user import users, User
+from jwt import encode
+import datetime
+from api.helpers.auth_token import secret_key
+
+# secret_key = environ.get("SECRET_KEY", "my_secret_key")
+
 
 user1_data = {
     "first_name": "userOne",
@@ -22,17 +28,19 @@ user2_data = {
     "other_names": "",
 }
 
+
 def generate_token_header(token):
     return {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + token,
     }
 
-admin_header = generate_token_header(encode_token(1,1))
+
+admin_header = generate_token_header(encode_token(1, 1))
 
 user1 = User(**user1_data)
 user2 = User(**user2_data)
-users.extend([user1,user2])
+users.extend([user1, user2])
 user1_id = user1.user_id
 user2_id = user2.user_id
 
@@ -46,7 +54,7 @@ new_record = {
     "tags": ["crime", "rape"],
     "Images": ["image1.jpg", "image2.jpg"],
     "Videos": ["vid1.mp4", "vid2.mp4"],
-    "comment": ""
+    "comment": "",
 }
 second_record = {
     "title": "My Second red flag",
@@ -56,7 +64,7 @@ second_record = {
     "images": ["image3.jpg", "image4.jpg"],
     "videos": ["vid8.mp4", "vid5.mp4"],
     "comment": "Caught in the very act",
-    "user_id":user2_id
+    "user_id": user2_id,
 }
 third_record = {
     "title": "My Second red flag",
@@ -66,7 +74,7 @@ third_record = {
     "images": ["image5.jpg", "image6.jpg"],
     "videos": ["vid9.mp4", "vid5.mp10"],
     "comment": "Caught in the very act",
-    "user_id":user1_id
+    "user_id": user1_id,
 }
 fourth_record = {
     "title": "My third red flag",
@@ -76,10 +84,17 @@ fourth_record = {
     "images": ["image5.jpg", "image6.jpg"],
     "videos": ["vid9.mp4", "vid5.mp10"],
     "comment": "Caught in the very act",
-    "user_id":user1_id
+    "user_id": user1_id,
 }
 red_flag_obj1 = RedFlag(**second_record)
 red_flag_obj2 = RedFlag(**third_record)
 red_flag_obj3 = RedFlag(**fourth_record)
-red_flag_obj1.status ="under investigation"
-red_flags.extend([red_flag_obj1,red_flag_obj2,red_flag_obj3])
+red_flag_obj1.status = "under investigation"
+red_flags.extend([red_flag_obj1, red_flag_obj2, red_flag_obj3])
+
+expired_token = encode(
+    {"userid": 1, "isAdmin": 1, "exp": datetime.datetime.utcnow()},
+    secret_key,
+    algorithm="HS256",
+).decode("utf-8")
+expired_token_header = generate_token_header(expired_token)

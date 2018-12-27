@@ -50,3 +50,6 @@ supported_end_points = [
 wrong_status = (
     "Status must either be 'resolved','under investigation' or 'rejected'"
 )
+
+invalid_token_message = "Invalid Token, verification failed"
+expired_token_message = "Signature has expired"

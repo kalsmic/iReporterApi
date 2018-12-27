@@ -1,22 +1,25 @@
 from flask import json
 
-from .base import (
-    user1_header,
-    user2_header)
+from .base import user1_header, user2_header
+
+from api.helpers.responses import invalid_token_message
 
 
 # EDIT A RED-FLAG RECORD'S COMMENT
 def test_edit_a_red_flag_comment_without_a_token(client):
-    response = client.patch("api/v1/red-flags/2/comment", )
+    response = client.patch("api/v1/red-flags/2/comment")
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["status"] == 401
-    assert data["error"] == "Missing access token in header"
+    assert data["error"] == invalid_token_message
 
 
 def test_edit_a_red_flag_comment_with_an_invalid_red_flag_id(client):
-    response = client.patch("api/v1/red-flags/f/comment", headers=user1_header,
-                            data=json.dumps({"comment": "I disagree"}))
+    response = client.patch(
+        "api/v1/red-flags/f/comment",
+        headers=user1_header,
+        data=json.dumps({"comment": "I disagree"}),
+    )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
@@ -33,10 +36,13 @@ def test_edit_a_red_flag_comment_without_comment_data(client):
 
 
 def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(
-        client):
-    response = client.patch("api/v1/red-flags/10/comment",
-                            headers=user1_header,
-                            data=json.dumps({"comment": "I disagree"}))
+    client
+):
+    response = client.patch(
+        "api/v1/red-flags/10/comment",
+        headers=user1_header,
+        data=json.dumps({"comment": "I disagree"}),
+    )
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["status"] == 404
@@ -44,9 +50,13 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(
 
 
 def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(
-        client):
-    response = client.patch("api/v1/red-flags/2/comment", headers=user1_header,
-                            data=json.dumps({"comment": ""}))
+    client
+):
+    response = client.patch(
+        "api/v1/red-flags/2/comment",
+        headers=user1_header,
+        data=json.dumps({"comment": ""}),
+    )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
@@ -54,8 +64,11 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(
 
 
 def test_edit_a_red_flag_comment_created_by_another_user(client):
-    response = client.patch("api/v1/red-flags/2/comment", headers=user2_header,
-                            data=json.dumps({"comment": "I diasgree"}))
+    response = client.patch(
+        "api/v1/red-flags/2/comment",
+        headers=user2_header,
+        data=json.dumps({"comment": "I diasgree"}),
+    )
     assert response.status_code == 403
     data = json.loads(response.data.decode())
     assert data["status"] == 403
@@ -63,8 +76,11 @@ def test_edit_a_red_flag_comment_created_by_another_user(client):
 
 
 def test_edit_a_red_flag_comment_created_by_the_current_user(client):
-    response = client.patch("api/v1/red-flags/2/comment", headers=user1_header,
-                            data=json.dumps({"comment": "I diasgree"}))
+    response = client.patch(
+        "api/v1/red-flags/2/comment",
+        headers=user1_header,
+        data=json.dumps({"comment": "I diasgree"}),
+    )
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
@@ -72,8 +88,11 @@ def test_edit_a_red_flag_comment_created_by_the_current_user(client):
 
 
 def test_edit_a_red_flag_comment_with_status_other_than_draft(client):
-    response = client.patch("api/v1/red-flags/1/comment", headers=user2_header,
-                            data=json.dumps({"comment": "I diasgree"}))
+    response = client.patch(
+        "api/v1/red-flags/1/comment",
+        headers=user2_header,
+        data=json.dumps({"comment": "I diasgree"}),
+    )
     assert response.status_code == 403
     data = json.loads(response.data.decode())
     assert data["status"] == 403

@@ -86,7 +86,7 @@ def validate_user_name(user_name):
 
 def validate_name(name, required=1):
     error = wrong_name
-    if not required and name == "":
+    if not required and len(str(name).strip()) == 0:
         error = None
     elif (
         name
@@ -129,19 +129,18 @@ def validate_comment(comment, edit=0):
     return error
 
 
-def validate_sentence(sentence, required=0, min_len=0, max_len=0):
+def validate_sentence(sentence, min_len=0, max_len=0):
     error = None
     sentence = str(sentence).strip()
     if sentence.isdigit():
         error = "Field cannot be a number"
-    elif not required and len(sentence)==0:   
-        pass
     elif len(sentence) < min_len:
         error = f"Field must contain a minimum of {str(min_len)} characters"
     elif max_len and len(sentence) > max_len:
         error = f"Field must contain a maximum of {str(max_len)} characters"
 
     return error
+
 
 media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
 
@@ -221,8 +220,8 @@ def validate_new_user(**kwargs):
 
 def validate_new_incident(**kwargs):
     errors = {}
-    errors["title"] = validate_sentence(kwargs.get("title"), 1, 4, 100)
-    errors["description"] = validate_sentence(kwargs.get("description"),1,10)
+    errors["title"] = validate_sentence(kwargs.get("title"), 4, 100)
+    errors["comment"] = validate_sentence(kwargs.get("comment"), 10)
     errors["location"] = validate_location(kwargs.get("location"))
     errors["tags"] = validate_tags(kwargs.get("tags"))
     errors["Images"] = validate_media(kwargs.get("images"), "Images")
