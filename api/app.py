@@ -3,7 +3,6 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 from api.helpers.responses import supported_end_points
-from api.routes.admin import admin_flags_bp
 from api.routes.auth import users_bp
 from api.routes.create_incident import create_red_flags_bp
 from api.routes.delete_incident import delete_red_flag_bp
@@ -35,6 +34,5 @@ def create_app(config="None"):
     app.register_blueprint(delete_red_flag_bp)
     app.register_blueprint(edit_red_flags_bp)
     app.register_blueprint(get_red_flags_bp)
-    app.register_blueprint(admin_flags_bp)
 
     return app

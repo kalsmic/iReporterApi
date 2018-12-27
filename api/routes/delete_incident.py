@@ -5,13 +5,13 @@ from api.helpers.auth_token import (
     non_admin,
     get_current_identity,
 )
+from api.helpers.responses import delete_not_allowed
+from api.helpers.validation import is_valid_id
+from api.models.incident import red_flags, get_incident_obj_by_id
 
 delete_red_flag_bp = Blueprint(
     "delete_red_flag_bp", __name__, url_prefix="/api/v1"
 )
-from api.models.incident import red_flags, get_incident_obj_by_id
-from api.helpers.validation import is_valid_id
-from api.helpers.responses import delete_not_allowed
 
 
 @delete_red_flag_bp.route("/red-flags/<red_flag_id>", methods=["DELETE"])
