@@ -85,6 +85,8 @@ def incident_record_exists(title, description, incident_results):
         ):
             return True
     return False
+
+
 #
 #
 # new_red = {

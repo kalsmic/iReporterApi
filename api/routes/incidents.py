@@ -62,8 +62,7 @@ def new_red_flag():
         return not_valid
     response = None
     if not incident_record_exists(
-            new_red_flag_data["title"], new_red_flag_data["description"],
-            red_flags
+        new_red_flag_data["title"], new_red_flag_data["description"], red_flags
     ):
         new_red_flag_data["user_id"] = get_current_identity()
         new_record = RedFlag(**new_red_flag_data)
@@ -140,23 +139,23 @@ def edit_red_flag_location(red_flag_id):
 
     data = request.data
     is_invalid = validate_edit_location(data)
-
-    if is_invalid:
-        return (jsonify({"error": is_invalid, "status": 400}), 400)
-
     results = get_incident_obj_by_id(int(record_id), red_flags)
 
+    response = None
+
     if not results:
-        return (
+        response = (
             jsonify(
                 {"status": 404, "error": "Red-flag record does not exist"}
             ),
             404,
         )
-    response = None
-    if (
-            results.created_by == get_current_identity()
-            and results.status == "draft"
+    elif is_invalid:
+        response = (jsonify({"error": is_invalid, "status": 400}), 400)
+
+    elif (
+        results.created_by == get_current_identity()
+        and results.status == "draft"
     ):
         location = json.loads(data).get("location")
 
@@ -304,7 +303,7 @@ def delete_record(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": incident_id,
+                            "id": record_id,
                             "message": "red-flag record has been deleted",
                         }
                     ],
