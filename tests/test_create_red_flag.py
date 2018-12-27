@@ -87,7 +87,7 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (data["error"]["title"] == "Field cannot be a number")
-    assert (data["error"]["description"] == wrong_description)
+    assert (data["error"]["description"] == "Field must contain a minimum of 10 characters")
     assert (data["error"][
                 "location"] == "location must be a list with both Latitude and Longitude coordinates")
     assert (data["error"][
@@ -113,8 +113,7 @@ def test_create_a_red_flag_without_wrong_input(client):
     data = json.loads(response.data.decode())
     assert (data["error"][
                 "title"] == "Field must contain a minimum of 4 characters")
-    assert (data["error"][
-                "description"] == "Please provide a description of type string")
+    assert (data["error"]["description"] == "Field cannot be a number")
     assert (data["error"][
                 "location"] == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180")
     assert (data["error"][
@@ -129,4 +128,4 @@ def test_create_a_red_flag_without_wrong_input(client):
                            data=json.dumps(wrong_input_1), )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
-    assert (data["error"]["title"] == "Field cannot be blank")
+    assert (data["error"]["title"] == "Field must contain a minimum of 4 characters")

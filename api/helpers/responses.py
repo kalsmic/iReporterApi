@@ -39,8 +39,10 @@ red_flag_deleted = "red-flag record has been deleted"
 supported_end_points = [
     "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/register",
     "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/login",
+    "POST https://ireporterapiv1.herokuapp.com/api/v1/red-flags",
     "GET https://ireporterapiv1.herokuapp.com/api/v1/red-flags",
     "GET https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>",
+    "PATCH https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>/status",
     "PATCH https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>/location",
     "PATCH https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>/comment",
     "DELETE https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>",
