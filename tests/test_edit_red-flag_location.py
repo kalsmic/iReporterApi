@@ -15,7 +15,7 @@ def test_edit_a_red_flag_location_without_a_token(client):
 
 
 def test_edit_a_red_flag_location_without_location_data(client):
-    response = client.patch("api/v1/red-flags/12/location",
+    response = client.patch("api/v1/red-flags/2/location",
                             headers=user1_header, )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
