@@ -1,72 +1,85 @@
-from flask import json
-
-from api.app import create_app
-
-app = create_app({"TESTING": True})
-client = app.test_client()
-
-admin_response = client.post(
-    "/api/v1/auth/login",
-    data=json.dumps({"username": "admin", "password": "Password123"}),
-)
-admin_token = json.loads(admin_response.data.decode())["token"]
-mimetype = "application/json"
-
-admin_header = {
-    "Content-Type": mimetype,
-    "Authorization": "Bearer " + admin_token,
-}
-admin_user_id = 1
+from api.helpers.auth_token import encode_token
+from api.models.incident import RedFlag, red_flags
+from api.models.user import users, User
 
 user1_data = {
-    "firstname": "userOne",
-    "lastname": "userone",
+    "first_name": "userOne",
+    "last_name": "userone",
     "email": "userOne@ireporter.com",
-    "phoneNumber": "0773125678",
+    "phone_number": "0773125678",
     "password": "Password123",
-    "username": "user1",
-    "othernames": "",
+    "user_name": "user1",
+    "other_names": "",
 }
+
 user2_data = {
-    "firstname": "userTwo",
-    "lastname": "lastTwo",
+    "first_name": "userTwo",
+    "last_name": "lastTwo",
     "email": "usertwo@ireporter.com",
-    "phoneNumber": "0774551567",
+    "phone_number": "0774551567",
     "password": "Password123",
-    "username": "user2",
-    "othernames": "",
+    "user_name": "user2",
+    "other_names": "",
 }
 
-user1_response = client.post(
-    "/api/v1/auth/register", data=json.dumps(user1_data)
-)
-data = json.loads(user1_response.data.decode())
-user1_id = data["data"][0]["id"]
+def generate_token_header(token):
+    return {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token,
+    }
 
-user2_response = client.post(
-    "/api/v1/auth/register", data=json.dumps(user2_data)
-)
-data = json.loads(user2_response.data.decode())
-user2_id = data["data"][0]["id"]
+admin_header = generate_token_header(encode_token(1,1))
 
-user1_response = client.post(
-    "/api/v1/auth/login",
-    data=json.dumps({"username": "user1", "password": "Password123"}),
-)
-user1_token = json.loads(user1_response.data.decode())["token"]
+user1 = User(**user1_data)
+user2 = User(**user2_data)
+users.extend([user1,user2])
+user1_id = user1.user_id
+user2_id = user2.user_id
 
-user2_response = client.post(
-    "/api/v1/auth/login",
-    data=json.dumps({"username": "user2", "password": "Password123"}),
-)
-user2_token = json.loads(user2_response.data.decode())["token"]
+user1_header = generate_token_header(encode_token(user1_id))
+user2_header = generate_token_header(encode_token(user2_id))
 
-user1_header = {
-    "Content-Type": mimetype,
-    "Authorization": "Bearer " + user1_token,
+new_record = {
+    "title": "My First red flag",
+    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
+    "location": [-80, -174.4],
+    "tags": ["crime", "rape"],
+    "Images": ["image1.jpg", "image2.jpg"],
+    "Videos": ["vid1.mp4", "vid2.mp4"],
+    "comment": ""
 }
-
-user2_header = {
-    "Content-Type": mimetype,
-    "Authorization": "Bearer " + user2_token,
+second_record = {
+    "title": "My Second red flag",
+    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
+    "location": [-78, -164.4],
+    "tags": ["crime", "murder"],
+    "images": ["image3.jpg", "image4.jpg"],
+    "videos": ["vid8.mp4", "vid5.mp4"],
+    "comment": "Caught in the very act",
+    "user_id":user2_id
 }
+third_record = {
+    "title": "My Second red flag",
+    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
+    "location": [-78, -164.4],
+    "tags": ["crime", "murder"],
+    "images": ["image5.jpg", "image6.jpg"],
+    "videos": ["vid9.mp4", "vid5.mp10"],
+    "comment": "Caught in the very act",
+    "user_id":user1_id
+}
+fourth_record = {
+    "title": "My third red flag",
+    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
+    "location": [-78, -164.4],
+    "tags": ["crime", "murder"],
+    "images": ["image5.jpg", "image6.jpg"],
+    "videos": ["vid9.mp4", "vid5.mp10"],
+    "comment": "Caught in the very act",
+    "user_id":user1_id
+}
+red_flag_obj1 = RedFlag(**second_record)
+red_flag_obj2 = RedFlag(**third_record)
+red_flag_obj3 = RedFlag(**fourth_record)
+red_flag_obj1.status ="under investigation"
+red_flags.extend([red_flag_obj1,red_flag_obj2,red_flag_obj3])

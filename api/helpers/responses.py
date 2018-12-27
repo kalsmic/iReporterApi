@@ -24,17 +24,20 @@ wrong_password = (
 )
 
 wrong_username = (
-    "Username must be string with atleast 5 characters and may" " contain a number"
+    "Username must be string with atleast 5 characters and may"
+    " contain a number"
 )
 wrong_phone_number = "Phone number must be a string of ten digits only"
 wrong_email = "Please provide a valid email address"
-wrong_name = "Name field is a string and cannot be blank or contain a space or a number"
+wrong_name = (
+    "Name field is a string and cannot be blank or contain a space or a number"
+)
 duplicate_email = "Account with specified email address already exists"
 duplicate_user_name = "Username already exists"
 delete_not_allowed = "You are not allowed to delete this resource"
 red_flag_deleted = "red-flag record has been deleted"
 supported_end_points = [
-    "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/signup",
+    "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/register",
     "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/login",
     "GET https://ireporterapiv1.herokuapp.com/api/v1/red-flags",
     "GET https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>",
@@ -42,3 +45,6 @@ supported_end_points = [
     "PATCH https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>/comment",
     "DELETE https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>",
 ]
+wrong_status = (
+    "Status must either be 'resolved','under investigation' or 'rejected'"
+)

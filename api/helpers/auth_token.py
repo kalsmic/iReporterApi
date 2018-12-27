@@ -9,7 +9,6 @@ secret_key = environ.get("SECRET_KEY", "my_secret_key")
 
 
 def encode_token(user_id, isAdmin=0):
-
     payload = {
         "userid": user_id,
         "isAdmin": isAdmin,
@@ -22,7 +21,6 @@ def encode_token(user_id, isAdmin=0):
 
 
 def decode_token(token):
-
     decoded = jwt.decode(str(token), secret_key, algorithm="HS256")
     return decoded
 
@@ -30,7 +28,10 @@ def decode_token(token):
 def extract_token_from_header():
     authorizaton_header = request.headers.get("Authorization")
     if not authorizaton_header or "Bearer" not in authorizaton_header:
-        return (jsonify({"error": "Bad authorization header", "status": 400}), 400)
+        return (
+            jsonify({"error": "Bad authorization header", "status": 400}),
+            400,
+        )
     token = str(authorizaton_header).split(" ")[1]
     return token
 
@@ -45,15 +46,25 @@ def token_required(func):
             response = func(*args, **kwargs)
         except jwt.DecodeError:
             response = (
-                jsonify({"error": "Missing access token in header", "status": 401}),
+                jsonify(
+                    {"error": "Missing access token in header", "status": 401}
+                ),
                 401,
             )
 
         except jwt.ExpiredSignatureError:
-            response = (jsonify({"error": "Signature has expired", "status": 401}), 401)
+            response = (
+                jsonify({"error": "Signature has expired", "status": 401}),
+                401,
+            )
         except jwt.InvalidTokenError:
             response = (
-                jsonify({"error": "Invalid Token verification failed", "status": 401}),
+                jsonify(
+                    {
+                        "error": "Invalid Token verification failed",
+                        "status": 401,
+                    }
+                ),
                 401,
             )
         return response
@@ -72,10 +83,32 @@ def get_current_role():
 def non_admin(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-
         if get_current_role():
             return (
-                jsonify({"error": "Admin cannot access this resource", "status": 403}),
+                jsonify(
+                    {
+                        "error": "Admin cannot access this resource",
+                        "status": 403,
+                    }
+                ),
+                403,
+            )
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def admin_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not get_current_role():
+            return (
+                jsonify(
+                    {
+                        "error": "Only Admin can access this resource",
+                        "status": 403,
+                    }
+                ),
                 403,
             )
         return func(*args, **kwargs)
