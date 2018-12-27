@@ -6,22 +6,16 @@ from api.helpers.auth_token import (
     get_current_identity,
 )
 
-red_flags_bp = Blueprint("red_flags_bp", __name__, url_prefix="/api/v1")
-from api.models.incident import (
-    RedFlag,
-    incident_record_exists,
-    red_flags,
+create_red_flags_bp = Blueprint(
+    "create_red_flags_bp", __name__, url_prefix="/api/v1"
 )
-from api.helpers.validation import (
-    validate_new_incident,
-)
+from api.models.incident import RedFlag, incident_record_exists, red_flags
+from api.helpers.validation import validate_new_incident
 
-from api.helpers.responses import (
-    expected_new_incident_format,
-)
+from api.helpers.responses import expected_new_incident_format
 
 
-@red_flags_bp.route("/red-flags", methods=["POST"])
+@create_red_flags_bp.route("/red-flags", methods=["POST"])
 @token_required
 @non_admin
 def new_red_flag():
@@ -49,11 +43,11 @@ def new_red_flag():
     }
 
     not_valid = validate_new_incident(**new_red_flag_data)
+    response = None
 
     if not_valid:
-        return not_valid
-    response = None
-    if not incident_record_exists(
+        response = not_valid
+    elif not incident_record_exists(
         new_red_flag_data["title"], new_red_flag_data["description"], red_flags
     ):
         new_red_flag_data["user_id"] = get_current_identity()
