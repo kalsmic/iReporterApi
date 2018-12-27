@@ -7,6 +7,7 @@ from api.routes.admin import admin_flags_bp
 from api.routes.auth import users_bp
 from api.routes.incidents import red_flags_bp
 from api.routes.edit_incident import edit_red_flags_bp
+from api.routes.delete_incident import delete_red_flag_bp
 from config import Config
 
 
@@ -31,6 +32,7 @@ def create_app(config="None"):
     app.register_blueprint(users_bp)
     app.register_blueprint(red_flags_bp)
     app.register_blueprint(edit_red_flags_bp)
+    app.register_blueprint(delete_red_flag_bp)
     app.register_blueprint(admin_flags_bp)
 
     return app
