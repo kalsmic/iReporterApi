@@ -37,7 +37,7 @@ duplicate_user_name = "Username already exists"
 delete_not_allowed = "You are not allowed to delete this resource"
 red_flag_deleted = "red-flag record has been deleted"
 supported_end_points = [
-    "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/signup",
+    "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/register",
     "POST https://ireporterapiv1.herokuapp.com/api/v1/auth/login",
     "GET https://ireporterapiv1.herokuapp.com/api/v1/red-flags",
     "GET https://ireporterapiv1.herokuapp.com/api/v1/red-flags/<red-flag-id>",
