@@ -56,7 +56,9 @@ records = {"red-flag": {"db": red_flags, "id": red_flag_id}}
 def get_incident_record(record_id, collection):
     """Returns a redflag or Intervention record"""
     return [
-        record.get_details() for record in collection if record.incident_id == record_id
+        record.get_details()
+        for record in collection
+        if record.incident_id == record_id
     ]
 
 
@@ -83,3 +85,18 @@ def incident_record_exists(title, description, incident_results):
         ):
             return True
     return False
+#
+#
+# new_red = {
+#     "title": "My First red flag",
+#     "description": "ggh",
+#     "location": [-80, -174.4],
+#     "tags": [],
+#     "Images": [],
+#     "Videos": [],
+#     "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing",
+#     "user_id": 2,
+# }
+#
+# red_obj = RedFlag(**new_red)
+# red_flags.append(red_obj)

@@ -25,7 +25,6 @@ def test_user_login_with_valid_credentials_(client):
 
 
 def test_user_login_without_data_(client):
-
     response = client.post("/api/v1/auth/login", headers=headers)
     data = json.loads(response.data.decode())
     assert response.status_code == 400
@@ -33,7 +32,6 @@ def test_user_login_without_data_(client):
 
 
 def test_user_login_with_wrong_credentials_(client):
-
     response = client.post(
         "/api/v1/auth/login",
         data=json.dumps({"username": "usehr1", "password": "Password123"}),
