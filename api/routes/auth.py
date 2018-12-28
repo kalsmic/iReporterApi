@@ -110,6 +110,7 @@ def login():
         )
 
     user_credentials = json.loads(request.data)
+    response = None
     try:
         username = user_credentials["username"]
         password = user_credentials["password"]
@@ -117,7 +118,7 @@ def login():
         # submit credentials
         data = is_valid_credentials(username, password)
         if data:
-            return (
+            response = (
                 jsonify(
                     {
                         "status": 200,
@@ -131,10 +132,12 @@ def login():
                 ),
                 200,
             )
-        return jsonify({"error": "Invalid credentials", "status": 401}), 401
+        else:
+            response = jsonify({"error": "Invalid credentials",
+                                "status": 401}), 401
 
     except KeyError:
-        return (
+        response = (
             jsonify(
                 {
                     "error": "Please provide the correct keys for the data",
@@ -143,3 +146,4 @@ def login():
             ),
             422,
         )
+    return response
