@@ -5,7 +5,6 @@ from jwt import encode
 import datetime
 from api.helpers.auth_token import secret_key
 
-# secret_key = environ.get("SECRET_KEY", "my_secret_key")
 
 
 user1_data = {
@@ -93,7 +92,11 @@ red_flag_obj1.status = "under investigation"
 red_flags.extend([red_flag_obj1, red_flag_obj2, red_flag_obj3])
 
 expired_token = encode(
-    {"userid": 1, "isAdmin": 1, "exp": datetime.datetime.utcnow()},
+    {
+        "userid": 1,
+        "isAdmin": 1,
+        "exp": datetime.datetime.utcnow() - datetime.timedelta(hours=3),
+    },
     secret_key,
     algorithm="HS256",
 ).decode("utf-8")

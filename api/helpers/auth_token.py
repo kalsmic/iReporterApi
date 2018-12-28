@@ -4,6 +4,7 @@ from os import environ
 
 import jwt
 from flask import request, jsonify
+
 from api.helpers.responses import expired_token_message, invalid_token_message
 
 secret_key = environ.get("SECRET_KEY", "my_secret_key")

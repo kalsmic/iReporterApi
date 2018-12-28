@@ -1,6 +1,6 @@
 from flask import json
 
-from api.helpers.responses import wrong_description, invalid_token_message
+from api.helpers.responses import invalid_token_message
 
 from .base import admin_header, user1_header, new_record
 
@@ -34,6 +34,9 @@ def test_create_a_red_flag_without_data(client):
 
 
 def test_create_a_red_flag_with_valid_data(client):
+    new_record[
+        "comment"
+    ] = "Lorem ipsum eiusmod temport labore et dolore magna"
     response = client.post(
         "api/v1/red-flags", headers=user1_header, data=json.dumps(new_record)
     )
@@ -65,7 +68,6 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert len(data["error"]) == 1
 
     wrong_input_1["title"] = "6"
-    wrong_input_1["description"] = ""
     wrong_input_1["location"] = ""
     wrong_input_1["tags"] = ""
     wrong_input_1["Images"] = ""
@@ -82,10 +84,6 @@ def test_create_a_red_flag_without_wrong_input(client):
     data = json.loads(response.data.decode())
     assert data["error"]["title"] == "Field cannot be a number"
     assert (
-        data["error"]["description"]
-        == "Field must contain a minimum of 10 characters"
-    )
-    assert (
         data["error"]["location"]
         == "location must be a list with both Latitude and Longitude coordinates"
     )
@@ -101,11 +99,10 @@ def test_create_a_red_flag_without_wrong_input(client):
         data["error"]["Videos"]
         == "Please provide an empty list of Videos if none"
     )
-    assert data["error"]["comment"] == "Comment must be a string"
-    assert len(data["error"]) == 7
+    assert data["error"]["comment"] == "Field cannot be a number"
+    assert len(data["error"]) == 6
 
     wrong_input_1["title"] = "my"
-    wrong_input_1["description"] = "23"
     wrong_input_1["location"] = [-90, 180]
     wrong_input_1["tags"] = [12]
     wrong_input_1["Images"] = ["mine.png"]
@@ -123,7 +120,6 @@ def test_create_a_red_flag_without_wrong_input(client):
         data["error"]["title"]
         == "Field must contain a minimum of 4 characters"
     )
-    assert data["error"]["description"] == "Field cannot be a number"
     assert (
         data["error"]["location"]
         == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
@@ -134,7 +130,7 @@ def test_create_a_red_flag_without_wrong_input(client):
     )
     assert data["error"]["Images"] == "Only JPEG Images are supported"
     assert data["error"]["Videos"] == "Only MP4 Videos are supported"
-    assert len(data["error"]) == 6
+    assert len(data["error"]) == 5
 
     wrong_input_1["title"] = ""
 

@@ -1,7 +1,7 @@
 from flask import json
 
-from .base import user2_header, expired_token_header
 from api.helpers.responses import invalid_token_message, expired_token_message
+from .base import user2_header, expired_token_header
 
 
 # GET ALL RED-FLAG RECORDS

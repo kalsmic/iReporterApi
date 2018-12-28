@@ -1,8 +1,7 @@
 from flask import json
 
-from .base import user1_header, user2_header
-
 from api.helpers.responses import invalid_token_message
+from .base import user1_header, user2_header
 
 
 # EDIT A RED-FLAG RECORD'S COMMENT
@@ -60,7 +59,7 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
-    assert data["error"] == "Please provide a comment"
+    assert data["error"] == "Field must contain a minimum of 10 characters"
 
 
 def test_edit_a_red_flag_comment_created_by_another_user(client):

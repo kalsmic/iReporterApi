@@ -1,9 +1,8 @@
 from flask import json
 
+from api.helpers.responses import invalid_token_message
 from .base import user2_header, user1_header
 
-
-from api.helpers.responses import invalid_token_message
 
 # DELETE A RED FLAG RECORD
 

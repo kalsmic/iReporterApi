@@ -1,7 +1,6 @@
 from flask import json
 
 from api.helpers.responses import wrong_status, invalid_token_message
-
 from .base import user1_header, admin_header
 
 

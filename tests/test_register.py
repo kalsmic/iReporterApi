@@ -34,7 +34,7 @@ data_with_wrong_keys = {
 
 
 def test_register_with_no_data(client):
-    response = client.post("api/v1/auth/register", headers=headers)
+    response = client.post("api/v1/auth/signup", headers=headers)
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["error"] == "Provide provide valid data to register"
@@ -42,7 +42,7 @@ def test_register_with_no_data(client):
 
 def test_register_with_wrong_key(client):
     response = client.post(
-        "api/v1/auth/register",
+        "api/v1/auth/signup",
         headers=headers,
         data=json.dumps(data_with_wrong_keys),
     )
@@ -55,7 +55,7 @@ def test_register_with_wrong_key(client):
 #
 def test_register_with_wrong_invalid_format_data(client):
     response = client.post(
-        "api/v1/auth/register", headers=headers, data=json.dumps(new_user_data)
+        "api/v1/auth/signup", headers=headers, data=json.dumps(new_user_data)
     )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
@@ -76,17 +76,20 @@ def test_register_with_wrong_valid_format_data(client):
     new_user_data["password"] = "Password123"
 
     response = client.post(
-        "api/v1/auth/register", headers=headers, data=json.dumps(new_user_data)
+        "api/v1/auth/signup", headers=headers, data=json.dumps(new_user_data)
     )
     assert response.status_code == 201
     data = json.loads(response.data.decode())
     assert data["data"][0]["message"] == "Account created Successfully"
-    assert data["data"][0]["id"] == 4
+    assert data["data"][0]["user"]["id"] == 4
+    assert data["data"][0]["user"]["email"] == "jdmark@email.com"
+    assert "token" in data["data"][0]
+
 
 
 def test_register_duplicate_user(client):
     response = client.post(
-        "api/v1/auth/register", headers=headers, data=json.dumps(new_user_data)
+        "api/v1/auth/signup", headers=headers, data=json.dumps(new_user_data)
     )
     assert response.status_code == 409
     data = json.loads(response.data.decode())
@@ -94,7 +97,7 @@ def test_register_duplicate_user(client):
 
     new_user_data["email"] = "jdmark2@email.com"
     response = client.post(
-        "api/v1/auth/register", headers=headers, data=json.dumps(new_user_data)
+        "api/v1/auth/signup", headers=headers, data=json.dumps(new_user_data)
     )
     assert response.status_code == 409
     data = json.loads(response.data.decode())

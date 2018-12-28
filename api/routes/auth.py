@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, json
 
+from api.helpers.auth_token import encode_token
 from api.helpers.validation import validate_new_user
 from api.models.user import (
     User,
@@ -11,7 +12,7 @@ from api.models.user import (
 users_bp = Blueprint("users_bp", __name__, url_prefix="/api/v1")
 
 
-@users_bp.route("/auth/register", methods=["POST"])
+@users_bp.route("/auth/signup", methods=["POST"])
 def register():
     expected_data = {
         "firstname": "String",
@@ -81,7 +82,9 @@ def register():
                 "status": 201,
                 "data": [
                     {
-                        "id": new_user_obj.user_id,
+                        "user": new_user_obj.get_user_details(),
+                        "token": encode_token(new_user_obj.user_id,
+                                              new_user_obj.is_admin),
                         "message": "Account created Successfully",
                     }
                 ],
@@ -117,9 +120,13 @@ def login():
             return (
                 jsonify(
                     {
-                        "token": data,
                         "status": 200,
-                        "message": "Logged in successfully",
+                        "data": [{
+                            "token": encode_token(data.user_id, data.is_admin),
+                            "user": data.get_user_details(),
+                            "message": "Logged in successfully",
+                        }]
+
                     }
                 ),
                 200,

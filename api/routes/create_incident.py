@@ -34,7 +34,6 @@ def new_red_flag():
 
     new_red_flag_data = {
         "title": data.get("title"),
-        "description": data.get("description"),
         "location": data.get("location"),
         "comment": data.get("comment"),
         "tags": data.get("tags"),
@@ -48,7 +47,7 @@ def new_red_flag():
     if not_valid:
         response = not_valid
     elif not incident_record_exists(
-        new_red_flag_data["title"], new_red_flag_data["description"], red_flags
+            new_red_flag_data["title"], new_red_flag_data["comment"], red_flags
     ):
         new_red_flag_data["user_id"] = get_current_identity()
         new_record = RedFlag(**new_red_flag_data)
