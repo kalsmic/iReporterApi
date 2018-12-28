@@ -15,8 +15,9 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
 | Methods | EndPoint                               | Functionality                                   |
 | ------- | -------------------------------------- | ----------------------------------------------- |
 | POST    | /api/v1/auth/signup                    | Sign up a user                                  |
-| POST    | /api/v1auth/login                      | Login a user                                    |
-| GET     | /api/v1 /red-flags                     | Fetch all red-flag records.                     |
+| POST    | /api/v1/auth/login                     | Login a user                                    |
+| POST    | /api/v1/red-flags                      | Create a red-flag record a user                 |
+| GET     | /api/v1/red-flags                      | Fetch all red-flag records.                     |
 | GET     | /api/v1/red-flags/red_flag_id          | Fetch a specific red-flag-record                |
 | PATCH   | /api/v1/red-flags/red_flag_id/location | Edit the location of a specific red-flag record |
 | PATCH   | /api/v1/red-flags/red_flag-id/comment  | Edit the comment of a specific red-flag record  |
