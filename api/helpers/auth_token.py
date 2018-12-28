@@ -5,6 +5,8 @@ from os import environ
 import jwt
 from flask import request, jsonify
 
+from api.helpers.responses import expired_token_message, invalid_token_message
+
 secret_key = environ.get("SECRET_KEY", "my_secret_key")
 
 
@@ -44,27 +46,15 @@ def token_required(func):
             token = extract_token_from_header()
             decode_token(token)
             response = func(*args, **kwargs)
-        except jwt.DecodeError:
-            response = (
-                jsonify(
-                    {"error": "Missing access token in header", "status": 401}
-                ),
-                401,
-            )
 
         except jwt.ExpiredSignatureError:
             response = (
-                jsonify({"error": "Signature has expired", "status": 401}),
+                jsonify({"error": expired_token_message, "status": 401}),
                 401,
             )
         except jwt.InvalidTokenError:
             response = (
-                jsonify(
-                    {
-                        "error": "Invalid Token verification failed",
-                        "status": 401,
-                    }
-                ),
+                jsonify({"error": invalid_token_message, "status": 401}),
                 401,
             )
         return response

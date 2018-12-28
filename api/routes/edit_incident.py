@@ -13,7 +13,7 @@ from api.helpers.validation import (
     is_valid_status,
     is_valid_id,
     validate_edit_location,
-    validate_comment,
+    validate_sentence,
 )
 from api.models.incident import get_incident_obj_by_id, red_flags
 
@@ -53,8 +53,8 @@ def edit_red_flag_location(red_flag_id):
         response = (jsonify({"error": is_invalid, "status": 400}), 400)
 
     elif (
-        results.created_by == get_current_identity()
-        and results.status == "draft"
+            results.created_by == get_current_identity()
+            and results.status == "draft"
     ):
         location = json.loads(data).get("location")
 
@@ -100,7 +100,8 @@ def edit_red_flag_comment(red_flag_id):
 
     data = request.data
     comment = json.loads(data).get("comment")
-    is_invalid = validate_comment(comment, edit=1)
+
+    is_invalid = validate_sentence(comment, 10)
     incident_id = int(red_flag_id)
     incident_results = get_incident_obj_by_id(int(incident_id), red_flags)
 

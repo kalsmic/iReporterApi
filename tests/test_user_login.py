@@ -17,11 +17,13 @@ def test_user_login_with_valid_credentials_(client):
     "Tests login a user "
     # create user
     register_response = client.post(
-        "/api/v1/auth/register", data=json.dumps(valid_user), headers=headers
+        "/api/v1/auth/signup", data=json.dumps(valid_user), headers=headers
     )
     assert register_response.status_code == 201
     data = json.loads(register_response.data.decode())
-    assert data["data"][0]["id"] == 5
+    assert data["data"][0]["user"]["id"] == 5
+    assert data["data"][0]["user"]["email"] == "scottd@gmail.com"
+    assert "token" in data["data"][0]
 
 
 def test_user_login_without_data_(client):
@@ -61,5 +63,6 @@ def test_user_login_with_correct_credentials_data(client):
     )
     assert response.status_code == 200
     data = json.loads(response.data.decode())
-    assert data["message"] == "Logged in successfully"
-    assert "token" in data
+    assert data["data"][0]["message"] == "Logged in successfully"
+    assert "token" in data["data"][0]
+    assert data["data"][0]["user"]["email"] == "scottd@gmail.com"

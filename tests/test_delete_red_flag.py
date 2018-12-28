@@ -1,11 +1,11 @@
 from flask import json
 
-from .base import (
-    user2_header,
-    user1_header)
+from api.helpers.responses import invalid_token_message
+from .base import user2_header, user1_header
 
 
 # DELETE A RED FLAG RECORD
+
 
 def test_delete_red_flag_without_a_access_token(client):
     #
@@ -13,7 +13,7 @@ def test_delete_red_flag_without_a_access_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["status"] == 401
-    assert data["error"] == "Missing access token in header"
+    assert data["error"] == invalid_token_message
 
 
 def test_delete_red_flag_with_red_flag_id_which_does_not_exist(client):

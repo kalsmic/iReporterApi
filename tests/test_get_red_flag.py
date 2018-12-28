@@ -1,20 +1,26 @@
 from flask import json
 
-from .base import (
-    user2_header)
+from api.helpers.responses import invalid_token_message, expired_token_message
+from .base import user2_header, expired_token_header
 
 
 # GET ALL RED-FLAG RECORDS
+
 
 def test_get_all_red_flags_without_token(client):
     # test only logged in user get red flags
     response = client.get("api/v1/red-flags")
     assert response.status_code == 401
     data = json.loads(response.data.decode())
-    assert data == {
-        "error": "Missing access token in header",
-        "status": 401,
-    }
+    assert data == {"error": invalid_token_message, "status": 401}
+
+
+def test_get_all_red_flags_with_expired_token(client):
+    # test only logged in user get red flags
+    response = client.get("api/v1/red-flags", headers=expired_token_header)
+    assert response.status_code == 401
+    data = json.loads(response.data.decode())
+    assert data == {"error": expired_token_message, "status": 401}
 
 
 def test_get_all_red_flags(client):
@@ -37,7 +43,7 @@ def test_get_a_red_flag(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0][0]["Images"] == ['image3.jpg', 'image4.jpg']
+    assert data["data"][0][0]["Images"] == ["image3.jpg", "image4.jpg"]
 
 
 def test_get_a_red_flag_with_invalid_id(client):

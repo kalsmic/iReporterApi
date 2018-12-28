@@ -7,9 +7,9 @@ time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
 
 
 class Incident:
-    def __init__(self, title, description, **kwargs):
+    def __init__(self, title, comment, **kwargs):
         self.title = title
-        self.description = description
+        self.comment = comment
         self.tags = kwargs.get("tags", [])
         self.images = kwargs.get("images", [])
         self.videos = kwargs.get("videos", [])
@@ -17,16 +17,14 @@ class Incident:
         self.created_on = time_now
         self.created_by = kwargs.get("user_id")
         self.status = "draft"
-        self.comment = kwargs.get("comment")
 
     def get_details(self):
         return {
             "title": self.title,
-            "description": self.description,
+            "comment": self.comment,
             "createdOn": self.created_on,
             "createdBy": self.created_by,
             "location": self.location,
-            "comment": self.comment,
             "status": self.status,
             "Images": self.images,
             "Videos": self.videos,
@@ -35,11 +33,11 @@ class Incident:
 
 
 class RedFlag(Incident):
-    def __init__(self, title, description, **kwargs):
+    def __init__(self, title, comment, **kwargs):
         global red_flag_id
         self.incident_id = red_flag_id
         self.incident_type = "Red-flag"
-        super().__init__(title, description, **kwargs)
+        super().__init__(title, comment, **kwargs)
         red_flag_id += 1
 
     def get_details(self):
@@ -77,28 +75,11 @@ def get_incident_obj_by_id(incident_id, collection):
     return None
 
 
-def incident_record_exists(title, description, incident_results):
+def incident_record_exists(title, comment, incident_results):
     for incident_result in incident_results:
         if (
             incident_result.title == title
-            and incident_result.description == description
+            and incident_result.comment == comment
         ):
             return True
     return False
-
-
-#
-#
-# new_red = {
-#     "title": "My First red flag",
-#     "description": "ggh",
-#     "location": [-80, -174.4],
-#     "tags": [],
-#     "Images": [],
-#     "Videos": [],
-#     "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing",
-#     "user_id": 2,
-# }
-#
-# red_obj = RedFlag(**new_red)
-# red_flags.append(red_obj)

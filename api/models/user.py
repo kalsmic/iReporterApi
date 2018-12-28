@@ -3,7 +3,7 @@ from datetime import date
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from api.helpers.auth_token import encode_token, get_current_identity
+from api.helpers.auth_token import get_current_identity
 from api.helpers.responses import duplicate_email, duplicate_user_name
 
 users = []
@@ -23,7 +23,7 @@ class User:
         self.phone_number = kwargs["phone_number"]
         self.password = generate_password_hash(kwargs["password"])
         self.user_name = kwargs["user_name"]
-        self.registered = date.today()
+        self.registered_on = date.today()
         self.is_admin = 0
         user_id += 1
 
@@ -36,7 +36,7 @@ class User:
             "email": self.email,
             "phoneNumber": self.phone_number,
             "username": self.user_name,
-            "registered": self.registered,
+            "registeredOn": self.registered_on,
             "isAdmin": self.is_admin,
         }
 
@@ -53,9 +53,9 @@ def check_if_user_exists(user_name, email):
 def is_valid_credentials(user_name, password):
     for user in users:
         if user.user_name == user_name and check_password_hash(
-            user.password, password
+                user.password, password
         ):
-            return encode_token(user.user_id, user.is_admin)
+            return user
     return None
 
 
@@ -70,6 +70,7 @@ admin = User(
     other_names="",
 )
 admin.is_admin = 1
+admin.registered_on ="Fri, 28 Dec 2018 00:00:00 GMT"
 users.append(admin)
 
 
@@ -79,8 +80,3 @@ def check_if_is_admin():
         if user.user_id == user_id and user.user_name == "admin":
             return True
     return False
-
-
-user_object_by_id_dict = {user.user_id: user for user in users}
-email_object_dictionary = {user.email: user for user in users}
-user_name_object_dictionary = {user.user_name: user for user in users}

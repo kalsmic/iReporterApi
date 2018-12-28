@@ -1,8 +1,7 @@
 from flask import json
 
-from .base import (
-    user2_header,
-    user1_header)
+from api.helpers.responses import invalid_token_message
+from .base import user2_header, user1_header
 
 
 # EDIT A RED-FLAG RECORD'S LOCATION
@@ -11,12 +10,13 @@ def test_edit_a_red_flag_location_without_a_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["status"] == 401
-    assert data["error"] == "Missing access token in header"
+    assert data["error"] == invalid_token_message
 
 
 def test_edit_a_red_flag_location_without_location_data(client):
-    response = client.patch("api/v1/red-flags/2/location",
-                            headers=user1_header, )
+    response = client.patch(
+        "api/v1/red-flags/2/location", headers=user1_header
+    )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
@@ -24,9 +24,11 @@ def test_edit_a_red_flag_location_without_location_data(client):
 
 
 def test_edit_a_red_flag_location_which_does_not_exist(client):
-    response = client.patch("api/v1/red-flags/12/location",
-                            headers=user1_header,
-                            data=json.dumps({"location": [12, 12]}))
+    response = client.patch(
+        "api/v1/red-flags/12/location",
+        headers=user1_header,
+        data=json.dumps({"location": [12, 12]}),
+    )
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["status"] == 404
@@ -34,9 +36,11 @@ def test_edit_a_red_flag_location_which_does_not_exist(client):
 
 
 def test_edit_a_red_flag_location_which_does_not_belong_to_user(client):
-    response = client.patch("api/v1/red-flags/2/location",
-                            headers=user2_header,
-                            data=json.dumps({"location": [12, 12]}))
+    response = client.patch(
+        "api/v1/red-flags/2/location",
+        headers=user2_header,
+        data=json.dumps({"location": [12, 12]}),
+    )
     assert response.status_code == 403
     data = json.loads(response.data.decode())
     assert data["status"] == 403
@@ -44,9 +48,11 @@ def test_edit_a_red_flag_location_which_does_not_belong_to_user(client):
 
 
 def test_edit_a_red_flag_location_with_invalid_red_flag_id(client):
-    response = client.patch("api/v1/red-flags/df/location",
-                            headers=user2_header,
-                            data=json.dumps({"location": [12, 12]}))
+    response = client.patch(
+        "api/v1/red-flags/df/location",
+        headers=user2_header,
+        data=json.dumps({"location": [12, 12]}),
+    )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
@@ -54,9 +60,11 @@ def test_edit_a_red_flag_location_with_invalid_red_flag_id(client):
 
 
 def test_edit_a_red_flag_location_status_of_draft(client):
-    response = client.patch("api/v1/red-flags/2/location",
-                            headers=user1_header,
-                            data=json.dumps({"location": [12, 12]}))
+    response = client.patch(
+        "api/v1/red-flags/2/location",
+        headers=user1_header,
+        data=json.dumps({"location": [12, 12]}),
+    )
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
@@ -65,21 +73,26 @@ def test_edit_a_red_flag_location_status_of_draft(client):
 
 
 def test_edit_a_red_flag_location_with_invalid_location_coordinates(client):
-    response = client.patch("api/v1/red-flags/2/location",
-                            headers=user1_header,
-                            data=json.dumps({"location": [-90, 12]}))
+    response = client.patch(
+        "api/v1/red-flags/2/location",
+        headers=user1_header,
+        data=json.dumps({"location": [-90, 12]}),
+    )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
     assert data["error"] == (
         "latitude must be between -90 and 90 and longitude"
-        " coordinates must be between -180 and 180")
+        " coordinates must be between -180 and 180"
+    )
 
 
 def test_edit_a_red_flag_location_status_other_than_draft(client):
-    response = client.patch("api/v1/red-flags/1/location",
-                            headers=user2_header,
-                            data=json.dumps({"location": [12, 12]}))
+    response = client.patch(
+        "api/v1/red-flags/1/location",
+        headers=user2_header,
+        data=json.dumps({"location": [12, 12]}),
+    )
     assert response.status_code == 403
     data = json.loads(response.data.decode())
     assert data["status"] == 403

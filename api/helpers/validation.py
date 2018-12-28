@@ -11,7 +11,6 @@ from api.helpers.responses import (
     wrong_email,
     wrong_phone_number,
     wrong_name,
-    wrong_description,
 )
 
 
@@ -48,10 +47,10 @@ def is_number(num_value):
 def is_string(str_value):
     """Checks if input is a string"""
     if (
-        str_value
-        and isinstance(str_value, str)
-        and not str(str_value).isspace()
-        and not str_value.isnumeric()
+            str_value
+            and isinstance(str_value, str)
+            and not str(str_value).isspace()
+            and not str_value.isnumeric()
     ):
         return True
     return False
@@ -73,7 +72,7 @@ def contains_number(str_value):
 
 
 def validate_email(email):
-    if not email and not re.match("[^@]+@[^@]+\.[^@]+", email):
+    if not email or not re.match("[^@]+@[^@]+\.[^@]+", email):
         return wrong_email
     return None
 
@@ -86,13 +85,13 @@ def validate_user_name(user_name):
 
 def validate_name(name, required=1):
     error = wrong_name
-    if not required and name == "":
+    if not required and len(str(name).strip()) == 0:
         error = None
     elif (
-        name
-        and is_string(name)
-        and not contains_space(name)
-        and not contains_number(name)
+            name
+            and is_string(name)
+            and not contains_space(name)
+            and not contains_number(name)
     ):
         error = None
     return error
@@ -101,10 +100,10 @@ def validate_name(name, required=1):
 def validate_password(password):
     error = wrong_password
     if (
-        len(password) >= 8
-        and re.search("[A-Z]", password)
-        and re.search("[0-9]", password)
-        and re.search("[a-z]", password)
+            len(password) >= 8
+            and re.search("[A-Z]", password)
+            and re.search("[0-9]", password)
+            and re.search("[a-z]", password)
     ):
         error = None
     return error
@@ -118,37 +117,16 @@ def validate_phone_number(phone_number):
     return error
 
 
-def validate_comment(comment, edit=0):
+def validate_sentence(sentence, min_len=0, max_len=0):
     error = None
-    if comment == "" and edit == 0:
-        pass
-    elif not comment and edit == 1:
-        error = "Please provide a comment"
-    elif not is_string(comment):
-        error = "Comment must be a string"
-    return error
-
-
-def validate_sentence(sentence, required=0, min_len=0, max_len=0):
-    error = None
-    if str(sentence).isdigit():
+    sentence = str(sentence).strip()
+    if sentence.isdigit():
         error = "Field cannot be a number"
-    elif min_len == 0 and sentence == "" or sentence.isspace():
-        pass
-    elif required and not is_string(sentence):
-        error = "Field cannot be blank"
     elif len(sentence) < min_len:
         error = f"Field must contain a minimum of {str(min_len)} characters"
     elif max_len and len(sentence) > max_len:
         error = f"Field must contain a maximum of {str(max_len)} characters"
 
-    return error
-
-
-def validate_description(description):
-    error = None
-    if not description or not is_string(description):
-        error = wrong_description
     return error
 
 
@@ -213,7 +191,7 @@ def validate_location(location):
     return error
 
 
-def validate_new_user(*args, **kwargs):
+def validate_new_user(**kwargs):
     errors = {}
     errors["firstname"] = validate_name(kwargs["first_name"])
     errors["lastname"] = validate_name(kwargs["last_name"])
@@ -230,13 +208,12 @@ def validate_new_user(*args, **kwargs):
 
 def validate_new_incident(**kwargs):
     errors = {}
-    errors["title"] = validate_sentence(kwargs.get("title"), 1, 4, 100)
-    errors["description"] = validate_description(kwargs.get("description"))
+    errors["title"] = validate_sentence(kwargs.get("title"), 4, 100)
+    errors["comment"] = validate_sentence(kwargs.get("comment"), 10)
     errors["location"] = validate_location(kwargs.get("location"))
     errors["tags"] = validate_tags(kwargs.get("tags"))
     errors["Images"] = validate_media(kwargs.get("images"), "Images")
     errors["Videos"] = validate_media(kwargs.get("videos"), "Videos")
-    errors["comment"] = validate_comment(kwargs.get("comment"))
     not_valid = {key: value for key, value in errors.items() if value}
 
     if not_valid:
@@ -267,9 +244,9 @@ def is_valid_status(status):
     if not status or not isinstance(status, str):
         is_valid = False
     elif str(status).lower() not in (
-        "resolved",
-        "under invenstigation",
-        "rejected",
+            "resolved",
+            "under investigation",
+            "rejected",
     ):
         is_valid = False
     return is_valid
