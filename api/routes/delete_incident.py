@@ -17,17 +17,10 @@ delete_red_flag_bp = Blueprint(
 @delete_red_flag_bp.route("/red-flags/<red_flag_id>", methods=["DELETE"])
 @token_required
 @non_admin
+@is_valid_id
 def delete_record(red_flag_id):
-    record_id = red_flag_id
-    if not is_valid_id(record_id):
-        return (
-            jsonify({"error": "Red-flag id must be an number", "status": 400}),
-            400,
-        )
-
-    incident_id = int(red_flag_id)
     results = get_incident_obj_by_id(
-        incident_id=incident_id, collection=red_flags
+        incident_id=int(red_flag_id), collection=red_flags
     )
 
     response = None

@@ -22,10 +22,9 @@ def test_edit_a_red_flag_comment_with_an_invalid_red_flag_id(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
-    assert data["error"] == "Red-flag id must be an number"
+    assert data["error"] == "Red-flag id must be an integer"
 
 
-#
 def test_edit_a_red_flag_comment_without_comment_data(client):
     response = client.patch("api/v1/red-flags/2/comment", headers=user1_header)
     assert response.status_code == 400

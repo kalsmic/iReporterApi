@@ -56,7 +56,7 @@ def test_edit_a_red_flag_location_with_invalid_red_flag_id(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
-    assert data["error"] == "Red-flag id must be an number"
+    assert data["error"] == "Red-flag id must be an integer"
 
 
 def test_edit_a_red_flag_location_status_of_draft(client):

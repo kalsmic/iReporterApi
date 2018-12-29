@@ -53,12 +53,21 @@ def request_data_required(func):
     return wrapper
 
 
-def is_valid_id(record_id):
-    try:
-        int(record_id)
-    except ValueError:
-        return False
-    return True
+def is_valid_id(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        value = kwargs["red_flag_id"]
+        try:
+            value = int(value, 10)
+        except ValueError:
+            return (
+                jsonify(
+                    {"status": 400, "error": "Red-flag id must be an integer"}
+                ),
+                400,
+            )
+        return func(*args, **kwargs)
+    return decorated_view
 
 
 def is_number(num_value):

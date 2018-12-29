@@ -27,18 +27,11 @@ edit_red_flags_bp = Blueprint(
 )
 @token_required
 @non_admin
+@is_valid_id
 def edit_red_flag_location(red_flag_id):
-    record_id = red_flag_id
-
-    if not is_valid_id(record_id):
-        return (
-            jsonify({"error": "Red-flag id must be an number", "status": 400}),
-            400,
-        )
-
     data = request.data
     is_invalid = validate_edit_location(data)
-    results = get_incident_obj_by_id(int(record_id), red_flags)
+    results = get_incident_obj_by_id(int(red_flag_id), red_flags)
 
     response = None
 
@@ -53,8 +46,8 @@ def edit_red_flag_location(red_flag_id):
         response = (jsonify({"error": is_invalid, "status": 400}), 400)
 
     elif (
-            results.created_by == get_current_identity()
-            and results.status == "draft"
+        results.created_by == get_current_identity()
+        and results.status == "draft"
     ):
         location = json.loads(data).get("location")
 
@@ -89,21 +82,14 @@ def edit_red_flag_location(red_flag_id):
 @edit_red_flags_bp.route("/red-flags/<red_flag_id>/comment", methods=["PATCH"])
 @token_required
 @non_admin
+@is_valid_id
 @request_data_required
 def edit_red_flag_comment(red_flag_id):
-    record_id = red_flag_id
-    if not is_valid_id(record_id):
-        return (
-            jsonify({"error": "Red-flag id must be an number", "status": 400}),
-            400,
-        )
-
     data = request.data
     comment = json.loads(data).get("comment")
-
-    is_invalid = validate_sentence(comment, 10)
     incident_id = int(red_flag_id)
-    incident_results = get_incident_obj_by_id(int(incident_id), red_flags)
+    is_invalid = validate_sentence(comment, 10)
+    incident_results = get_incident_obj_by_id(incident_id, red_flags)
 
     response = None
     if not incident_results or not incident_results.incident_id == incident_id:
@@ -164,15 +150,9 @@ def edit_red_flag_comment(red_flag_id):
 @edit_red_flags_bp.route("/red-flags/<red_flag_id>/status", methods=["PATCH"])
 @token_required
 @admin_required
+@is_valid_id
 @request_data_required
 def edit_red_flag_status(red_flag_id):
-    record_id = red_flag_id
-    if not is_valid_id(record_id):
-        return (
-            jsonify({"error": "Red-flag id must be an number", "status": 400}),
-            400,
-        )
-
     status = json.loads(request.data).get("status")
 
     incident_id = int(red_flag_id)

@@ -86,7 +86,6 @@ def test_register_with_wrong_valid_format_data(client):
     assert "token" in data["data"][0]
 
 
-
 def test_register_duplicate_user(client):
     response = client.post(
         "api/v1/auth/signup", headers=headers, data=json.dumps(new_user_data)
