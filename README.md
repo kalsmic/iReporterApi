@@ -54,8 +54,8 @@ Enter the command below in the terminal to run the tests with coverage using
 
 ## Built With
 
--[Python](https://www.python.org/) - A programming language that lets you work quickly and integrate systems more effectively
--[Flask](http://flask.pocoo.org/) - A microframework for Python based on Werkzeug, Jinja 2 and good intentions.
+-   [Python](https://www.python.org/) - A programming language that lets you work quickly and integrate systems more effectively
+-   [Flask](http://flask.pocoo.org/) - A microframework for Python based on Werkzeug, Jinja 2 and good intentions.
 
 ## Author
 
