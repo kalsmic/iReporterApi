@@ -17,7 +17,7 @@ def create_app(config="None"):
     CORS(app)
 
     @app.errorhandler(404)
-    def page_not_found(e):
+    def _page_not_found(e):
         return (
             jsonify(
                 {
