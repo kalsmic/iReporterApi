@@ -1,4 +1,6 @@
 from datetime import datetime
+from api.helpers.auth_token import get_current_role, get_current_identity
+
 
 red_flag_id = 1
 red_flags = []
@@ -53,11 +55,19 @@ records = {"red-flag": {"db": red_flags, "id": red_flag_id}}
 
 def get_incident_record(record_id, collection):
     """Returns a redflag or Intervention record"""
-    return [
+    result = [
         record.get_details()
         for record in collection
         if record.incident_id == record_id
     ]
+    if not get_current_role():
+        result = [
+            record.get_details()
+            for record in collection
+            if record.incident_id == record_id
+            and record.created_by == get_current_identity()
+        ]
+    return result
 
 
 def get_all_incident_records(collection):
@@ -65,7 +75,16 @@ def get_all_incident_records(collection):
         Returns: all red-flags if collection is red-flags else
         Returns: interventions if collection is interventions
     """
-    return [record.get_details() for record in collection]
+    result = None
+    if get_current_role():
+        result = [record.get_details() for record in collection]
+    else:
+        result = [
+            record.get_details()
+            for record in collection
+            if record.created_by == get_current_identity()
+        ]
+    return result
 
 
 def get_incident_obj_by_id(incident_id, collection):
