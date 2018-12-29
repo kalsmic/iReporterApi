@@ -52,3 +52,12 @@ wrong_status = (
 
 invalid_token_message = "Invalid Token, verification failed"
 expired_token_message = "Signature has expired"
+expected_signup_data = {
+    "firstname": "String",
+    "lastname": "String",
+    "othernames": "String",
+    "username": "String",
+    "email": "String",
+    "phoneNumber": "string",
+    "password": "string",
+}

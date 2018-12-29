@@ -6,7 +6,6 @@ import datetime
 from api.helpers.auth_token import secret_key
 
 
-
 user1_data = {
     "first_name": "userOne",
     "last_name": "userone",

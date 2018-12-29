@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, json
 
 from api.helpers.auth_token import encode_token
-from api.helpers.validation import validate_new_user
+from api.helpers.validation import validate_new_user, sign_up_data_required
 from api.models.user import (
     User,
     users,
@@ -13,27 +13,8 @@ users_bp = Blueprint("users_bp", __name__, url_prefix="/api/v1")
 
 
 @users_bp.route("/auth/signup", methods=["POST"])
+@sign_up_data_required
 def register():
-    expected_data = {
-        "firstname": "String",
-        "lastname": "String",
-        "othernames": "String",
-        "username": "String",
-        "email": "String",
-        "phoneNumber": "string",
-        "password": "string",
-    }
-    if not request.data:
-        return (
-            jsonify(
-                {
-                    "error": "Provide provide valid data to register",
-                    "expected": expected_data,
-                    "status": 400,
-                }
-            ),
-            400,
-        )
 
     new_user = json.loads(request.data)
     try:
@@ -71,27 +52,30 @@ def register():
     user_exists = check_if_user_exists(
         user_name=new_user["user_name"], email=new_user["email"]
     )
+    response = None
     if user_exists:
-        return jsonify({"error": user_exists, "status": 409}), 409
-
-    new_user_obj = User(**new_user)
-    users.append(new_user_obj)
-    return (
-        jsonify(
-            {
-                "status": 201,
-                "data": [
-                    {
-                        "user": new_user_obj.get_user_details(),
-                        "token": encode_token(new_user_obj.user_id,
-                                              new_user_obj.is_admin),
-                        "message": "Account created Successfully",
-                    }
-                ],
-            }
-        ),
-        201,
-    )
+        response = jsonify({"error": user_exists, "status": 409}), 409
+    else:
+        new_user_obj = User(**new_user)
+        users.append(new_user_obj)
+        response = (
+            jsonify(
+                {
+                    "status": 201,
+                    "data": [
+                        {
+                            "user": new_user_obj.get_user_details(),
+                            "token": encode_token(
+                                new_user_obj.user_id, new_user_obj.is_admin
+                            ),
+                            "message": "Account created Successfully",
+                        }
+                    ],
+                }
+            ),
+            201,
+        )
+    return response
 
 
 @users_bp.route("/auth/login", methods=["POST"])
@@ -122,19 +106,24 @@ def login():
                 jsonify(
                     {
                         "status": 200,
-                        "data": [{
-                            "token": encode_token(data.user_id, data.is_admin),
-                            "user": data.get_user_details(),
-                            "message": "Logged in successfully",
-                        }]
-
+                        "data": [
+                            {
+                                "token": encode_token(
+                                    data.user_id, data.is_admin
+                                ),
+                                "user": data.get_user_details(),
+                                "message": "Logged in successfully",
+                            }
+                        ],
                     }
                 ),
                 200,
             )
         else:
-            response = jsonify({"error": "Invalid credentials",
-                                "status": 401}), 401
+            response = (
+                jsonify({"error": "Invalid credentials", "status": 401}),
+                401,
+            )
 
     except KeyError:
         response = (

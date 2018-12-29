@@ -6,6 +6,7 @@ from api.models.incident import (
     get_incident_record,
     get_all_incident_records,
 )
+from api.helpers.validation import is_valid_id
 
 get_red_flags_bp = Blueprint(
     "get_red_flags_bp", __name__, url_prefix="/api/v1"
@@ -23,18 +24,9 @@ def get_all_red_flags():
 
 @get_red_flags_bp.route("/red-flags/<red_flag_id>", methods=["GET"])
 @token_required
+@is_valid_id
 def get_a_red_flag(red_flag_id):
-    try:
-        red_flag_id = int(red_flag_id)
-    except ValueError:
-        return (
-            jsonify(
-                {"status": 400, "error": "Red-flag id must be an integer"}
-            ),
-            400,
-        )
-
-    results = get_incident_record(red_flag_id, red_flags)
+    results = get_incident_record(int(red_flag_id), red_flags)
     response = None
     if results:
         response = jsonify({"status": 200, "data": [results]}), 200
