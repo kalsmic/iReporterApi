@@ -8,6 +8,7 @@ class Config:
     TESTING = False
     CSRF_ENABLED = True
     SECRET_KEY = os.environ.get("SECRET_KEY")
+    JSON_SORT_KEYS = False
 
 
 class ProductionConfig(Config):
