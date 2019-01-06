@@ -36,7 +36,7 @@ Open the terminal and run the following commands
     source venv/bin.activate
     pip3 install -r requirements.txt
     source venv/bin/activate
-    export APP_SETTINGS="config.ProductionConfig"
+    export APP_SETTINGS="instance.config.ProductionConfig"
     export SECRET_KEY="your secret key"
     python deploy.py
 ```
