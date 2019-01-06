@@ -8,10 +8,10 @@ from api.routes.create_incident import create_red_flags_bp
 from api.routes.delete_incident import delete_red_flag_bp
 from api.routes.edit_incident import edit_red_flags_bp
 from api.routes.get_incidents import get_red_flags_bp
-from config import Config
+from instance.config import Config
 
 
-def create_app(config="None"):
+def create_app(config=None):
     """Set up Flask application in function"""
     app = Flask(__name__)
     CORS(app)

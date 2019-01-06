@@ -1,12 +1,12 @@
 from flask import Blueprint, jsonify
 
 from api.helpers.auth_token import token_required
+from api.helpers.validation import is_valid_id
 from api.models.incident import (
     red_flags,
     get_incident_record,
     get_all_incident_records,
 )
-from api.helpers.validation import is_valid_id
 
 get_red_flags_bp = Blueprint(
     "get_red_flags_bp", __name__, url_prefix="/api/v1"

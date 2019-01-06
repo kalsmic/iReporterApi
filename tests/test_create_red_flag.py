@@ -1,7 +1,6 @@
 from flask import json
 
 from api.helpers.responses import invalid_token_message
-
 from .base import admin_header, user1_header, new_record
 
 
@@ -84,20 +83,20 @@ def test_create_a_red_flag_without_wrong_input(client):
     data = json.loads(response.data.decode())
     assert data["error"]["title"] == "Field cannot be a number"
     assert (
-        data["error"]["location"]
-        == "location must be a list with both Latitude and Longitude coordinates"
+            data["error"]["location"]
+            == "location must be a list with both Latitude and Longitude coordinates"
     )
     assert (
-        data["error"]["tags"]
-        == "Please provide a list of tags i.e ['crime','rape'] or an empty list"
+            data["error"]["tags"]
+            == "Please provide a list of tags i.e ['crime','rape'] or an empty list"
     )
     assert (
-        data["error"]["Images"]
-        == "Please provide an empty list of Images if none"
+            data["error"]["Images"]
+            == "Please provide an empty list of Images if none"
     )
     assert (
-        data["error"]["Videos"]
-        == "Please provide an empty list of Videos if none"
+            data["error"]["Videos"]
+            == "Please provide an empty list of Videos if none"
     )
     assert data["error"]["comment"] == "Field cannot be a number"
     assert len(data["error"]) == 6
@@ -117,16 +116,16 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-        data["error"]["title"]
-        == "Field must contain a minimum of 4 characters"
+            data["error"]["title"]
+            == "Field must contain a minimum of 4 characters"
     )
     assert (
-        data["error"]["location"]
-        == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
+            data["error"]["location"]
+            == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
     )
     assert (
-        data["error"]["tags"]
-        == "Tags must be of string type i.e ['crime','rape']"
+            data["error"]["tags"]
+            == "Tags must be of string type i.e ['crime','rape']"
     )
     assert data["error"]["Images"] == "Only JPEG Images are supported"
     assert data["error"]["Videos"] == "Only MP4 Videos are supported"
@@ -142,8 +141,8 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-        data["error"]["title"]
-        == "Field must contain a minimum of 4 characters"
+            data["error"]["title"]
+            == "Field must contain a minimum of 4 characters"
     )
 
     wrong_input_1["title"] = (
@@ -160,6 +159,6 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-        data["error"]["title"]
-        == "Field must contain a maximum of 100 characters"
+            data["error"]["title"]
+            == "Field must contain a maximum of 100 characters"
     )

@@ -1,5 +1,4 @@
-from flask import Blueprint
-from flask import jsonify, json, request
+from flask import Blueprint, jsonify, json, request
 
 from api.helpers.auth_token import (
     non_admin,
@@ -46,8 +45,8 @@ def edit_red_flag_location(red_flag_id):
         response = (jsonify({"error": is_invalid, "status": 400}), 400)
 
     elif (
-        results.created_by == get_current_identity()
-        and results.status == "draft"
+            results.created_by == get_current_identity()
+            and results.status == "draft"
     ):
         location = json.loads(data).get("location")
 
@@ -119,7 +118,7 @@ def edit_red_flag_comment(red_flag_id):
                     "status": 403,
                     "error": (
                         "You cannot edit a record which is"
-                        f" {incident_results.status }"
+                        f" {incident_results.status}"
                     ),
                 }
             ),

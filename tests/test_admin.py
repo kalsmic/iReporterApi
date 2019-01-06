@@ -69,7 +69,7 @@ def test_edit_a_red_flag_status_with_invalid_status_data(client):
 
 
 def test_edit_a_red_flag_status_for_a_red_flag_record_which_does_not_exist(
-    client
+        client
 ):
     response = client.patch(
         "api/v1/red-flags/10/status",

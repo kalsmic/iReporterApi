@@ -1,6 +1,6 @@
 from datetime import datetime
-from api.helpers.auth_token import get_current_role, get_current_identity
 
+from api.helpers.auth_token import get_current_role, get_current_identity
 
 red_flag_id = 1
 red_flags = []
@@ -65,7 +65,7 @@ def get_incident_record(record_id, collection):
             record.get_details()
             for record in collection
             if record.incident_id == record_id
-            and record.created_by == get_current_identity()
+               and record.created_by == get_current_identity()
         ]
     return result
 
@@ -97,8 +97,8 @@ def get_incident_obj_by_id(incident_id, collection):
 def incident_record_exists(title, comment, incident_results):
     for incident_result in incident_results:
         if (
-            incident_result.title == title
-            and incident_result.comment == comment
+                incident_result.title == title
+                and incident_result.comment == comment
         ):
             return True
     return False

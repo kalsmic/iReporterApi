@@ -1,10 +1,10 @@
-from api.helpers.auth_token import encode_token
+import datetime
+
+from jwt import encode
+
+from api.helpers.auth_token import encode_token, secret_key
 from api.models.incident import RedFlag, red_flags
 from api.models.user import users, User
-from jwt import encode
-import datetime
-from api.helpers.auth_token import secret_key
-
 
 user1_data = {
     "first_name": "userOne",
