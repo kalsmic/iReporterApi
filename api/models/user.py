@@ -70,7 +70,7 @@ admin = User(
     other_names="",
 )
 admin.is_admin = 1
-admin.registered_on ="Fri, 28 Dec 2018 00:00:00 GMT"
+admin.registered_on = "Fri, 28 Dec 2018 00:00:00 GMT"
 users.append(admin)
 
 

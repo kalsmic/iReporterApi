@@ -15,7 +15,6 @@ users_bp = Blueprint("users_bp", __name__, url_prefix="/api/v1")
 @users_bp.route("/auth/signup", methods=["POST"])
 @sign_up_data_required
 def register():
-
     new_user = json.loads(request.data)
     try:
         first_name = new_user["firstname"]

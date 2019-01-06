@@ -60,7 +60,7 @@ def delete_record(red_flag_id):
                     "status": 403,
                     "error": (
                         "You are not allowed to delete a red-flag which is"
-                        f" {results.status }"
+                        f" {results.status}"
                     ),
                 }
             ),

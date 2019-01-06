@@ -67,6 +67,7 @@ def is_valid_id(func):
                 400,
             )
         return func(*args, **kwargs)
+
     return decorated_view
 
 
@@ -80,10 +81,10 @@ def is_number(num_value):
 def is_string(str_value):
     """Checks if input is a string"""
     if (
-        str_value
-        and isinstance(str_value, str)
-        and not str(str_value).isspace()
-        and not str_value.isnumeric()
+            str_value
+            and isinstance(str_value, str)
+            and not str(str_value).isspace()
+            and not str_value.isnumeric()
     ):
         return True
     return False
@@ -121,10 +122,10 @@ def validate_name(name, required=1):
     if not required and len(str(name).strip()) == 0:
         error = None
     elif (
-        name
-        and is_string(name)
-        and not contains_space(name)
-        and not contains_number(name)
+            name
+            and is_string(name)
+            and not contains_space(name)
+            and not contains_number(name)
     ):
         error = None
     return error
@@ -133,10 +134,10 @@ def validate_name(name, required=1):
 def validate_password(password):
     error = wrong_password
     if (
-        len(password) >= 8
-        and re.search("[A-Z]", password)
-        and re.search("[0-9]", password)
-        and re.search("[a-z]", password)
+            len(password) >= 8
+            and re.search("[A-Z]", password)
+            and re.search("[0-9]", password)
+            and re.search("[a-z]", password)
     ):
         error = None
     return error
@@ -277,9 +278,9 @@ def is_valid_status(status):
     if not status or not isinstance(status, str):
         is_valid = False
     elif str(status).lower() not in (
-        "resolved",
-        "under investigation",
-        "rejected",
+            "resolved",
+            "under investigation",
+            "rejected",
     ):
         is_valid = False
     return is_valid

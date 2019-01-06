@@ -34,7 +34,7 @@ def test_edit_a_red_flag_comment_without_comment_data(client):
 
 
 def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(
-    client
+        client
 ):
     response = client.patch(
         "api/v1/red-flags/10/comment",
@@ -48,7 +48,7 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(
 
 
 def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(
-    client
+        client
 ):
     response = client.patch(
         "api/v1/red-flags/2/comment",
