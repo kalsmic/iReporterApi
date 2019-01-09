@@ -8,7 +8,9 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 localised solutions that will curb this menace, hence the birth of iReporter. iReporter enables
 any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention
 
-[Link to api on Heroku api](https://ireporterapiv1.herokuapp.com/)
+[Link to API on Heroku api](https://ireporterapiv1.herokuapp.com/)
+
+[Link to API DOCUMENTATION on Swagger Hub](https://app.swaggerhub.com/apis-docs/kalsmiciReporter1/iReporter/v1)
 
 **iReporter API ENDPOINTS**
 
