@@ -57,7 +57,7 @@ def edit_red_flag_location(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": results.incident_id,
+                            "red-flag": results.get_details(),
                             "message": "Updated red-flag record’s location",
                         }
                     ],
