@@ -43,10 +43,10 @@ class RedFlag(Incident):
         red_flag_id += 1
 
     def get_details(self):
-        details = super().get_details()
+        details = dict()
         details["id"] = self.incident_id
         details["type"] = self.incident_type
-
+        details.update(super().get_details())
         return details
 
 

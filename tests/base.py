@@ -47,16 +47,15 @@ user2_header = generate_token_header(encode_token(user2_id))
 
 new_record = {
     "title": "My First red flag",
-    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
+    "comment": " ",
     "location": [-80, -174.4],
     "tags": ["crime", "rape"],
     "Images": ["image1.jpg", "image2.jpg"],
-    "Videos": ["vid1.mp4", "vid2.mp4"],
-    "comment": "",
+    "Videos": ["vid1.mp4", "vid2.mp4"]
+
 }
 second_record = {
     "title": "My Second red flag",
-    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
     "location": [-78, -164.4],
     "tags": ["crime", "murder"],
     "images": ["image3.jpg", "image4.jpg"],
@@ -66,7 +65,6 @@ second_record = {
 }
 third_record = {
     "title": "My Second red flag",
-    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
     "location": [-78, -164.4],
     "tags": ["crime", "murder"],
     "images": ["image5.jpg", "image6.jpg"],
@@ -76,7 +74,6 @@ third_record = {
 }
 fourth_record = {
     "title": "My third red flag",
-    "description": "Lorem ipsum eiusmod temport labore et dolore magna",
     "location": [-78, -164.4],
     "tags": ["crime", "murder"],
     "images": ["image5.jpg", "image6.jpg"],
