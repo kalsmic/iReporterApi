@@ -92,3 +92,5 @@ def test_edit_a_red_flag_status(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert data["data"][0]["message"] == "Updated red-flag record’s status"
+    assert data["data"][0]["red-flag"]["id"] == 3
+    assert data["data"][0]["red-flag"]["status"] == "resolved"

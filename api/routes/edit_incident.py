@@ -179,7 +179,7 @@ def edit_red_flag_status(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": incident_results.incident_id,
+                            "red-flag": incident_results.get_details(),
                             "message": "Updated red-flag record’s status",
                         }
                     ],
