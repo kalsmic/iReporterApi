@@ -63,13 +63,14 @@ def test_edit_a_red_flag_location_status_of_draft(client):
     response = client.patch(
         "api/v1/red-flags/2/location",
         headers=user1_header,
-        data=json.dumps({"location": [12, 12]}),
+        data=json.dumps({"location": [12, 23]}),
     )
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert data["data"][0]["message"] == "Updated red-flag record’s location"
-    assert data["data"][0]["id"] == 2
+    assert data["data"][0]["red-flag"]["id"] == 2
+    assert data["data"][0]["red-flag"]["location"] == [12, 23]
 
 
 def test_edit_a_red_flag_location_with_invalid_location_coordinates(client):

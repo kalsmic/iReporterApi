@@ -59,7 +59,7 @@ def new_red_flag():
                     "status": 201,
                     "data": [
                         {
-                            "id": new_record.incident_id,
+                            "red-flag": new_record.get_details(),
                             "message": "Created red-flag record",
                         }
                     ],

@@ -1,7 +1,7 @@
 from flask import json
 
 from api.helpers.responses import invalid_token_message
-from .base import admin_header, user1_header, new_record
+from .base import admin_header, user1_header, new_record,user1_id
 
 
 # CREATE A RED-FLAG
@@ -42,7 +42,12 @@ def test_create_a_red_flag_with_valid_data(client):
     assert response.status_code == 201
     data = json.loads(response.data.decode())
     assert data["data"][0]["message"] == "Created red-flag record"
-    assert data["data"][0]["id"] == 4
+    assert data["data"][0]["red-flag"]["id"] == 4
+    assert data["data"][0]["red-flag"]["title"] == new_record['title']
+    assert data["data"][0]["red-flag"]["comment"] == new_record['comment']
+    assert data["data"][0]["red-flag"]["createdBy"] == user1_id
+
+
 
 
 def test_create_a_duplicate_red_flag(client):

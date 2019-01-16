@@ -1,7 +1,7 @@
 from flask import json
 
 from api.helpers.responses import invalid_token_message
-from .base import user1_header, user2_header
+from .base import user1_header, user2_header,user1_id
 
 
 # EDIT A RED-FLAG RECORD'S COMMENT
@@ -74,15 +74,23 @@ def test_edit_a_red_flag_comment_created_by_another_user(client):
 
 
 def test_edit_a_red_flag_comment_created_by_the_current_user(client):
+    comment = (
+        "He was found giving a bride to the doctor in exchange"
+        " for VIP treatment"
+    )
     response = client.patch(
         "api/v1/red-flags/2/comment",
         headers=user1_header,
-        data=json.dumps({"comment": "I diasgree"}),
+        data=json.dumps({"comment": comment }),
     )
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert data["data"][0]["message"] == "Updated red-flag record’s comment"
+    assert data["data"][0]["red-flag"]["comment"] == comment
+    assert data["data"][0]["red-flag"]["createdBy"] == user1_id
+    assert data["data"][0]["red-flag"]["id"] == 2
+
 
 
 def test_edit_a_red_flag_comment_with_status_other_than_draft(client):

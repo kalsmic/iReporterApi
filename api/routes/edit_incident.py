@@ -57,7 +57,7 @@ def edit_red_flag_location(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": results.incident_id,
+                            "red-flag": results.get_details(),
                             "message": "Updated red-flag record’s location",
                         }
                     ],
@@ -134,7 +134,7 @@ def edit_red_flag_comment(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": incident_results.incident_id,
+                            "red-flag": incident_results.get_details(),
                             "message": "Updated red-flag record’s comment",
                         }
                     ],
@@ -179,7 +179,7 @@ def edit_red_flag_status(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": incident_results.incident_id,
+                            "red-flag": incident_results.get_details(),
                             "message": "Updated red-flag record’s status",
                         }
                     ],
