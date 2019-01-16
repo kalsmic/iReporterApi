@@ -16,6 +16,18 @@ def create_app(config=None):
     app = Flask(__name__)
     CORS(app)
 
+    @app.route('/')
+    def _hello_ireporter():
+        return (
+            jsonify(
+                {
+                    "message": "Welcome to iReporter",
+                    "status": 200
+                }
+            ),
+            200,
+        )
+        
     @app.errorhandler(404)
     def _page_not_found(e):
         return (
@@ -26,6 +38,17 @@ def create_app(config=None):
                 }
             ),
             404,
+        )
+    @app.errorhandler(405)
+    def _method_not_allowed(e):
+        return (
+            jsonify(
+                {
+                    "error": "Method not allowed",
+                    "supportedMethods": supported_end_points
+                }
+            ),
+            405,
         )
 
     app.config.from_object(Config)
