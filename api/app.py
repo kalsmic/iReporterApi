@@ -17,17 +17,18 @@ def create_app(config=None):
     CORS(app)
 
     @app.route('/')
+    @app.route('/api/v1')
     def _hello_ireporter():
         return (
             jsonify(
                 {
-                    "message": "Welcome to iReporter",
+                    "message": "Welcome to iReporter API V1",
                     "status": 200
                 }
             ),
             200,
         )
-        
+
     @app.errorhandler(404)
     def _page_not_found(e):
         return (
