@@ -30,7 +30,7 @@ def new_red_flag():
             ),
             400,
         )
-    data = json.loads(request.data)
+    data = request.get_json(force=True)
 
     new_red_flag_data = {
         "title": data.get("title"),
