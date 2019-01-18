@@ -29,6 +29,18 @@ def create_app(config=None):
             200,
         )
 
+    @app.errorhandler(400)
+    def _page_not_found(e):
+        return (
+            jsonify(
+                {
+                    "error": "Bad JSON format data",
+                    "status":400
+                }
+            ),
+            400,
+        )
+
     @app.errorhandler(404)
     def _page_not_found(e):
         return (
