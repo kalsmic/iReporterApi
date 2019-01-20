@@ -36,8 +36,7 @@ class User:
             "email": self.email,
             "phoneNumber": self.phone_number,
             "username": self.user_name,
-            "registeredOn": self.registered_on,
-            "isAdmin": self.is_admin,
+            "registeredOn": self.registered_on
         }
 
 
