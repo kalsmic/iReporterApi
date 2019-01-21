@@ -30,7 +30,7 @@ def new_red_flag():
             ),
             400,
         )
-    data = json.loads(request.data)
+    data = request.get_json(force=True)
 
     new_red_flag_data = {
         "title": data.get("title"),
@@ -59,7 +59,7 @@ def new_red_flag():
                     "status": 201,
                     "data": [
                         {
-                            "id": new_record.incident_id,
+                            "red-flag": new_record.get_details(),
                             "message": "Created red-flag record",
                         }
                     ],

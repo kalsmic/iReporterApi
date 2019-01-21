@@ -48,7 +48,8 @@ def edit_red_flag_location(red_flag_id):
             results.created_by == get_current_identity()
             and results.status == "draft"
     ):
-        location = json.loads(data).get("location")
+        data = request.get_json(force=True)
+        location = data.get("location")
 
         results.location = location
         response = (
@@ -57,7 +58,7 @@ def edit_red_flag_location(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": results.incident_id,
+                            "red-flag": results.get_details(),
                             "message": "Updated red-flag record’s location",
                         }
                     ],
@@ -85,7 +86,7 @@ def edit_red_flag_location(red_flag_id):
 @request_data_required
 def edit_red_flag_comment(red_flag_id):
     data = request.data
-    comment = json.loads(data).get("comment")
+    comment = request.get_json(force=True).get("comment")
     incident_id = int(red_flag_id)
     is_invalid = validate_sentence(comment, 10)
     incident_results = get_incident_obj_by_id(incident_id, red_flags)
@@ -125,7 +126,7 @@ def edit_red_flag_comment(red_flag_id):
             403,
         )
     else:
-        comment = json.loads(data).get("comment")
+        comment = request.get_json(force=True).get("comment")
         incident_results.comment = comment
 
         response = (
@@ -134,7 +135,7 @@ def edit_red_flag_comment(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": incident_results.incident_id,
+                            "red-flag": incident_results.get_details(),
                             "message": "Updated red-flag record’s comment",
                         }
                     ],
@@ -152,7 +153,7 @@ def edit_red_flag_comment(red_flag_id):
 @is_valid_id
 @request_data_required
 def edit_red_flag_status(red_flag_id):
-    status = json.loads(request.data).get("status")
+    status = request.get_json(force=True).get("status")
 
     incident_id = int(red_flag_id)
     incident_results = get_incident_obj_by_id(int(incident_id), red_flags)
@@ -179,7 +180,7 @@ def edit_red_flag_status(red_flag_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": incident_results.incident_id,
+                            "red-flag": incident_results.get_details(),
                             "message": "Updated red-flag record’s status",
                         }
                     ],

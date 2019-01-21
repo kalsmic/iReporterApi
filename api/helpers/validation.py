@@ -269,7 +269,7 @@ def validate_edit_location(data):
     if not data:
         error = "Please provide a valid location"
     else:
-        error = validate_location(json.loads(data).get("location"))
+        error = validate_location( request.get_json(force=True).get("location"))
     return error
 
 
