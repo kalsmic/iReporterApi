@@ -69,3 +69,61 @@ def register_user():
             201,
         )
     return response
+
+
+@users_bp.route("/auth/login", methods=["POST"])
+def login():
+    expected_data = {"username": "String", "password": "string"}
+    if not request.data:
+        return (
+            jsonify(
+                {
+                    "error": "Provide provide valid data to login",
+                    "expected": expected_data,
+                    "status": 400,
+                }
+            ),
+            400,
+        )
+
+    user_credentials = json.loads(request.data)
+    response = None
+    try:
+        user_name = user_credentials["username"]
+        user_password = user_credentials["password"]
+
+        # submit credentials
+        data = user_obj.is_valid_credentials(user_name, user_password)
+        if data:
+            response = (
+                jsonify(
+                    {
+                        "status": 200,
+                        "data": [
+                            {
+                                "token": encode_token(data.get("id")),
+                                "user": data,
+                                "message": "Logged in successfully",
+                            }
+                        ],
+                    }
+                ),
+                200,
+            )
+        else:
+            response = (
+                jsonify({"error": "Invalid credentials", "status": 401}),
+                401,
+            )
+
+    except KeyError:
+        response = (
+            jsonify(
+                {
+                    "error": "Please provide the correct keys for the data",
+                    "status": 422,
+                }
+            ),
+            422,
+        )
+    return response

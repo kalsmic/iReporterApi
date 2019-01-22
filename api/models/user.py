@@ -1,6 +1,6 @@
 """FIle contains model for user"""
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from api.helpers.responses import (
     duplicate_email,
@@ -25,7 +25,6 @@ class User:
         user_name = kwargs.get("user_name")
         user_password = generate_password_hash(kwargs["password"])
 
-        # is_admin = kwargs.get('is_admin')
         sql = (
             "INSERT INTO users ("
             "first_name,"
@@ -67,3 +66,34 @@ class User:
         if user_exists and user_exists.get("phone_number") == phone_number:
             error["phoneNumber"] = duplicate_phone_number
         return error
+
+    def get_user_details(self, user_id):
+        user_sql = (
+            "SELECT id, user_name,first_name,last_name,other_names, "
+            "email,is_admin FROM users "
+            f"WHERE id='{user_id}';"
+        )
+        self.db.cursor.execute(user_sql)
+        user_details = self.db.cursor.fetchone()
+        return user_details
+
+    def is_valid_credentials(self, user_name, user_password):
+        sql = (
+            "SELECT id,user_name ,user_password FROM users where user_name="
+            f"'{user_name}';"
+        )
+        self.db.cursor.execute(sql)
+
+        user_db_details = self.db.cursor.fetchone()
+
+        if (
+                user_db_details
+                and user_db_details.get("user_name") == user_name
+                and check_password_hash(
+                user_db_details.get("user_password"), user_password
+        )
+        ):
+            user_id = user_db_details.get("id")
+
+            return self.get_user_details(user_id)
+        return None
