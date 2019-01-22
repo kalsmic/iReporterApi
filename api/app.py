@@ -2,6 +2,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
+from api.views.auth import users_bp
 from instance.config import Config
 
 
@@ -16,7 +17,7 @@ def create_app(config=None):
         return (
             jsonify(
                 {
-                    "message": "Welcome to iReporter API V1",
+                    "message": "Welcome to iReporter API V2",
                     "status": 200
                 }
             ),
@@ -52,4 +53,5 @@ def create_app(config=None):
         )
 
     app.config.from_object(Config)
+    app.register_blueprint(users_bp)
     return app
