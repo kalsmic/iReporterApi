@@ -128,3 +128,83 @@ def validate_new_user(**kwargs):
     if invalid_fields:
         return jsonify({"status": 400, "error": invalid_fields}), 400
     return None
+
+
+
+def validate_sentence(sentence, min_len=0, max_len=0):
+    error = None
+    sentence = str(sentence).strip()
+    if sentence.isdigit():
+        error = "Field cannot be a number"
+    elif len(sentence) < min_len:
+        error = f"Field must contain a minimum of {str(min_len)} characters"
+    elif max_len and len(sentence) > max_len:
+        error = f"Field must contain a maximum of {str(max_len)} characters"
+
+    return error
+
+
+media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
+
+
+def is_validate_media_type(collection, media_type):
+    for media in collection:
+        if not media.endswith(media_format.get(media_type)[0]):
+            return False
+    return True
+
+
+def validate_media(media_collection, media_type):
+    media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
+    error = None
+    if not isinstance(media_collection, list):
+        error = f"Please provide an empty list of {media_type} if none"
+    elif not is_validate_media_type(media_collection, media_type):
+        error = (
+            f"Only {media_format.get(media_type)[1]} {media_type} are "
+            "supported"
+        )
+
+    return error
+
+
+def validate_location(location):
+    error = None
+    if not isinstance(location, list) or not len(location) == 2:
+        error = (
+            "location must be a list with both Latitude and Longitude "
+            "coordinates"
+        )
+    elif not is_number(location[0]) or not is_number(location[1]):
+        error = "location coordinates must be a number"
+    elif not -90 < location[0] < 90 or not -180 < location[1] < 180:
+        error = (
+            "latitude must be between -90 and 90 and longitude "
+            "coordinates must be between -180 and 180"
+        )
+
+    return error
+
+
+def validate_new_incident(**kwargs):
+    errors = dict()
+    errors["title"] = validate_sentence(kwargs.get("title"), 4, 100)
+    errors["comment"] = validate_sentence(kwargs.get("comment"), 10)
+    errors["location"] = validate_location(kwargs.get("location"))
+    errors["Images"] = validate_media(kwargs.get("images"), "Images")
+    errors["Videos"] = validate_media(kwargs.get("videos"), "Videos")
+    not_valid = {key: value for key, value in errors.items() if value}
+
+    if not_valid:
+        return (
+            jsonify(
+                {
+                    "status": 400,
+                    "error": not_valid,
+                }
+            ),
+            400,
+        )
+    return None
+
+

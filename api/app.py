@@ -3,6 +3,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 from api.views.auth import users_bp
+from api.views.create_incident import create_incident_bp
 from instance.config import Config
 
 
@@ -54,4 +55,5 @@ def create_app(config=None):
 
     app.config.from_object(Config)
     app.register_blueprint(users_bp)
+    app.register_blueprint(create_incident_bp)
     return app
