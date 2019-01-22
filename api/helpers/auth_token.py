@@ -80,3 +80,21 @@ def get_current_role():
     db.cursor.execute(sql)
     is_admin = db.cursor.fetchone()
     return is_admin["is_admin"]
+
+
+def non_admin(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if get_current_role():
+            return (
+                jsonify(
+                    {
+                        "error": "Admin cannot access this resource",
+                        "status": 401,
+                    }
+                ),
+                401,
+            )
+        return func(*args, **kwargs)
+
+    return wrapper
