@@ -1,3 +1,4 @@
+from api.helpers.auth_token import get_current_identity, get_current_role
 from database.db import Database
 
 
@@ -64,3 +65,25 @@ class Incident:
             return True
         return False
 
+    def get_all_incident_records(self, inc_type):
+        if get_current_role():  # if user is admin
+            return self.get_all_records(inc_type)
+        user_id = str(get_current_identity())
+
+        return self.get_all_records_for_a_specific_user(inc_type, user_id)
+
+    def get_all_records(self, inc_type):
+        sql = (
+            f"SELECT * FROM incident_view WHERE type='{inc_type}';"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchall()
+
+    def get_all_records_for_a_specific_user(self, inc_type, user_id):
+        sql = (
+            "SELECT * FROM incident_view WHERE "
+            f"created_by='{user_id}' AND type='{inc_type}';"
+        )
+        self.db.cursor.execute(sql)
+
+        return self.db.cursor.fetchall()
