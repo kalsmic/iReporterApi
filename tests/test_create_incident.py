@@ -165,3 +165,22 @@ def test_create_a_red_flag_without_wrong_input(client):
             data["error"]["title"]
             == "Field must contain a maximum of 100 characters"
     )
+
+
+
+def test_create_an_intervention_with_valid_data(client):
+    response = client.post(
+        "api/v2/interventions",
+        headers=user2_header,
+        data=json.dumps(new_intervention),
+    )
+    assert response.status_code == 201
+    data = json.loads(response.data.decode())
+    assert data["data"][0]["message"] == "Created intervention record"
+    assert data["data"][0]["intervention"]["created_by"] == user2_id
+    assert data["data"][0]["intervention"]["comment"] == (
+        "Mi proin sed libero enim sed faucibus turpis in."
+        "Adipiscing bibendum est ultricies integer quis auctor elit"
+    )
+
+    assert data["data"][0]["intervention"]["title"] == ("Broken bridge")
