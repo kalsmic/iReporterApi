@@ -1,5 +1,6 @@
 """Module contains functions for validating user input"""
 import re
+from uuid import UUID
 from functools import wraps
 
 from flask import jsonify, request
@@ -208,3 +209,21 @@ def validate_new_incident(**kwargs):
     return None
 
 
+
+
+
+def is_valid_uuid(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        value = kwargs["red_flags_id"]
+
+        try:
+            value = UUID(value, version=4)
+        except ValueError:
+            return (
+                jsonify({"status": 400, "error": "Invalid incident id"}),
+                400,
+            )
+        return func(*args, **kwargs)
+
+    return decorated_view
