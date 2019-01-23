@@ -6,6 +6,7 @@ from api.views.auth import users_bp
 from api.views.create_incident import create_incident_bp
 from api.views.get_incidents import get_inc_bp
 from api.views.edit_incident import edit_bp,admin_bp
+from api.views.delete_incident import del_inc_bp
 from instance.config import Config
 
 
@@ -67,5 +68,5 @@ def create_app(config=None):
     app.register_blueprint(get_inc_bp)
     app.register_blueprint(edit_bp)
     app.register_blueprint(admin_bp)
-
+    app.register_blueprint(del_inc_bp)
     return app

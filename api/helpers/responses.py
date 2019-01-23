@@ -25,3 +25,4 @@ expired_token_message = "Signature has expired"
 wrong_status = (
     "Status must either be 'resolved','under investigation' or 'rejected'"
 )
+delete_not_allowed = "You are not allowed to delete this resource"
