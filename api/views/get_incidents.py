@@ -21,12 +21,12 @@ def get_all_red_flags():
     return jsonify({"status": 200, "data": results}), 200
 
 
-@get_inc_bp.route("/red-flags/<red_flags_id>", methods=["GET"])
+@get_inc_bp.route("/red-flags/<red_flag_id>", methods=["GET"])
 @token_required
 @is_valid_uuid
-def get_a_red_flag(red_flags_id):
+def get_a_red_flag(red_flag_id):
     results = incident_obj.get_an_incident_record_(
-        inc_type='red-flag', inc_id=red_flags_id
+        inc_type='red-flag', inc_id=red_flag_id
     )
     response = None
     if results and 'error' in results:
