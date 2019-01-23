@@ -140,6 +140,11 @@ class Incident:
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
 
+    def delete_incident_record(self, inc_id, inc_type, user_id):
+        sql = (
+            f"DELETE FROM incidents WHERE created_by='{user_id}' "
+            f"AND id='{inc_id}' AND type='{inc_type}' returning *;"
+        )
+        self.db.cursor.execute(sql)
 
-
-
+        return self.db.cursor.fetchone()
