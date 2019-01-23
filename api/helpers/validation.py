@@ -1,7 +1,8 @@
 """Module contains functions for validating user input"""
+import json
 import re
-from uuid import UUID
 from functools import wraps
+from uuid import UUID
 
 from flask import jsonify, request
 
@@ -13,6 +14,20 @@ from api.helpers.responses import (
     wrong_name
 )
 
+
+def request_data_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not request.data:
+            return (
+                jsonify(
+                    {"error": "Please provide valid input data", "status": 400}
+                ),
+                400,
+            )
+        return func(*args, **kwargs)
+
+    return wrapper
 
 def sign_up_data_required(func):
     @wraps(func)
@@ -215,7 +230,7 @@ def validate_new_incident(**kwargs):
 def is_valid_uuid(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        value = kwargs["red_flags_id"]
+        value = kwargs["red_flag_id"]
 
         try:
             value = UUID(value, version=4)
@@ -227,3 +242,12 @@ def is_valid_uuid(func):
         return func(*args, **kwargs)
 
     return decorated_view
+
+
+def validate_edit_location(location):
+    error = validate_location(location)
+    if error:
+        return error
+    else:
+        return None
+

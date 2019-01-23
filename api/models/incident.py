@@ -112,4 +112,16 @@ class Incident:
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
 
+    def update_incident_location(self, inc_id, inc_type, location):
+        location = (location[0], location[1])
+        sql = (
+            f"UPDATE incidents SET location='{location}' "
+            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,location;"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+
+
+
 
