@@ -37,6 +37,12 @@ def create_app(config=None):
             ),
             400,
         )
+    @app.errorhandler(401)
+    def _not_authorized(e):
+        return (
+            jsonify({"error": "You are not authorized to access this resource"}),
+            401,
+        )
 
     @app.errorhandler(404)
     def _page_not_found(e):

@@ -6,6 +6,7 @@ from .base import (
     expired_token_header,
     user1_header,
     user1_id,
+    admin_header,
 )
 
 
@@ -38,3 +39,53 @@ def test_get_all_red_flags(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["data"] == []
+
+
+# GET A SPECIFIC RED-FLAG RECORD
+
+
+def test_get_a_red_flag(client):
+    response = client.get(
+        "api/v2/red-flags/10df0c67-5f2b-4e5d-8b45-7357bbf3bebb",
+        headers=user1_header,
+    )
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert (
+            data["data"][0]["title"]
+            == "Vestibulum blandit ligula a mollis ullamcorper."
+    )
+
+
+def test_get_a_red_flag_for_another_user(client):
+    response = client.get(
+        "api/v2/red-flags/10df0c67-5f2b-4e5d-8b45-7357bbf3bebb",
+        headers=user2_header,
+    )
+    assert response.status_code == 401
+    data = json.loads(response.data.decode())
+    assert data["status"] == 401
+    assert data["error"] == "You're not Authorized to access this resource"
+
+
+def test_admin_get_a_red_flag(client):
+    response = client.get(
+        "api/v2/red-flags/10df0c67-5f2b-4e5d-8b45-7357bbf3bebb",
+        headers=admin_header,
+    )
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert (
+            data["data"][0]["title"]
+            == "Vestibulum blandit ligula a mollis ullamcorper."
+    )
+
+
+def test_get_a_red_flag_with_invalid_id(client):
+    response = client.get("api/v2/red-flags/fs", headers=user2_header)
+    assert response.status_code == 400
+    data = json.loads(response.data.decode())
+    assert data["status"] == 400
+    assert data["error"] == "Invalid incident id"

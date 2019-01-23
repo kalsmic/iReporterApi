@@ -74,7 +74,7 @@ def get_current_identity():
         abort(401)
 
 
-def get_current_role():
+def is_admin_user():
     user_id = get_current_identity()
     sql = f"select is_admin from users where id='{user_id}';"
     db.cursor.execute(sql)
@@ -85,7 +85,7 @@ def get_current_role():
 def non_admin(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if get_current_role():
+        if is_admin_user():
             return (
                 jsonify(
                     {

@@ -1,13 +1,12 @@
 import pytest
+
 from api.app import create_app
 from database.db import Database
 
 db = Database()
 db.cursor.execute(open("database/schema.sql", "r").read())
 db.cursor.execute(open("database/empty_tables.sql", "r").read())
-# set up test data
 db.cursor.execute(open("database/test_data.sql", "r").read())
-
 
 
 @pytest.fixture(scope="session")

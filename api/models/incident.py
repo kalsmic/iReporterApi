@@ -1,4 +1,4 @@
-from api.helpers.auth_token import get_current_identity, get_current_role
+from api.helpers.auth_token import get_current_identity, is_admin_user
 from database.db import Database
 
 
@@ -66,7 +66,7 @@ class Incident:
         return False
 
     def get_all_incident_records(self, inc_type):
-        if get_current_role():  # if user is admin
+        if is_admin_user():  # if user is admin
             return self.get_all_records(inc_type)
         user_id = str(get_current_identity())
 
@@ -87,3 +87,29 @@ class Incident:
         self.db.cursor.execute(sql)
 
         return self.db.cursor.fetchall()
+
+    def get_an_incident_record_(self, inc_type, inc_id):
+        inc_id = str(inc_id)
+        user_id = get_current_identity()
+
+        record = self.get_incident_by_id(inc_type, inc_id)
+        if record and is_admin_user():
+            pass
+        elif record and record['created_by'] == user_id:
+            pass
+        elif record and record['created_by'] != user_id:
+            record = {"error": "You're not Authorized to access this resource"}
+        else:
+            record = None
+        return record
+
+    def get_incident_by_id(self, inc_type, inc_id):
+
+        sql = (
+            f"SELECT * FROM public.incident_view "
+            f"WHERE id='{inc_id}' AND type='{inc_type}';"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+
