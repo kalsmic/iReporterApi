@@ -1,7 +1,4 @@
-import os
-
 from flask import Blueprint, jsonify, json, request
-from werkzeug import secure_filename
 
 from api.helpers.auth_token import (
     non_admin,
@@ -13,6 +10,7 @@ from api.helpers.validation import (
     is_valid_uuid,
     validate_edit_location
 )
+from api.helpers.validation import validate_sentence
 from api.models.incident import Incident
 
 incident_obj = Incident()
@@ -62,7 +60,6 @@ def edit_red_flag_location(red_flag_id):
             inc_id=inc_id, inc_type='red-flag', location=location
         )
 
-
         response = (
             jsonify(
                 {
@@ -70,7 +67,7 @@ def edit_red_flag_location(red_flag_id):
                     "data": [
                         {
                             "id": updated_record['id'],
-                            "location":updated_record['location'],
+                            "location": updated_record['location'],
                             "message": "Updated red-flag record’s location"
                         }
                     ],
@@ -88,4 +85,84 @@ def edit_red_flag_location(red_flag_id):
             ),
             403,
         )
+    return response
+
+
+@edit_bp.route(
+    "/red-flags/<red_flag_id>/comment", methods=["PATCH"]
+)
+@token_required
+@non_admin
+@is_valid_uuid
+@request_data_required
+def edit_red_flag_comment(red_flag_id):
+    data = request.get_json(force=True)
+    comment = data.get("comment")
+    is_invalid = validate_sentence(comment, min_len=10)
+    incident_type = 'red-flag'
+    incident_results = incident_obj.get_incident_by_id(
+        incident_type, red_flag_id
+    )
+
+    response = None
+    if not incident_results:
+        response = (
+            jsonify(
+                {
+                    "status": 404,
+                    "error": "red-flag record does not exist",
+                }
+            ),
+            404,
+        )
+    elif is_invalid:
+        response = (jsonify({"error": is_invalid, "status": 400}), 400)
+
+    elif not incident_results["created_by"] == get_current_identity():
+        response = (
+            jsonify(
+                {
+                    "status": 401,
+                    "error": "You can only edit comments created by you",
+                }
+            ),
+            401,
+        )
+    elif not incident_results["status"].lower() == "draft":
+        response = (
+            jsonify(
+                {
+                    "status": 403,
+                    "error": (
+                        "You cannot edit a record which is"
+                        f" {incident_results['status']}"
+                    ),
+                }
+            ),
+            403,
+        )
+    else:
+        comment = data.get("comment")
+        updated_record = incident_obj.update_incident_comment(
+            inc_id=red_flag_id, inc_type=incident_type, comment=comment
+        )
+        response = (
+            jsonify(
+                {
+                    "status": 200,
+                    "data": [
+                        {
+
+                            "id": updated_record['id'],
+                            "comment": updated_record['comment'],
+                            "message": "Updated "
+                                       + incident_type
+                                       + " record’s comment",
+                        }
+                    ],
+                }
+            ),
+            200,
+        )
+
     return response
