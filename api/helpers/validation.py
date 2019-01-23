@@ -251,3 +251,16 @@ def validate_edit_location(location):
     else:
         return None
 
+
+def is_valid_status(status):
+    is_valid = True
+    if not status or not isinstance(status, str):
+        is_valid = False
+    elif str(status).lower() not in (
+            "draft",
+            "resolved",
+            "under investigation",
+            "rejected",
+    ):
+        is_valid = False
+    return is_valid

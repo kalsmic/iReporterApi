@@ -3,6 +3,9 @@ wrong_password = (
     " letter, atleast on lower case letter and  atleast one number."
 )
 
+wrong_status = (
+    "Status must either be 'resolved','under investigation','"
+)
 wrong_username = (
     "Username must be string with atleast 5 characters and may"
     " contain a number"
@@ -18,3 +21,7 @@ duplicate_phone_number = "phoneNumber already in use"
 
 invalid_token_message = "Invalid Token, verification failed"
 expired_token_message = "Signature has expired"
+
+wrong_status = (
+    "Status must either be 'resolved','under investigation' or 'rejected'"
+)

@@ -98,3 +98,21 @@ def non_admin(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def admin_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if not is_admin_user():
+            return (
+                jsonify(
+                    {
+                        "error": "Only Admin can access this resource",
+                        "status": 401,
+                    }
+                ),
+                401,
+            )
+        return func(*args, **kwargs)
+
+    return wrapper
