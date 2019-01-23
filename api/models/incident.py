@@ -121,6 +121,16 @@ class Incident:
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
 
+    def update_incident_comment(self, inc_id, inc_type, comment):
+        comment = comment.strip()
+        sql = (
+            f"UPDATE incidents SET comment='{comment}' "
+            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,comment;"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+
 
 
 
