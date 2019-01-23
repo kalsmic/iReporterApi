@@ -1,5 +1,4 @@
 """Module contains functions for validating user input"""
-import json
 import re
 from functools import wraps
 from uuid import UUID
@@ -28,6 +27,7 @@ def request_data_required(func):
         return func(*args, **kwargs)
 
     return wrapper
+
 
 def sign_up_data_required(func):
     @wraps(func)
@@ -146,7 +146,6 @@ def validate_new_user(**kwargs):
     return None
 
 
-
 def validate_sentence(sentence, min_len=0, max_len=0):
     error = None
     sentence = str(sentence).strip()
@@ -224,9 +223,6 @@ def validate_new_incident(**kwargs):
     return None
 
 
-
-
-
 def is_valid_uuid(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
@@ -264,3 +260,14 @@ def is_valid_status(status):
     ):
         is_valid = False
     return is_valid
+
+
+def parse_incident_type(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        incident_type = kwargs["incident_type"]
+
+        if incident_type == "red-flags" or incident_type == "interventions":
+            return func(*args, **kwargs)
+
+    return decorated_view
