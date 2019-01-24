@@ -70,3 +70,14 @@ def test_delete_red_flag(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert data["data"][0]["message"] == "red-flag record has been deleted"
+
+
+def test_delete_an_intervention(client):
+    response = client.delete(
+        "api/v2/interventions/79bb7006-272e-4e0c-8253-117305466b6a",
+        headers=user1_header,
+    )
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert data["data"][0]["message"] == "intervention record has been deleted"
