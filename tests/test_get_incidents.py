@@ -110,3 +110,43 @@ def test_get_all_interventions(client):
     response = client.get("api/v2/interventions", headers=user2_header)
     assert response.status_code == 200
     assert isinstance(data["data"],list)
+
+# GET A SPECIFIC INTERVENTION RECORD
+
+def test_get_a_intervention(client):
+    response = client.get(
+        "api/v2/interventions/79bb7006-272e-4e0c-8253-117305466b4a",
+        headers=user1_header,
+    )
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert (
+            data["data"][0]["title"]
+            == "leo vel fringilla. Egestas tellus rutru"
+    )
+
+
+def test_get_a_intervention_for_another_user(client):
+    response = client.get(
+        "api/v2/interventions/79bb7006-272e-4e0c-8253-117305466b4a",
+        headers=user2_header,
+    )
+    assert response.status_code == 401
+    data = json.loads(response.data.decode())
+    assert data["status"] == 401
+    assert data["error"] == "You're not Authorized to access this resource"
+
+
+def test_admin_get_a_intervention(client):
+    response = client.get(
+        "api/v2/interventions/79bb7006-272e-4e0c-8253-117305466b4a",
+        headers=admin_header,
+    )
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert (
+            data["data"][0]["title"]
+            == "leo vel fringilla. Egestas tellus rutru"
+    )

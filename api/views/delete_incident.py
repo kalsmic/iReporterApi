@@ -16,15 +16,16 @@ del_inc_bp = Blueprint(
 
 
 @del_inc_bp.route(
-    "/red-flags/<red_flag_id>", methods=["DELETE"]
+    "/<incident_type>/<incident_id>", methods=["DELETE"]
 )
 @token_required
 @non_admin
 @is_valid_uuid
-def delete_record(red_flag_id):
-    incident_type = 'red-flag'
+def delete_record(incident_type, incident_id):
+    incident_type = incident_type[:-1]
+
     results = incident_obj.get_incident_by_id(
-        inc_type=incident_type, inc_id=red_flag_id
+        inc_type=incident_type, inc_id=incident_id
     )
 
     response = None
@@ -43,7 +44,7 @@ def delete_record(red_flag_id):
         response = (jsonify({"status": 403, "error": delete_not_allowed}), 403)
     elif results["status"].lower() == "draft":
         delete_id = incident_obj.delete_incident_record(
-            inc_id=red_flag_id,
+            inc_id=incident_id,
             inc_type=incident_type,
             user_id=get_current_identity(),
         )
