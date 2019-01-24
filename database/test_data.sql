@@ -38,6 +38,16 @@ VALUES
       'Draft'
 ),
 (
+      '79bb7006-272e-4e0c-8253-117305466b7a',
+      'leo vel fringilla. Egestas lorem rutru',
+      'empus imperdiet nulla meuda pellentesque elit eget gravida',
+      (-42.000000,+164.400000),
+      '6eb98d19-b89a-43d2-a8b4-e2be474bfc3f',
+      '2019-02-03',
+      'intervention',
+      'Resolved'
+),
+(
       'b7e7ddf0-3bdb-4932-888d-e262a54bda6a',
       'esse cillum dolore eu fugiat nulla pariatur',
       'Duis aute irure dolor in reprehenderit in voluptate velit.',
