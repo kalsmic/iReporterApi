@@ -71,7 +71,7 @@ def test_edit_a_red_flag_location_status_of_draft(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "Updated red-flag record’s location"
+    assert data["data"][0]["success"] == "Updated red-flag record’s location"
     assert data["data"][0]["id"] == "10df0c67-5f2b-4e5d-8b45-7357bbf3bebb"
 
 
@@ -100,6 +100,7 @@ def test_edit_a_red_flag_location_status_other_than_draft(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 403
     assert data["error"] == "You are not allowed to modify this resource"
+
 
 # TEST EDIT INTERVENTION RECORD'S LOCATION
 def test_edit_a_intervention_location_without_a_token(client):
@@ -169,11 +170,15 @@ def test_edit_a_intervention_location_status_of_draft(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "Updated intervention record’s location"
+    assert (
+        data["data"][0]["success"] == "Updated intervention record’s location"
+    )
     assert data["data"][0]["id"] == "79bb7006-272e-4e0c-8253-117305466b4a"
 
 
-def test_edit_a_intervention_location_with_invalid_location_coordinates(client):
+def test_edit_a_intervention_location_with_invalid_location_coordinates(
+    client
+):
     response = client.patch(
         "api/v2/interventions/79bb7006-272e-4e0c-8253-117305466b4a/location",
         headers=user1_header,

@@ -63,6 +63,6 @@ def test_user_login_with_correct_credentials_data(client):
     )
     assert response.status_code == 200
     data = json.loads(response.data.decode())
-    assert data["data"][0]["message"] == "Logged in successfully"
+    assert data["data"][0]["success"] == "Logged in successfully"
     assert "token" in data["data"][0]
     assert data["data"][0]["user"]["email"] == "arthurkalule@gmail.com"

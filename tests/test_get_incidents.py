@@ -53,8 +53,8 @@ def test_get_a_red_flag(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-            data["data"][0]["title"]
-            == "Vestibulum blandit ligula a mollis ullamcorper."
+        data["data"][0]["title"]
+        == "Vestibulum blandit ligula a mollis ullamcorper."
     )
 
 
@@ -78,12 +78,13 @@ def test_admin_get_a_red_flag(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-            data["data"][0]["title"]
-            == "Vestibulum blandit ligula a mollis ullamcorper."
+        data["data"][0]["title"]
+        == "Vestibulum blandit ligula a mollis ullamcorper."
     )
 
 
 # INTERVENTIONS
+
 
 def test_get_all_interventions_without_token(client):
     # test only logged in user get red flags
@@ -109,9 +110,11 @@ def test_get_all_interventions(client):
 
     response = client.get("api/v2/interventions", headers=user2_header)
     assert response.status_code == 200
-    assert isinstance(data["data"],list)
+    assert isinstance(data["data"], list)
+
 
 # GET A SPECIFIC INTERVENTION RECORD
+
 
 def test_get_a_intervention(client):
     response = client.get(
@@ -122,8 +125,7 @@ def test_get_a_intervention(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-            data["data"][0]["title"]
-            == "leo vel fringilla. Egestas tellus rutru"
+        data["data"][0]["title"] == "leo vel fringilla. Egestas tellus rutru"
     )
 
 
@@ -147,6 +149,5 @@ def test_admin_get_a_intervention(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-            data["data"][0]["title"]
-            == "leo vel fringilla. Egestas tellus rutru"
+        data["data"][0]["title"] == "leo vel fringilla. Egestas tellus rutru"
     )

@@ -39,7 +39,7 @@ def test_edit_a_red_flag_comment_without_comment_data(client):
 
 
 def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(
-        client
+    client
 ):
     response = client.patch(
         "api/v2/red-flags/79bb7006-272e-4e0c-8253-117305466b4a/comment",
@@ -53,7 +53,7 @@ def test_edit_a_red_flag_comment_for_a_red_flag_record_which_does_not_exist(
 
 
 def test_edit_a_red_flag_comment_for_a_red_flag_record_with_without_a_comment(
-        client
+    client
 ):
     response = client.patch(
         "api/v2/red-flags/10df0c67-5f2b-4e5d-8b45-7357bbf3bebb/comment",
@@ -87,7 +87,7 @@ def test_edit_a_red_flag_comment_created_by_the_current_user(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "Updated red-flag record’s comment"
+    assert data["data"][0]["success"] == "Updated red-flag record’s comment"
     assert data["data"][0]["comment"] == "Proin sagittis nisl rhoncus mattis"
 
 
@@ -103,6 +103,7 @@ def test_edit_a_red_flag_comment_with_status_other_than_draft(client):
     error_message = "You cannot edit a record which is Resolved"
     assert data["error"] == error_message
 
+
 # EDIT A intervention RECORD'S COMMENT
 def test_edit_a_intervention_comment_without_a_token(client):
     response = client.patch(
@@ -112,6 +113,7 @@ def test_edit_a_intervention_comment_without_a_token(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 401
     assert data["error"] == invalid_token_message
+
 
 def test_edit_a_intervention_comment_with_an_invalid_intervention_id(client):
     response = client.patch(
@@ -137,7 +139,7 @@ def test_edit_a_intervention_comment_without_comment_data(client):
 
 
 def test_edit_a_intervention_comment_for_a_intervention_record_which_does_not_exist(
-        client
+    client
 ):
     response = client.patch(
         "api/v2/interventions/79cc7006-272e-4e0c-8253-117302466b4a/comment",
@@ -151,7 +153,7 @@ def test_edit_a_intervention_comment_for_a_intervention_record_which_does_not_ex
 
 
 def test_edit_a_intervention_comment_for_a_intervention_record_with_without_a_comment(
-        client
+    client
 ):
     response = client.patch(
         "api/v2/interventions/79cc7006-272e-4e0c-8253-117305466b4a/comment",
@@ -185,7 +187,9 @@ def test_edit_a_intervention_comment_created_by_the_current_user(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "Updated intervention record’s comment"
+    assert (
+        data["data"][0]["success"] == "Updated intervention record’s comment"
+    )
     assert data["data"][0]["comment"] == "Proin sagittis nisl rhoncus mattis"
 
 
@@ -200,4 +204,3 @@ def test_edit_a_intervention_comment_with_status_other_than_draft(client):
     assert data["status"] == 403
     error_message = "You cannot edit a record which is Resolved"
     assert data["error"] == error_message
-

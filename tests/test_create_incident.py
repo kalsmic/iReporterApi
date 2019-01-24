@@ -50,7 +50,7 @@ def test_create_a_red_flag_with_valid_data(client):
     )
     assert response.status_code == 201
     data = json.loads(response.data.decode())
-    assert data["data"][0]["message"] == "Created red-flag record"
+    assert data["data"][0]["success"] == "Created red-flag record"
     assert data["data"][0]["red-flag"]["created_by"] == user1_id
 
 
@@ -92,17 +92,17 @@ def test_create_a_red_flag_without_wrong_input(client):
     data = json.loads(response.data.decode())
     assert data["error"]["title"] == "Field cannot be a number"
     assert (
-            data["error"]["location"]
-            == "location must be a list with both Latitude and Longitude coordinates"
+        data["error"]["location"]
+        == "location must be a list with both Latitude and Longitude coordinates"
     )
 
     assert (
-            data["error"]["Images"]
-            == "Please provide an empty list of Images if none"
+        data["error"]["Images"]
+        == "Please provide an empty list of Images if none"
     )
     assert (
-            data["error"]["Videos"]
-            == "Please provide an empty list of Videos if none"
+        data["error"]["Videos"]
+        == "Please provide an empty list of Videos if none"
     )
     assert data["error"]["comment"] == "Field cannot be a number"
     assert len(data["error"]) == 5
@@ -122,12 +122,12 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-            data["error"]["title"]
-            == "Field must contain a minimum of 4 characters"
+        data["error"]["title"]
+        == "Field must contain a minimum of 4 characters"
     )
     assert (
-            data["error"]["location"]
-            == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
+        data["error"]["location"]
+        == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
     )
 
     assert data["error"]["Images"] == "Only JPEG Images are supported"
@@ -144,8 +144,8 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-            data["error"]["title"]
-            == "Field must contain a minimum of 4 characters"
+        data["error"]["title"]
+        == "Field must contain a minimum of 4 characters"
     )
 
     wrong_input_1["title"] = (
@@ -162,10 +162,9 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-            data["error"]["title"]
-            == "Field must contain a maximum of 100 characters"
+        data["error"]["title"]
+        == "Field must contain a maximum of 100 characters"
     )
-
 
 
 def test_create_an_intervention_with_valid_data(client):
@@ -176,7 +175,7 @@ def test_create_an_intervention_with_valid_data(client):
     )
     assert response.status_code == 201
     data = json.loads(response.data.decode())
-    assert data["data"][0]["message"] == "Created intervention record"
+    assert data["data"][0]["success"] == "Created intervention record"
     assert data["data"][0]["intervention"]["created_by"] == user2_id
     assert data["data"][0]["intervention"]["comment"] == (
         "Mi proin sed libero enim sed faucibus turpis in."
