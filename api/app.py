@@ -8,7 +8,7 @@ from api.views.get_incidents import get_inc_bp
 from api.views.edit_incident import edit_bp,admin_bp
 from api.views.delete_incident import del_inc_bp
 from instance.config import Config
-
+from flask_swagger_ui import get_swaggerui_blueprint
 
 def create_app(config=None):
     """Set up Flask application in function"""
@@ -69,4 +69,9 @@ def create_app(config=None):
     app.register_blueprint(edit_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(del_inc_bp)
+    SWAGGER_UI_URL = "/api/v2/docs"
+    API_URL = "https://kalsmic.github.io/swagger-ui/dist/ireporter.json"
+
+    swagger_ui_blueprint = get_swaggerui_blueprint(SWAGGER_UI_URL, API_URL)
+    app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_UI_URL)
     return app
