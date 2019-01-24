@@ -99,3 +99,17 @@ def test_edit_a_red_flag_status(client):
     assert data["status"] == 200
     assert data["data"][0]["message"] == "Updated red-flag record’s status"
     assert data["data"][0]["status"] == "Resolved"
+
+
+def test_edit_a_intervention_status(client):
+    response = client.patch(
+        "api/v2/interventions/79cc7006-224e-4e0c-8253-117305466b4a/status",
+        headers=admin_header,
+        data=json.dumps({"status": "resolved"}),
+    )
+
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert data["data"][0]["message"] == "Updated intervention record’s status"
+    assert data["data"][0]["status"] == "Resolved"
