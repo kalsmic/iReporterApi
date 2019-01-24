@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify
 
 from api.helpers.auth_token import token_required
 from api.models.incident import Incident
-from api.helpers.validation import is_valid_uuid
+from api.helpers.validation import is_valid_uuid,parse_incident_type
 
 get_inc_bp = Blueprint(
     "get_incidents", __name__, url_prefix="/api/v2"
@@ -11,11 +11,14 @@ get_inc_bp = Blueprint(
 incident_obj = Incident()
 
 
-@get_inc_bp.route("/red-flags", methods=["GET"])
+@get_inc_bp.route("/<incident_type>", methods=["GET"])
 @token_required
-def get_all_red_flags():
+@parse_incident_type
+def get_all_red_flags(incident_type):
+    incident_type = incident_type[:-1]
+
     results = incident_obj.get_all_incident_records(
-        inc_type='red-flag'
+        inc_type=incident_type
     )
 
     return jsonify({"status": 200, "data": results}), 200
