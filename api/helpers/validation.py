@@ -10,7 +10,7 @@ from api.helpers.responses import (
     wrong_username,
     wrong_email,
     wrong_phone_number,
-    wrong_name
+    wrong_name,
 )
 
 
@@ -61,10 +61,10 @@ def is_number(num_value):
 def is_string(str_value):
     """Checks if input is a string"""
     if (
-            str_value
-            and isinstance(str_value, str)
-            and not str(str_value).isspace()
-            and not str_value.isnumeric()
+        str_value
+        and isinstance(str_value, str)
+        and not str(str_value).isspace()
+        and not str_value.isnumeric()
     ):
         return True
     return False
@@ -102,10 +102,10 @@ def validate_name(name, required=1):
     if not required and len(str(name).strip()) == 0:
         error = None
     elif (
-            name
-            and is_string(name)
-            and not contains_space(name)
-            and not contains_number(name)
+        name
+        and is_string(name)
+        and not contains_space(name)
+        and not contains_number(name)
     ):
         error = None
     return error
@@ -114,10 +114,10 @@ def validate_name(name, required=1):
 def validate_password(password):
     error = wrong_password
     if (
-            len(password) >= 8
-            and re.search("[A-Z]", password)
-            and re.search("[0-9]", password)
-            and re.search("[a-z]", password)
+        len(password) >= 8
+        and re.search("[A-Z]", password)
+        and re.search("[0-9]", password)
+        and re.search("[a-z]", password)
     ):
         error = None
     return error
@@ -211,15 +211,7 @@ def validate_new_incident(**kwargs):
     not_valid = {key: value for key, value in errors.items() if value}
 
     if not_valid:
-        return (
-            jsonify(
-                {
-                    "status": 400,
-                    "error": not_valid,
-                }
-            ),
-            400,
-        )
+        return (jsonify({"status": 400, "error": not_valid}), 400)
     return None
 
 
@@ -231,7 +223,6 @@ def is_valid_uuid(func):
         # elif 'intervention_id' in kwargs:
         #     value = kwargs["intervention_id"]
         #
-
 
         try:
             value = UUID(value, version=4)
@@ -258,10 +249,10 @@ def is_valid_status(status):
     if not status or not isinstance(status, str):
         is_valid = False
     elif str(status).lower() not in (
-            "draft",
-            "resolved",
-            "under investigation",
-            "rejected",
+        "draft",
+        "resolved",
+        "under investigation",
+        "rejected",
     ):
         is_valid = False
     return is_valid

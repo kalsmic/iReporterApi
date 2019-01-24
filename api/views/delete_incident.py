@@ -10,14 +10,10 @@ from api.helpers.validation import is_valid_uuid
 from api.models.incident import Incident
 
 incident_obj = Incident()
-del_inc_bp = Blueprint(
-    "del_inc_bp", __name__, url_prefix="/api/v2"
-)
+del_inc_bp = Blueprint("del_inc_bp", __name__, url_prefix="/api/v2")
 
 
-@del_inc_bp.route(
-    "/<incident_type>/<incident_id>", methods=["DELETE"]
-)
+@del_inc_bp.route("/<incident_type>/<incident_id>", methods=["DELETE"])
 @token_required
 @non_admin
 @is_valid_uuid
@@ -57,7 +53,7 @@ def delete_record(incident_type, incident_id):
                         {
                             "incident": delete_id,
                             "message": incident_type
-                                       + " record has been deleted",
+                            + " record has been deleted",
                         }
                     ],
                 }

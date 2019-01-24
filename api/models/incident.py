@@ -73,9 +73,7 @@ class Incident:
         return self.get_all_records_for_a_specific_user(inc_type, user_id)
 
     def get_all_records(self, inc_type):
-        sql = (
-            f"SELECT * FROM incident_view WHERE type='{inc_type}';"
-        )
+        sql = f"SELECT * FROM incident_view WHERE type='{inc_type}';"
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchall()
 
@@ -95,9 +93,9 @@ class Incident:
         record = self.get_incident_by_id(inc_type, inc_id)
         if record and is_admin_user():
             pass
-        elif record and record['created_by'] == user_id:
+        elif record and record["created_by"] == user_id:
             pass
-        elif record and record['created_by'] != user_id:
+        elif record and record["created_by"] != user_id:
             record = {"error": "You're not Authorized to access this resource"}
         else:
             record = None
@@ -129,7 +127,6 @@ class Incident:
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
-
 
     def update_incident_status(self, inc_id, inc_type, status):
         status = status.strip().lower().capitalize()

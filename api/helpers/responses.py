@@ -3,9 +3,7 @@ wrong_password = (
     " letter, atleast on lower case letter and  atleast one number."
 )
 
-wrong_status = (
-    "Status must either be 'resolved','under investigation','"
-)
+wrong_status = "Status must either be 'resolved','under investigation','"
 wrong_username = (
     "Username must be string with atleast 5 characters and may"
     " contain a number"
