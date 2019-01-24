@@ -110,3 +110,4 @@ def test_get_all_interventions(client):
     response = client.get("api/v2/interventions", headers=user2_header)
     assert response.status_code == 200
     assert isinstance(data["data"],list)
+

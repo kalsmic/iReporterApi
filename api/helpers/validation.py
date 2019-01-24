@@ -226,7 +226,12 @@ def validate_new_incident(**kwargs):
 def is_valid_uuid(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        value = kwargs["red_flag_id"]
+        # if 'red_flag_id' in kwargs:
+        value = kwargs["incident_id"]
+        # elif 'intervention_id' in kwargs:
+        #     value = kwargs["intervention_id"]
+        #
+
 
         try:
             value = UUID(value, version=4)
