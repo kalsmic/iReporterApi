@@ -60,7 +60,6 @@ def register_user():
                     "data": [
                         {
                             "user": new_user_details,
-                            "token": encode_token(new_user_details["id"]),
                             "success": "Account created Successfully",
                         }
                     ],
