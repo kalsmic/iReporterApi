@@ -61,7 +61,7 @@ def register_user():
                         {
                             "user": new_user_details,
                             "token": encode_token(new_user_details["id"]),
-                            "message": "Account created Successfully",
+                            "success": "Account created Successfully",
                         }
                     ],
                 }
@@ -73,13 +73,11 @@ def register_user():
 
 @users_bp.route("/auth/login", methods=["POST"])
 def login():
-    expected_data = {"username": "String", "password": "string"}
     if not request.data:
         return (
             jsonify(
                 {
                     "error": "Provide provide valid data to login",
-                    "expected": expected_data,
                     "status": 400,
                 }
             ),
@@ -103,7 +101,7 @@ def login():
                             {
                                 "token": encode_token(data.get("id")),
                                 "user": data,
-                                "message": "Logged in successfully",
+                                "success": "Logged in successfully",
                             }
                         ],
                     }

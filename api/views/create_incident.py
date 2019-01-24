@@ -62,7 +62,7 @@ def new_red_flag(incident_type):
                     "data": [
                         {
                             incident_type: new_db_incident_details,
-                            "message": "Created " + incident_type + " record",
+                            "success": "Created " + incident_type + " record",
                         }
                     ],
                 }

@@ -52,7 +52,7 @@ def delete_record(incident_type, incident_id):
                     "data": [
                         {
                             "incident": delete_id,
-                            "message": incident_type
+                            "success": incident_type
                             + " record has been deleted",
                         }
                     ],

@@ -72,7 +72,7 @@ def edit_red_flag_location(incident_type, incident_id):
                         {
                             "id": updated_record["id"],
                             "location": updated_record["location"],
-                            "message": "Updated "
+                            "success": "Updated "
                             + incident_type
                             + " record’s location",
                         }
@@ -158,7 +158,7 @@ def edit_red_flag_comment(incident_type, incident_id):
                         {
                             "id": updated_record["id"],
                             "comment": updated_record["comment"],
-                            "message": "Updated "
+                            "success": "Updated "
                             + incident_type
                             + " record’s comment",
                         }
@@ -214,7 +214,7 @@ def edit_red_flag_status(incident_type, incident_id):
                         {
                             "id": updated_record["id"],
                             "status": updated_record["status"],
-                            "message": "Updated "
+                            "success": "Updated "
                             + incident_type
                             + " record’s status",
                         }
