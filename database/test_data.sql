@@ -38,6 +38,26 @@ VALUES
       'Draft'
 ),
 (
+      '79cc7006-272e-4e0c-8253-117305466b4a',
+      'leo vel fringilla. Egestas habib rutru',
+      'empus imperdiet nulla sentongo pellentesque elit eget gravida',
+      (-43.000000,+144.400000),
+      '6eb98d19-b89a-43d2-a8b4-e2be474bfc3f',
+      '2019-01-03',
+      'intervention',
+      'Draft'
+),
+(
+      '79cc7006-224e-4e0c-8253-117305466b4a',
+      'leo vel frngilla. Egestas habib rutru',
+      'empus impdiet nulla sentongo pellentesque elit eget gravida',
+      (-43.000000,+144.400000),
+      '6eb98d19-b89a-43d2-a8b4-e2be474bfc3f',
+      '2019-01-03',
+      'intervention',
+      'Resolved'
+),
+(
       '79bb7006-272e-4e0c-8253-117305466b7a',
       'leo vel fringilla. Egestas lorem rutru',
       'empus imperdiet nulla meuda pellentesque elit eget gravida',
