@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 from api.helpers.auth_token import (
     token_required,
@@ -6,25 +6,40 @@ from api.helpers.auth_token import (
     get_current_identity,
 )
 from api.helpers.responses import delete_not_allowed
-from api.helpers.validation import is_valid_uuid
+from api.helpers.validation import is_valid_uuid, request_data_required, validate_type
 from api.models.incident import Incident
 
 incident_obj = Incident()
-del_inc_bp = Blueprint("del_inc_bp", __name__, url_prefix="/api/v2")
+del_inc_bp = Blueprint("del_inc_bp", __name__, url_prefix="/api/v3")
 
 
-@del_inc_bp.route("/<incident_type>/<incident_id>", methods=["DELETE"])
+@del_inc_bp.route("/incidents/<incident_id>", methods=["DELETE"])
 @token_required
 @non_admin
 @is_valid_uuid
-def delete_record(incident_type, incident_id):
-    incident_type = incident_type[:-1]
+@request_data_required
+def delete_record(incident_id):
+    data = request.get_json(force=True)
+    incident_type = data.get("type")
 
-    results = incident_obj.get_incident_by_id(
+    response = None
+    not_valid_type = validate_type(incident_type)
+    if not_valid_type:
+        return (
+            jsonify(
+                {
+                    "status": 400,
+                    "error": not_valid_type,
+                }
+            ),
+            400,
+        )
+
+    results = incident_obj.get_incident_by_id_and_type(
         inc_type=incident_type, inc_id=incident_id
     )
 
-    response = None
+
     if not results:
         response = (
             jsonify(
@@ -53,7 +68,7 @@ def delete_record(incident_type, incident_id):
                         {
                             "incident": delete_id,
                             "success": incident_type
-                            + " record has been deleted",
+                                       + " record has been deleted",
                         }
                     ],
                 }

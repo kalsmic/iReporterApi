@@ -15,7 +15,7 @@ from .base import (
 # # CREATE A RED-FLAG
 def test_create_a_red_flag_without_a_token(client):
     # test only logged in user with token
-    response = client.post("api/v2/red-flags")
+    response = client.post("api/v3/incidents")
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data == {"error": invalid_token_message, "status": 401}
@@ -24,7 +24,7 @@ def test_create_a_red_flag_without_a_token(client):
 # # assert admin_header == "dd"
 def test_admin_cannot_create_a_red_flag(client):
     response = client.post(
-        "api/v2/red-flags", headers=admin_header, data=json.dumps(new_red_flag)
+        "api/v3/incidents", headers=admin_header, data=json.dumps(new_red_flag)
     )
     assert response.status_code == 401
     data = json.loads(response.data.decode())
@@ -35,10 +35,10 @@ def test_admin_cannot_create_a_red_flag(client):
 
 
 def test_create_a_red_flag_without_data(client):
-    response = client.post("api/v2/red-flags", headers=user1_header)
+    response = client.post("api/v3/incidents", headers=user1_header)
     assert response.status_code == 400
     data = json.loads(response.data.decode())
-    assert data["error"] == "Please provide red-flag Data"
+    assert data["error"] == "Please provide incident Data"
 
 
 def test_create_a_red_flag_with_valid_data(client):
@@ -46,7 +46,7 @@ def test_create_a_red_flag_with_valid_data(client):
         "comment"
     ] = "Lorem ipsum eiusmod temport labore et dolore magna"
     response = client.post(
-        "api/v2/red-flags", headers=user1_header, data=json.dumps(new_red_flag)
+        "api/v3/incidents", headers=user1_header, data=json.dumps(new_red_flag)
     )
     assert response.status_code == 201
     data = json.loads(response.data.decode())
@@ -54,21 +54,12 @@ def test_create_a_red_flag_with_valid_data(client):
     assert data["data"][0]["red-flag"]["created_by"] == user1_id
 
 
-def test_create_a_duplicate_red_flag(client):
-    response = client.post(
-        "api/v2/red-flags", headers=user1_header, data=json.dumps(new_red_flag)
-    )
-    assert response.status_code == 409
-    data = json.loads(response.data.decode())
-    assert data["error"] == "red-flag record already exists"
-
-
 def test_create_a_red_flag_without_wrong_input(client):
     wrong_input_1 = new_red_flag
 
     new_red_flag["location"] = ["jk", 180]
     response = client.post(
-        "api/v2/red-flags", headers=user1_header, data=json.dumps(new_red_flag)
+        "api/v3/incidents", headers=user1_header, data=json.dumps(new_red_flag)
     )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
@@ -83,7 +74,7 @@ def test_create_a_red_flag_without_wrong_input(client):
     wrong_input_1["comment"] = "5"
     # create a red flag with one coordinate in the location
     response = client.post(
-        "api/v2/red-flags",
+        "api/v3/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
@@ -115,7 +106,7 @@ def test_create_a_red_flag_without_wrong_input(client):
     wrong_input_1["comment"] = "Lorem ipsum"
 
     response = client.post(
-        "api/v2/red-flags",
+        "api/v3/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
@@ -137,7 +128,7 @@ def test_create_a_red_flag_without_wrong_input(client):
     wrong_input_1["title"] = ""
 
     response = client.post(
-        "api/v2/red-flags",
+        "api/v3/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
@@ -155,7 +146,7 @@ def test_create_a_red_flag_without_wrong_input(client):
     )
 
     response = client.post(
-        "api/v2/red-flags",
+        "api/v3/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
@@ -169,7 +160,7 @@ def test_create_a_red_flag_without_wrong_input(client):
 
 def test_create_an_intervention_with_valid_data(client):
     response = client.post(
-        "api/v2/interventions",
+        "api/v3/incidents",
         headers=user2_header,
         data=json.dumps(new_intervention),
     )

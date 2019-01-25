@@ -201,6 +201,8 @@ def validate_location(location):
     return error
 
 
+
+
 def validate_new_incident(**kwargs):
     errors = dict()
     errors["title"] = validate_sentence(kwargs.get("title"), 4, 100)
@@ -208,6 +210,7 @@ def validate_new_incident(**kwargs):
     errors["location"] = validate_location(kwargs.get("location"))
     errors["Images"] = validate_media(kwargs.get("images"), "Images")
     errors["Videos"] = validate_media(kwargs.get("videos"), "Videos")
+    errors["type"] = validate_type(kwargs.get('inc_type'))
     not_valid = {key: value for key, value in errors.items() if value}
 
     if not_valid:
@@ -218,11 +221,7 @@ def validate_new_incident(**kwargs):
 def is_valid_uuid(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        # if 'red_flag_id' in kwargs:
         value = kwargs["incident_id"]
-        # elif 'intervention_id' in kwargs:
-        #     value = kwargs["intervention_id"]
-        #
 
         try:
             value = UUID(value, version=4)
@@ -258,12 +257,9 @@ def is_valid_status(status):
     return is_valid
 
 
-def parse_incident_type(func):
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        incident_type = kwargs["incident_type"]
-
-        if incident_type == "red-flags" or incident_type == "interventions":
-            return func(*args, **kwargs)
-
-    return decorated_view
+def validate_type(inc_type):
+    error = None
+    if inc_type == "red-flag" or inc_type == "intervention":
+        return None
+    else:
+        return "type must either be red-flag or intervention"

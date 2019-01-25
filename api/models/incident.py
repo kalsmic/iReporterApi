@@ -25,7 +25,7 @@ class Incident:
         new_incident_id = last_insert_id.get("id")
         self.insert_images(new_incident_id, images)
         self.insert_videos(new_incident_id, videos)
-        return self.get_incident_by_id(inc_type, new_incident_id)
+        return self.get_incident_by_id(new_incident_id)
 
     def insert_images(self, incident_id, images):
         for image in images:
@@ -90,7 +90,7 @@ class Incident:
         inc_id = str(inc_id)
         user_id = get_current_identity()
 
-        record = self.get_incident_by_id(inc_type, inc_id)
+        record = self.get_incident_by_id_and_type(inc_type, inc_id)
         if record and is_admin_user():
             pass
         elif record and record["created_by"] == user_id:
@@ -101,7 +101,16 @@ class Incident:
             record = None
         return record
 
-    def get_incident_by_id(self, inc_type, inc_id):
+    def get_incident_by_id(self, inc_id):
+
+        sql = (
+            f"SELECT * FROM public.incident_view "
+            f"WHERE id='{inc_id}';"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+    def get_incident_by_id_and_type(self, inc_type, inc_id):
 
         sql = (
             f"SELECT * FROM public.incident_view "
@@ -110,11 +119,11 @@ class Incident:
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
 
-    def update_incident_location(self, inc_id, inc_type, location):
+    def update_incident_location(self, inc_id, location):
         location = (location[0], location[1])
         sql = (
             f"UPDATE incidents SET location='{location}' "
-            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,location;"
+            f"WHERE id='{inc_id}' returning id,location;"
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
@@ -123,7 +132,7 @@ class Incident:
         comment = comment.strip()
         sql = (
             f"UPDATE incidents SET comment='{comment}' "
-            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,comment;"
+            f"WHERE id='{inc_id}' returning id,comment;"
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
@@ -132,7 +141,7 @@ class Incident:
         status = status.strip().lower().capitalize()
         sql = (
             f"UPDATE incidents SET status='{status}' "
-            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,status;"
+            f"WHERE id='{inc_id}' returning id,status;"
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
