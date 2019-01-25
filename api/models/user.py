@@ -95,5 +95,5 @@ class User:
         ):
             user_id = user_db_details.get("id")
 
-            return self.get_user_details(user_id)
+            return user_id
         return None
