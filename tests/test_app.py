@@ -19,5 +19,5 @@ def test_welcome_message(client):
     response = client.get("/")
     assert response.status_code == 200
     data = json.loads(response.data.decode())
-    assert data["message"] == "Welcome to iReporter API V2"
+    assert data["message"] == "Welcome to iReporter API V3"
     assert data["status"] == 200
