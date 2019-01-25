@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, abort
 
 from api.helpers.auth_token import (
     token_required,
@@ -13,28 +13,22 @@ incident_obj = Incident()
 del_inc_bp = Blueprint("del_inc_bp", __name__, url_prefix="/api/v3")
 
 
-@del_inc_bp.route("/incidents/<incident_id>", methods=["DELETE"])
+@del_inc_bp.route("/<incidents>/<incident_id>", methods=["DELETE"])
 @token_required
 @non_admin
 @is_valid_uuid
-@request_data_required
-def delete_record(incident_id):
-    data = request.get_json(force=True)
-    incident_type = data.get("type")
+def delete_record(incidents,incident_id):
+    incident_type = None
+    if incidents == 'red-flags':
+        incident_type = 'red-flag'
+    elif incidents == 'interventions':
+        incident_type = 'intervention'
+    else:
+        abort(404)
+
 
     response = None
-    not_valid_type = validate_type(incident_type)
-    if not_valid_type:
-        return (
-            jsonify(
-                {
-                    "status": 400,
-                    "error": not_valid_type,
-                }
-            ),
-            400,
-        )
-
+  
     results = incident_obj.get_incident_by_id_and_type(
         inc_type=incident_type, inc_id=incident_id
     )
