@@ -256,7 +256,6 @@ def is_valid_status(status):
 
 
 def validate_type(inc_type):
-    error = None
     if inc_type == "red-flag" or inc_type == "intervention":
         return None
     else:
