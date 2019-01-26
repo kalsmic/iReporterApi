@@ -45,26 +45,7 @@ class Incident:
             )
             self.db.cursor.execute(sql)
 
-    def get_incident_by_id(self, inc_type, inc_id):
-
-        sql = (
-            f"SELECT * FROM public.incident_view "
-            f"WHERE id='{inc_id}' AND type='{inc_type}';"
-        )
-        self.db.cursor.execute(sql)
-        return self.db.cursor.fetchone()
-
-    def incident_record_exists(self, title, comment):
-        sql = (
-            "SELECT count(*) FROM incidents WHERE "
-            f"title='{title}' AND comment='{comment}';"
-        )
-        self.db.cursor.execute(sql)
-        duplicates = self.db.cursor.fetchone()
-        if duplicates["count"]:
-            return True
-        return False
-
+  
     def get_all_incident_records(self, inc_type):
         if is_admin_user():  # if user is admin
             return self.get_all_records(inc_type)
