@@ -58,8 +58,8 @@ def create_app(config=None):
     app.register_blueprint(edit_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(del_inc_bp)
-    SWAGGER_UI_URL = "/api/v3/docs"
-    API_URL = "https://kalsmic.github.io/swagger-ui/dist/ireporter_api_v3.json"
+    SWAGGER_UI_URL = "/api/v2/docs"
+    API_URL = "https://kalsmic.github.io/swagger-ui/dist/ireporter_api_v2.json"
 
     swagger_ui_blueprint = get_swaggerui_blueprint(SWAGGER_UI_URL, API_URL)
     app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_UI_URL)
