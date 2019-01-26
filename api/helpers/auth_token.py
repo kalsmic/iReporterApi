@@ -1,9 +1,8 @@
 import datetime
-from functools import wraps
-from os import environ
-
 import jwt
 from flask import request, jsonify, abort
+from functools import wraps
+from os import environ
 
 from api.helpers.responses import expired_token_message, invalid_token_message
 from database.db import Database

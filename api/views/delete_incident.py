@@ -57,7 +57,7 @@ def delete_record(incidents, incident_id):
                         {
                             "incident": delete_id,
                             "success": incident_type
-                            + " record has been deleted",
+                                       + " record has been deleted",
                         }
                     ],
                 }
@@ -78,4 +78,3 @@ def delete_record(incidents, incident_id):
             403,
         )
     return response
-    

@@ -44,7 +44,7 @@ def edit_incident_location(incidents, incident_id):
                 {
                     "status": 404,
                     "error": inc_type
-                    + " record with specified id does not exist",
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -56,8 +56,8 @@ def edit_incident_location(incidents, incident_id):
         )
 
     elif (
-        results["created_by"] == get_current_identity()
-        and results["status"].lower() == "draft"
+            results["created_by"] == get_current_identity()
+            and results["status"].lower() == "draft"
     ):
         location = data.get("location")
 
@@ -75,8 +75,8 @@ def edit_incident_location(incidents, incident_id):
                             "id": updated_record["id"],
                             "location": updated_record["location"],
                             "success": "Updated "
-                            + inc_type
-                            + " record’s location",
+                                       + inc_type
+                                       + " record’s location",
                         }
                     ],
                 }
@@ -121,7 +121,7 @@ def edit_red_flag_comment(incidents, incident_id):
                 {
                     "status": 404,
                     "error": incident_type
-                    + " record with specified id does not exist",
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -166,8 +166,8 @@ def edit_red_flag_comment(incidents, incident_id):
                             "id": updated_record["id"],
                             "comment": updated_record["comment"],
                             "success": "Updated "
-                            + incident_type
-                            + " record’s comment",
+                                       + incident_type
+                                       + " record’s comment",
                         }
                     ],
                 }
@@ -202,7 +202,7 @@ def edit_incident_status(incidents, incident_id):
                 {
                     "status": 404,
                     "error": incident_type
-                    + " record with specified id does not exist",
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -225,8 +225,8 @@ def edit_incident_status(incidents, incident_id):
                             "id": updated_record["id"],
                             "status": updated_record["status"],
                             "success": "Updated "
-                            + incident_type
-                            + " record’s status",
+                                       + incident_type
+                                       + " record’s status",
                         }
                     ],
                 }
