@@ -26,7 +26,7 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
 
 :green_book: [Link to API V1 documentation](https://app.swaggerhub.com/apis-docs/kalsmiciReporter1/iReporter/v1)
 
-:paperclip: [Link API V1 source code](https://github.com/kalsmic/iReporterApi/tree/api)
+:link: [Link API V1 source code](https://github.com/kalsmic/iReporterApi/tree/api)
 
 ### API V2 - PostgreSQL database
 
@@ -34,7 +34,7 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
 
 :green_book: [Link to API V2 documentation](https://ireporterapiv2.herokuapp.com/api/v2/docs)
 
-:paperclip: [Link API V2 Source code](https://github.com/kalsmic/iReporterApi/tree/api-database)
+:link: [Link API V2 Source code](https://github.com/kalsmic/iReporterApi/tree/api-database)
 
 ## How to set up the project
 
@@ -64,9 +64,8 @@ Enter the command below in the terminal to run the tests with coverage using
 
 ## Built With
 
-- [Python](https://www.python.org/) - A programming language that lets you work quickly and integrate systems more effectively
-
-- [Flask](http://flask.pocoo.org/) - A microframework for Python based on Werkzeug, Jinja 2 and good intentions.
+-   [Python](https://www.python.org/) - A programming language that lets you work quickly and integrate systems more effectively
+-   [Flask](http://flask.pocoo.org/) - A microframework for Python based on Werkzeug, Jinja 2 and good intentions.
 
 ## Author
 
