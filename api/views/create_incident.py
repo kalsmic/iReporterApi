@@ -19,12 +19,7 @@ incident_obj = Incident()
 def new_red_flag():
     if not request.data:
         return (
-            jsonify(
-                {
-                    "error": "Please provide incident Data",
-                    "status": 400,
-                }
-            ),
+            jsonify({"error": "Please provide incident Data", "status": 400}),
             400,
         )
     data = request.get_json(force=True)

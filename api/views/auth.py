@@ -75,10 +75,7 @@ def login():
     if not request.data:
         return (
             jsonify(
-                {
-                    "error": "Provide provide valid data to login",
-                    "status": 400,
-                }
+                {"error": "Provide provide valid data to login", "status": 400}
             ),
             400,
         )

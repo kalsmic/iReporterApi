@@ -134,7 +134,9 @@ def test_edit_a_intervention_location_which_does_not_exist(client):
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["status"] == 404
-    assert data["error"] == "intervention record with specified id does not exist"
+    assert (
+        data["error"] == "intervention record with specified id does not exist"
+    )
 
 
 def test_edit_a_intervention_location_which_does_not_belong_to_user(client):

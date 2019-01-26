@@ -9,7 +9,7 @@ from .base import (
     user2_id,
     user2_header,
     new_intervention,
-    invalid_id_token_header
+    invalid_id_token_header,
 )
 
 
@@ -21,27 +21,26 @@ def test_create_a_red_flag_without_a_token(client):
     data = json.loads(response.data.decode())
     assert data == {"error": invalid_token_message, "status": 401}
 
+
 def test_create_a_red_flag_with_invalid_token(client):
     # test onlcreate incident record with invalid token
-    response = client.post(
-        "api/v3/incidents",
-        headers=invalid_id_token_header
-    )
+    response = client.post("api/v3/incidents", headers=invalid_id_token_header)
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data == {
-        "error": "You are not authorized to access this resource", "status": 401}
+        "error": "You are not authorized to access this resource",
+        "status": 401,
+    }
 
 
 def test_create_a_red_flag_with_bad_json_format_data(client):
     response = client.post(
-        "/api/v3/incidents",
-        headers=user1_header,
-        data = "my incident"
+        "/api/v3/incidents", headers=user1_header, data="my incident"
     )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["error"] == "Bad JSON format data"
+
 
 def test_admin_cannot_create_a_red_flag(client):
     response = client.post(
@@ -73,7 +72,6 @@ def test_create_a_red_flag_with_valid_data(client):
     data = json.loads(response.data.decode())
     assert data["data"][0]["success"] == "Created red-flag record"
     assert data["data"][0]["red-flag"]["created_by"] == user1_id
-
 
 
 def test_create_a_red_flag_without_wrong_input(client):
@@ -149,7 +147,6 @@ def test_create_a_red_flag_without_wrong_input(client):
     assert len(data["error"]) == 4
 
     wrong_input_1["title"] = ""
-
 
     response = client.post(
         "api/v3/incidents",

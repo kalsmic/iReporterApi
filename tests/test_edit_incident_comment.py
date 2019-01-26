@@ -149,7 +149,9 @@ def test_edit_a_intervention_comment_for_a_intervention_record_which_does_not_ex
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["status"] == 404
-    assert data["error"] == "intervention record with specified id does not exist"
+    assert (
+        data["error"] == "intervention record with specified id does not exist"
+    )
 
 
 def test_edit_a_intervention_comment_for_a_intervention_record_with_without_a_comment(

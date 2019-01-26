@@ -9,7 +9,7 @@ from .base import user2_header, user1_header
 
 def test_delete_red_flag_without_a_access_token(client):
     response = client.delete(
-        "api/v3/red-flags/68df1a76-80d0-4334-93f9-2f8d04a5ec8e",
+        "api/v3/red-flags/68df1a76-80d0-4334-93f9-2f8d04a5ec8e"
     )
     assert response.status_code == 401
     data = json.loads(response.data.decode())
@@ -21,7 +21,7 @@ def test_delete_red_flag_with_red_flag_id_which_does_not_exist(client):
     # red flag id does not exist
     response = client.delete(
         "api/v3/red-flags/68df1a76-80d0-4334-93f9-2f8d04a5ed8e",
-        headers=user1_header
+        headers=user1_header,
     )
     assert response.status_code == 404
     data = json.loads(response.data.decode())
@@ -30,10 +30,7 @@ def test_delete_red_flag_with_red_flag_id_which_does_not_exist(client):
 
 
 def test_delete_red_flag_with_invalid_format_red_flag_id(client):
-    response = client.delete(
-        "api/v3/red-flags/fdf",
-        headers=user1_header
-    )
+    response = client.delete("api/v3/red-flags/fdf", headers=user1_header)
 
     assert response.status_code == 400
     data = json.loads(response.data.decode())

@@ -32,7 +32,10 @@ def create_app(config=None):
     def _not_authorized(e):
         return (
             jsonify(
-                {"error": "You are not authorized to access this resource", "status": 401}
+                {
+                    "error": "You are not authorized to access this resource",
+                    "status": 401,
+                }
             ),
             401,
         )

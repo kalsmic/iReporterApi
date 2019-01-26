@@ -38,7 +38,7 @@ new_red_flag = {
     "location": [-80, -174.4],
     "Images": ["image1.jpg", "image2.jpg"],
     "Videos": ["vid1.mp4", "vid2.mp4"],
-    "type":"red-flag"
+    "type": "red-flag",
 }
 
 new_intervention = {
@@ -50,8 +50,7 @@ new_intervention = {
     "location": [-72, -154.4],
     "Images": ["image6.jpg", "image7.jpg"],
     "Videos": ["vid8.mp4", "vid5.mp4"],
-    "type": "intervention"
-
+    "type": "intervention",
 }
 
 expired_token = encode(

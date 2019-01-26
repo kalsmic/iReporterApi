@@ -13,7 +13,7 @@ from api.helpers.validation import (
     validate_edit_location,
     is_valid_status,
     validate_sentence,
-    parse_incident_type
+    parse_incident_type,
 )
 from api.models.incident import Incident
 
@@ -28,13 +28,13 @@ admin_bp = Blueprint("admin", __name__, url_prefix="/api/v3")
 @parse_incident_type
 @is_valid_uuid
 @request_data_required
-def edit_incident_location(incidents,incident_id):
+def edit_incident_location(incidents, incident_id):
     data = request.get_json(force=True)
     is_invalid_location = validate_edit_location(data.get("location"))
     inc_type = incidents[:-1]
 
     results = incident_obj.get_incident_by_id_and_type(
-        inc_id=incident_id,inc_type=inc_type
+        inc_id=incident_id, inc_type=inc_type
     )
     response = None
 
@@ -43,7 +43,8 @@ def edit_incident_location(incidents,incident_id):
             jsonify(
                 {
                     "status": 404,
-                    "error": inc_type + " record with specified id does not exist",
+                    "error": inc_type
+                    + " record with specified id does not exist",
                 }
             ),
             404,
@@ -55,8 +56,8 @@ def edit_incident_location(incidents,incident_id):
         )
 
     elif (
-            results["created_by"] == get_current_identity()
-            and results["status"].lower() == "draft"
+        results["created_by"] == get_current_identity()
+        and results["status"].lower() == "draft"
     ):
         location = data.get("location")
 
@@ -74,8 +75,8 @@ def edit_incident_location(incidents,incident_id):
                             "id": updated_record["id"],
                             "location": updated_record["location"],
                             "success": "Updated "
-                                       + inc_type
-                                       + " record’s location",
+                            + inc_type
+                            + " record’s location",
                         }
                     ],
                 }
@@ -93,8 +94,6 @@ def edit_incident_location(incidents,incident_id):
             403,
         )
     return response
-
-
 
 
 @edit_bp.route("/<incidents>/<incident_id>/comment", methods=["PATCH"])
@@ -121,7 +120,8 @@ def edit_red_flag_comment(incidents, incident_id):
             jsonify(
                 {
                     "status": 404,
-                    "error": incident_type + " record with specified id does not exist",
+                    "error": incident_type
+                    + " record with specified id does not exist",
                 }
             ),
             404,
@@ -166,8 +166,8 @@ def edit_red_flag_comment(incidents, incident_id):
                             "id": updated_record["id"],
                             "comment": updated_record["comment"],
                             "success": "Updated "
-                                       + incident_type
-                                       + " record’s comment",
+                            + incident_type
+                            + " record’s comment",
                         }
                     ],
                 }
@@ -201,7 +201,8 @@ def edit_incident_status(incidents, incident_id):
             jsonify(
                 {
                     "status": 404,
-                    "error": incident_type + " record with specified id does not exist",
+                    "error": incident_type
+                    + " record with specified id does not exist",
                 }
             ),
             404,
@@ -224,8 +225,8 @@ def edit_incident_status(incidents, incident_id):
                             "id": updated_record["id"],
                             "status": updated_record["status"],
                             "success": "Updated "
-                                       + incident_type
-                                       + " record’s status",
+                            + incident_type
+                            + " record’s status",
                         }
                     ],
                 }

@@ -201,8 +201,6 @@ def validate_location(location):
     return error
 
 
-
-
 def validate_new_incident(**kwargs):
     errors = dict()
     errors["title"] = validate_sentence(kwargs.get("title"), 4, 100)
@@ -210,7 +208,7 @@ def validate_new_incident(**kwargs):
     errors["location"] = validate_location(kwargs.get("location"))
     errors["Images"] = validate_media(kwargs.get("images"), "Images")
     errors["Videos"] = validate_media(kwargs.get("videos"), "Videos")
-    errors["type"] = validate_type(kwargs.get('inc_type'))
+    errors["type"] = validate_type(kwargs.get("inc_type"))
     not_valid = {key: value for key, value in errors.items() if value}
 
     if not_valid:
@@ -263,6 +261,7 @@ def validate_type(inc_type):
         return None
     else:
         return "type must either be red-flag or intervention"
+
 
 def parse_incident_type(func):
     @wraps(func)

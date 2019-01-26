@@ -45,7 +45,6 @@ class Incident:
             )
             self.db.cursor.execute(sql)
 
-  
     def get_all_incident_records(self, inc_type):
         if is_admin_user():  # if user is admin
             return self.get_all_records(inc_type)
@@ -84,10 +83,7 @@ class Incident:
 
     def get_incident_by_id(self, inc_id):
 
-        sql = (
-            f"SELECT * FROM public.incident_view "
-            f"WHERE id='{inc_id}';"
-        )
+        sql = f"SELECT * FROM public.incident_view " f"WHERE id='{inc_id}';"
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
 
