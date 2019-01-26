@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, abort
+from flask import Blueprint, jsonify
 
 from api.helpers.auth_token import token_required
 from api.helpers.validation import is_valid_uuid, parse_incident_type
