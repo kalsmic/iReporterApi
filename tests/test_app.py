@@ -1,4 +1,10 @@
 from flask import json
+from .base import (
+    admin_header,
+    user1_header,
+    user1_id,
+    
+)
 
 
 def test_invalid_url(client):
@@ -7,6 +13,10 @@ def test_invalid_url(client):
     data = json.loads(response.data.decode())
     assert data["error"] == "Endpoint for specified URL does not exist"
 
+    response = client.get("api/v3/red-flag/ssd", headers=user1_header)
+    assert response.status_code == 404
+    data = json.loads(response.data.decode())
+    assert data["error"] == "Endpoint for specified URL does not exist"
 
 def test_method_not_allowed(client):
     response = client.delete("/")

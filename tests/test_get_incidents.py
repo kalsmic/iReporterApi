@@ -57,6 +57,18 @@ def test_get_a_red_flag(client):
         == "Vestibulum blandit ligula a mollis ullamcorper."
     )
 
+def test_get_a_red_flag_with_id_which_does_not_exist(client):
+    response = client.get(
+        "api/v3/red-flags/10df0c67-5f2b-4e5d-8b45-7357bbf7bebb",
+        headers=user1_header,
+    )
+    assert response.status_code == 404
+    data = json.loads(response.data.decode())
+    assert data["status"] == 404
+    # assert (
+    #     data["data"][0]["title"]
+    #     == "Vestibulum blandit ligula a mollis ullamcorper."
+    # )
 
 def test_get_a_red_flag_for_another_user(client):
     response = client.get(

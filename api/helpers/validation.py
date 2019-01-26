@@ -3,7 +3,7 @@ import re
 from functools import wraps
 from uuid import UUID
 
-from flask import jsonify, request
+from flask import jsonify, request, abort
 
 from api.helpers.responses import (
     wrong_password,
@@ -263,3 +263,14 @@ def validate_type(inc_type):
         return None
     else:
         return "type must either be red-flag or intervention"
+
+def parse_incident_type(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        incident_type = kwargs["incidents"]
+
+        if incident_type == "red-flags" or incident_type == "interventions":
+            return func(*args, **kwargs)
+        abort(404)
+
+    return decorated_view

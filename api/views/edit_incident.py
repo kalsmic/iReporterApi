@@ -13,6 +13,7 @@ from api.helpers.validation import (
     validate_edit_location,
     is_valid_status,
     validate_sentence,
+    parse_incident_type
 )
 from api.models.incident import Incident
 
@@ -24,18 +25,13 @@ admin_bp = Blueprint("admin", __name__, url_prefix="/api/v3")
 @edit_bp.route("/<incidents>/<incident_id>/location", methods=["PATCH"])
 @token_required
 @non_admin
+@parse_incident_type
 @is_valid_uuid
 @request_data_required
 def edit_incident_location(incidents,incident_id):
     data = request.get_json(force=True)
     is_invalid_location = validate_edit_location(data.get("location"))
-    inc_type = None
-    if incidents == 'red-flags':
-        inc_type = 'red-flag'
-    elif incidents == 'interventions':
-        inc_type = 'intervention'
-    else:
-        abort(404)
+    inc_type = incidents[:-1]
 
     results = incident_obj.get_incident_by_id_and_type(
         inc_id=incident_id,inc_type=inc_type
@@ -99,19 +95,16 @@ def edit_incident_location(incidents,incident_id):
     return response
 
 
+
+
 @edit_bp.route("/<incidents>/<incident_id>/comment", methods=["PATCH"])
 @token_required
 @non_admin
+@parse_incident_type
 @is_valid_uuid
 @request_data_required
 def edit_red_flag_comment(incidents, incident_id):
-    inc_type = None
-    if incidents == 'red-flags':
-        inc_type = 'red-flag'
-    elif incidents == 'interventions':
-        inc_type = 'intervention'
-    else:
-        abort(404)
+    inc_type = incidents[:-1]
 
     data = request.get_json(force=True)
     comment = data.get("comment")
@@ -188,17 +181,11 @@ def edit_red_flag_comment(incidents, incident_id):
 @admin_bp.route("/<incidents>/<incident_id>/status", methods=["PATCH"])
 @token_required
 @admin_required
+@parse_incident_type
 @is_valid_uuid
 @request_data_required
 def edit_incident_status(incidents, incident_id):
-    inc_type = None
-    if incidents == 'red-flags':
-        inc_type = 'red-flag'
-    elif incidents == 'interventions':
-        inc_type = 'intervention'
-    else:
-        abort(404)
-
+    inc_type = incidents[:-1]
     status = request.get_json(force=True).get("status")
 
     incident_type = inc_type
