@@ -52,7 +52,7 @@ def create_app(config=None):
         return (jsonify({"error": "Method not allowed"}), 405)
 
     @app.errorhandler(500)
-    def internal_server_error(e):
+    def _internal_server_error(e):
         return (jsonify({"error": "internal s error"}), 500)
 
     app.config.from_object(Config)
