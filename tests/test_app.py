@@ -1,9 +1,13 @@
 from flask import json
-from .base import admin_header, user1_header, user1_id
+
+from .base import user1_header
 
 
 def test_invalid_url(client):
-    response = client.delete("api/v2/")
+    response = client.delete(
+        "api/v2/intervention/79bb7006-272e-4e0c-8253-117305466b6a",
+        headers=user1_header,
+    )
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["error"] == "Endpoint for specified URL does not exist"

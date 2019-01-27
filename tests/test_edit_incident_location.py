@@ -3,6 +3,7 @@ from flask import json
 from api.helpers.responses import invalid_token_message
 from .base import user2_header, user1_header
 
+
 # EDIT A RED-FLAG RECORD'S LOCATION
 def test_edit_a_red_flag_location_without_a_token(client):
     response = client.patch(
