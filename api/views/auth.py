@@ -11,7 +11,7 @@ user_obj = User()
 @users_bp.route("/auth/signup", methods=["POST"])
 @sign_up_data_required
 def register_user():
-    new_user = json.loads(request.data)
+    new_user = request.get_json(force=True)
     try:
         first_name = new_user["firstname"]
         last_name = new_user["lastname"]
@@ -80,7 +80,7 @@ def login():
             400,
         )
 
-    user_credentials = json.loads(request.data)
+    user_credentials = request.get_json(force=True)
     response = None
     try:
         user_name = user_credentials["username"]

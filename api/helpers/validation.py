@@ -125,7 +125,7 @@ def validate_password(password):
 def validate_phone_number(phone_number):
     error = wrong_phone_number
 
-    if len(phone_number) == 10 and phone_number.isdigit():
+    if len(str(phone_number)) == 10 and str(phone_number).isdigit():
         error = None
     return error
 
