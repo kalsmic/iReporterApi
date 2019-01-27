@@ -51,6 +51,10 @@ def create_app(config=None):
     def _method_not_allowed(e):
         return (jsonify({"error": "Method not allowed"}), 405)
 
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return (jsonify({"error": "internal s error"}), 500)
+
     app.config.from_object(Config)
     app.register_blueprint(users_bp)
     app.register_blueprint(create_incident_bp)
