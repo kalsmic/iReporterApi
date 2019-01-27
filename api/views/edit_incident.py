@@ -4,7 +4,7 @@ from api.helpers.auth_token import (
     non_admin,
     get_current_identity,
     token_required,
-    admin_required
+    admin_required,
 )
 from api.helpers.responses import wrong_status
 from api.helpers.validation import (
@@ -12,35 +12,29 @@ from api.helpers.validation import (
     is_valid_uuid,
     validate_edit_location,
     is_valid_status,
-    validate_sentence
+    validate_sentence,
+    parse_incident_type,
 )
 from api.models.incident import Incident
 
 incident_obj = Incident()
-edit_bp = Blueprint(
-    "edit_bp", __name__, url_prefix="/api/v2"
-)
-admin_bp = Blueprint(
-    "admin", __name__, url_prefix="/api/v2"
-)
+edit_bp = Blueprint("edit_bp", __name__, url_prefix="/api/v2")
+admin_bp = Blueprint("admin", __name__, url_prefix="/api/v2")
 
 
-@edit_bp.route(
-    "/<incident_type>/<incident_id>/location", methods=["PATCH"]
-)
+@edit_bp.route("/<incidents>/<incident_id>/location", methods=["PATCH"])
 @token_required
 @non_admin
+@parse_incident_type
 @is_valid_uuid
 @request_data_required
-def edit_red_flag_location(incident_type, incident_id):
+def edit_incident_location(incidents, incident_id):
     data = request.get_json(force=True)
-    incident_type = incident_type[:-1]
-
     is_invalid_location = validate_edit_location(data.get("location"))
+    inc_type = incidents[:-1]
 
-    results = incident_obj.get_incident_by_id(
-        inc_id=incident_id,
-        inc_type=incident_type
+    results = incident_obj.get_incident_by_id_and_type(
+        inc_id=incident_id, inc_type=inc_type
     )
     response = None
 
@@ -49,7 +43,8 @@ def edit_red_flag_location(incident_type, incident_id):
             jsonify(
                 {
                     "status": 404,
-                    "error": incident_type + " record does not exist",
+                    "error": inc_type
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -68,7 +63,7 @@ def edit_red_flag_location(incident_type, incident_id):
 
         inc_id = incident_id
         updated_record = incident_obj.update_incident_location(
-            inc_id=inc_id, inc_type=incident_type, location=location
+            inc_id=inc_id, location=location
         )
 
         response = (
@@ -77,9 +72,11 @@ def edit_red_flag_location(incident_type, incident_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": updated_record['id'],
-                            "location": updated_record['location'],
-                            "message": "Updated " + incident_type + " record’s location"
+                            "id": updated_record["id"],
+                            "location": updated_record["location"],
+                            "success": "Updated "
+                                       + inc_type
+                                       + " record’s location",
                         }
                     ],
                 }
@@ -99,19 +96,21 @@ def edit_red_flag_location(incident_type, incident_id):
     return response
 
 
-@edit_bp.route(
-    "/<incident_type>/<incident_id>/comment", methods=["PATCH"]
-)
+@edit_bp.route("/<incidents>/<incident_id>/comment", methods=["PATCH"])
 @token_required
 @non_admin
+@parse_incident_type
 @is_valid_uuid
 @request_data_required
-def edit_red_flag_comment(incident_type,incident_id):
+def edit_red_flag_comment(incidents, incident_id):
+    inc_type = incidents[:-1]
+
     data = request.get_json(force=True)
     comment = data.get("comment")
     is_invalid = validate_sentence(comment, min_len=10)
-    incident_type = incident_type[:-1]
-    incident_results = incident_obj.get_incident_by_id(
+    incident_type = inc_type
+
+    incident_results = incident_obj.get_incident_by_id_and_type(
         inc_type=incident_type, inc_id=incident_id
     )
 
@@ -121,7 +120,8 @@ def edit_red_flag_comment(incident_type,incident_id):
             jsonify(
                 {
                     "status": 404,
-                    "error": incident_type + " record does not exist",
+                    "error": incident_type
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -163,10 +163,9 @@ def edit_red_flag_comment(incident_type,incident_id):
                     "status": 200,
                     "data": [
                         {
-
-                            "id": updated_record['id'],
-                            "comment": updated_record['comment'],
-                            "message": "Updated "
+                            "id": updated_record["id"],
+                            "comment": updated_record["comment"],
+                            "success": "Updated "
                                        + incident_type
                                        + " record’s comment",
                         }
@@ -179,20 +178,20 @@ def edit_red_flag_comment(incident_type,incident_id):
     return response
 
 
-@admin_bp.route(
-    "/<incident_type>/<incident_id>/status", methods=["PATCH"]
-)
+@admin_bp.route("/<incidents>/<incident_id>/status", methods=["PATCH"])
 @token_required
 @admin_required
+@parse_incident_type
 @is_valid_uuid
 @request_data_required
-def edit_red_flag_status(incident_type, incident_id):
+def edit_incident_status(incidents, incident_id):
+    inc_type = incidents[:-1]
     status = request.get_json(force=True).get("status")
 
-    incident_type = incident_type[:-1]
+    incident_type = inc_type
 
     incident_id = incident_id
-    incident_results = incident_obj.get_incident_by_id(
+    incident_results = incident_obj.get_incident_by_id_and_type(
         inc_type=incident_type, inc_id=incident_id
     )
 
@@ -202,7 +201,8 @@ def edit_red_flag_status(incident_type, incident_id):
             jsonify(
                 {
                     "status": 404,
-                    "error": incident_type + " record does not exist",
+                    "error": incident_type
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -222,9 +222,9 @@ def edit_red_flag_status(incident_type, incident_id):
                     "status": 200,
                     "data": [
                         {
-                            "id": updated_record['id'],
-                            "status": updated_record['status'],
-                            "message": "Updated "
+                            "id": updated_record["id"],
+                            "status": updated_record["status"],
+                            "success": "Updated "
                                        + incident_type
                                        + " record’s status",
                         }

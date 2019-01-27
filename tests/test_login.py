@@ -21,9 +21,7 @@ def test_user_login_with_valid_credentials_(client):
     )
     assert register_response.status_code == 201
     data = json.loads(register_response.data.decode())
-    # assert data["data"][0]["user"]["id"] == 5s
     assert data["data"][0]["user"]["email"] == "arthurkalule@gmail.com"
-    assert "token" in data["data"][0]
 
 
 def test_user_login_without_data_(client):
@@ -63,6 +61,6 @@ def test_user_login_with_correct_credentials_data(client):
     )
     assert response.status_code == 200
     data = json.loads(response.data.decode())
-    assert data["data"][0]["message"] == "Logged in successfully"
+    assert data["data"][0]["success"] == "Logged in successfully"
     assert "token" in data["data"][0]
-    assert data["data"][0]["user"]["email"] == "arthurkalule@gmail.com"
+    assert data["status"] == 200

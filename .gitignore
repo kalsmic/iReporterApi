@@ -1,9 +1,11 @@
 venv
 __pycache__
 .pyc
+*.pyc
 .idea
 .vscode
 .env
 .swp
 htmlcov
 .coverage
+

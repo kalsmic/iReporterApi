@@ -2,14 +2,39 @@
 
 [![Build Status](https://travis-ci.com/kalsmic/iReporterApi.svg?branch=api)](https://travis-ci.com/kalsmic/iReporterApi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2b2df2ba4fc8d8138ab4/maintainability)](https://codeclimate.com/github/kalsmic/iReporterApi/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/kalsmic/iReporterApi/badge.svg?branch=api)](https://coveralls.io/github/kalsmic/iReporterApi?branch=api-database) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dcaff2f8a36b474da2ed1c144d5630be)](https://www.codacy.com/app/kalsmic/iReporterApi?utm_source=github.com&utm_medium=referral&utm_content=kalsmic/iReporterApi&utm_campaign=Badge_Grade)
+[![Coverage Status](https://coveralls.io/repos/github/kalsmic/iReporterApi/badge.svg?branch=api)](https://coveralls.io/github/kalsmic/iReporterApi?branch=api-database)
 
 Corruption is a huge bane to Africa’s development. African countries must develop novel and
 localised solutions that will curb this menace, hence the birth of iReporter. iReporter enables
-any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention
+any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.
 
-[Link to API on Heroku api](https://ireporterapiv2.herokuapp.com/)
+## Complete Tasks
 
+### User stories on Pivotal tracker
+
+:link:  [Link to user stories](https://www.pivotaltracker.com/n/projects/2231809)
+
+### UI Templates
+
+:link: [Live project on gh-pages](https://kalsmic.github.io/iReporter/)
+
+:link: [Link to Source code](https://github.com/kalsmic/iReporter/tree/develop)
+
+### API V1 - python data structures
+
+:rocket: [Link to Deployment on Heroku API V1](https://ireporterapiv1.herokuapp.com/)
+
+:green_book: [Link to API V1 documentation](https://app.swaggerhub.com/apis-docs/kalsmiciReporter1/iReporter/v1)
+
+:link: [Link API V1 source code](https://github.com/kalsmic/iReporterApi/tree/api)
+
+### API V2 - PostgreSQL database
+
+:rocket: [Link to Deployment on Heroku API V2](https://ireporterapiv2.herokuapp.com/)
+
+:green_book: [Link to API V2 documentation](https://ireporterapiv2.herokuapp.com/api/v2/docs)
+
+:link: [Link API V2 Source code](https://github.com/kalsmic/iReporterApi/tree/api-database)
 
 ## How to set up the project
 

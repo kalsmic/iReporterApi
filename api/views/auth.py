@@ -60,8 +60,7 @@ def register_user():
                     "data": [
                         {
                             "user": new_user_details,
-                            "token": encode_token(new_user_details["id"]),
-                            "message": "Account created Successfully",
+                            "success": "Account created Successfully",
                         }
                     ],
                 }
@@ -73,15 +72,10 @@ def register_user():
 
 @users_bp.route("/auth/login", methods=["POST"])
 def login():
-    expected_data = {"username": "String", "password": "string"}
     if not request.data:
         return (
             jsonify(
-                {
-                    "error": "Provide provide valid data to login",
-                    "expected": expected_data,
-                    "status": 400,
-                }
+                {"error": "Provide provide valid data to login", "status": 400}
             ),
             400,
         )
@@ -93,17 +87,16 @@ def login():
         user_password = user_credentials["password"]
 
         # submit credentials
-        data = user_obj.is_valid_credentials(user_name, user_password)
-        if data:
+        user_id = user_obj.is_valid_credentials(user_name, user_password)
+        if user_id:
             response = (
                 jsonify(
                     {
                         "status": 200,
                         "data": [
                             {
-                                "token": encode_token(data.get("id")),
-                                "user": data,
-                                "message": "Logged in successfully",
+                                "token": encode_token(user_id),
+                                "success": "Logged in successfully",
                             }
                         ],
                     }

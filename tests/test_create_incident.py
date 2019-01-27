@@ -9,22 +9,42 @@ from .base import (
     user2_id,
     user2_header,
     new_intervention,
+    invalid_id_token_header,
 )
 
 
 # # CREATE A RED-FLAG
 def test_create_a_red_flag_without_a_token(client):
     # test only logged in user with token
-    response = client.post("api/v2/red-flags")
+    response = client.post("api/v2/incidents")
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data == {"error": invalid_token_message, "status": 401}
 
 
-# # assert admin_header == "dd"
+def test_create_a_red_flag_with_invalid_token(client):
+    # test onlcreate incident record with invalid token
+    response = client.post("api/v2/incidents", headers=invalid_id_token_header)
+    assert response.status_code == 401
+    data = json.loads(response.data.decode())
+    assert data == {
+        "error": "You are not authorized to access this resource",
+        "status": 401,
+    }
+
+
+def test_create_a_red_flag_with_bad_json_format_data(client):
+    response = client.post(
+        "/api/v2/incidents", headers=user1_header, data="my incident"
+    )
+    assert response.status_code == 400
+    data = json.loads(response.data.decode())
+    assert data["error"] == "Bad JSON format data"
+
+
 def test_admin_cannot_create_a_red_flag(client):
     response = client.post(
-        "api/v2/red-flags", headers=admin_header, data=json.dumps(new_red_flag)
+        "api/v2/incidents", headers=admin_header, data=json.dumps(new_red_flag)
     )
     assert response.status_code == 401
     data = json.loads(response.data.decode())
@@ -35,10 +55,10 @@ def test_admin_cannot_create_a_red_flag(client):
 
 
 def test_create_a_red_flag_without_data(client):
-    response = client.post("api/v2/red-flags", headers=user1_header)
+    response = client.post("api/v2/incidents", headers=user1_header)
     assert response.status_code == 400
     data = json.loads(response.data.decode())
-    assert data["error"] == "Please provide red-flag Data"
+    assert data["error"] == "Please provide incident Data"
 
 
 def test_create_a_red_flag_with_valid_data(client):
@@ -46,29 +66,20 @@ def test_create_a_red_flag_with_valid_data(client):
         "comment"
     ] = "Lorem ipsum eiusmod temport labore et dolore magna"
     response = client.post(
-        "api/v2/red-flags", headers=user1_header, data=json.dumps(new_red_flag)
+        "api/v2/incidents", headers=user1_header, data=json.dumps(new_red_flag)
     )
     assert response.status_code == 201
     data = json.loads(response.data.decode())
-    assert data["data"][0]["message"] == "Created red-flag record"
+    assert data["data"][0]["success"] == "Created red-flag record"
     assert data["data"][0]["red-flag"]["created_by"] == user1_id
 
 
-def test_create_a_duplicate_red_flag(client):
-    response = client.post(
-        "api/v2/red-flags", headers=user1_header, data=json.dumps(new_red_flag)
-    )
-    assert response.status_code == 409
-    data = json.loads(response.data.decode())
-    assert data["error"] == "red-flag record already exists"
-
-
-def test_create_a_red_flag_without_wrong_input(client):
+def test_create_a_red_flag_with_wrong_input(client):
     wrong_input_1 = new_red_flag
 
     new_red_flag["location"] = ["jk", 180]
     response = client.post(
-        "api/v2/red-flags", headers=user1_header, data=json.dumps(new_red_flag)
+        "api/v2/incidents", headers=user1_header, data=json.dumps(new_red_flag)
     )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
@@ -81,9 +92,10 @@ def test_create_a_red_flag_without_wrong_input(client):
     wrong_input_1["Images"] = ""
     wrong_input_1["Videos"] = ""
     wrong_input_1["comment"] = "5"
+
     # create a red flag with one coordinate in the location
     response = client.post(
-        "api/v2/red-flags",
+        "api/v2/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
@@ -92,17 +104,17 @@ def test_create_a_red_flag_without_wrong_input(client):
     data = json.loads(response.data.decode())
     assert data["error"]["title"] == "Field cannot be a number"
     assert (
-            data["error"]["location"]
-            == "location must be a list with both Latitude and Longitude coordinates"
+        data["error"]["location"]
+        == "location must be a list with both Latitude and Longitude coordinates"
     )
 
     assert (
-            data["error"]["Images"]
-            == "Please provide an empty list of Images if none"
+        data["error"]["Images"]
+        == "Please provide an empty list of Images if none"
     )
     assert (
-            data["error"]["Videos"]
-            == "Please provide an empty list of Videos if none"
+        data["error"]["Videos"]
+        == "Please provide an empty list of Videos if none"
     )
     assert data["error"]["comment"] == "Field cannot be a number"
     assert len(data["error"]) == 5
@@ -115,19 +127,19 @@ def test_create_a_red_flag_without_wrong_input(client):
     wrong_input_1["comment"] = "Lorem ipsum"
 
     response = client.post(
-        "api/v2/red-flags",
+        "api/v2/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-            data["error"]["title"]
-            == "Field must contain a minimum of 4 characters"
+        data["error"]["title"]
+        == "Field must contain a minimum of 4 characters"
     )
     assert (
-            data["error"]["location"]
-            == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
+        data["error"]["location"]
+        == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
     )
 
     assert data["error"]["Images"] == "Only JPEG Images are supported"
@@ -137,15 +149,15 @@ def test_create_a_red_flag_without_wrong_input(client):
     wrong_input_1["title"] = ""
 
     response = client.post(
-        "api/v2/red-flags",
+        "api/v2/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-            data["error"]["title"]
-            == "Field must contain a minimum of 4 characters"
+        data["error"]["title"]
+        == "Field must contain a minimum of 4 characters"
     )
 
     wrong_input_1["title"] = (
@@ -153,30 +165,30 @@ def test_create_a_red_flag_without_wrong_input(client):
         " in elit accumsan bibendum. Suspendisse tincidunt, justo quis laoreet elementum,"
         "enim ligula consectetur ligula, quis fringilla ligula augue non nibh. "
     )
+    wrong_input_1["type"] = "redflag"
 
     response = client.post(
-        "api/v2/red-flags",
+        "api/v2/incidents",
         headers=user1_header,
         data=json.dumps(wrong_input_1),
     )
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert (
-            data["error"]["title"]
-            == "Field must contain a maximum of 100 characters"
+        data["error"]["title"]
+        == "Field must contain a maximum of 100 characters"
     )
-
 
 
 def test_create_an_intervention_with_valid_data(client):
     response = client.post(
-        "api/v2/interventions",
+        "api/v2/incidents",
         headers=user2_header,
         data=json.dumps(new_intervention),
     )
     assert response.status_code == 201
     data = json.loads(response.data.decode())
-    assert data["data"][0]["message"] == "Created intervention record"
+    assert data["data"][0]["success"] == "Created intervention record"
     assert data["data"][0]["intervention"]["created_by"] == user2_id
     assert data["data"][0]["intervention"]["comment"] == (
         "Mi proin sed libero enim sed faucibus turpis in."

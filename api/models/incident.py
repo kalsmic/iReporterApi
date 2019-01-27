@@ -25,7 +25,7 @@ class Incident:
         new_incident_id = last_insert_id.get("id")
         self.insert_images(new_incident_id, images)
         self.insert_videos(new_incident_id, videos)
-        return self.get_incident_by_id(inc_type, new_incident_id)
+        return self.get_incident_by_id(new_incident_id)
 
     def insert_images(self, incident_id, images):
         for image in images:
@@ -45,26 +45,6 @@ class Incident:
             )
             self.db.cursor.execute(sql)
 
-    def get_incident_by_id(self, inc_type, inc_id):
-
-        sql = (
-            f"SELECT * FROM public.incident_view "
-            f"WHERE id='{inc_id}' AND type='{inc_type}';"
-        )
-        self.db.cursor.execute(sql)
-        return self.db.cursor.fetchone()
-
-    def incident_record_exists(self, title, comment):
-        sql = (
-            "SELECT count(*) FROM incidents WHERE "
-            f"title='{title}' AND comment='{comment}';"
-        )
-        self.db.cursor.execute(sql)
-        duplicates = self.db.cursor.fetchone()
-        if duplicates["count"]:
-            return True
-        return False
-
     def get_all_incident_records(self, inc_type):
         if is_admin_user():  # if user is admin
             return self.get_all_records(inc_type)
@@ -73,9 +53,7 @@ class Incident:
         return self.get_all_records_for_a_specific_user(inc_type, user_id)
 
     def get_all_records(self, inc_type):
-        sql = (
-            f"SELECT * FROM incident_view WHERE type='{inc_type}';"
-        )
+        sql = f"SELECT * FROM incident_view WHERE type='{inc_type}';"
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchall()
 
@@ -92,18 +70,24 @@ class Incident:
         inc_id = str(inc_id)
         user_id = get_current_identity()
 
-        record = self.get_incident_by_id(inc_type, inc_id)
+        record = self.get_incident_by_id_and_type(inc_type, inc_id)
         if record and is_admin_user():
             pass
-        elif record and record['created_by'] == user_id:
+        elif record and record["created_by"] == user_id:
             pass
-        elif record and record['created_by'] != user_id:
+        elif record and record["created_by"] != user_id:
             record = {"error": "You're not Authorized to access this resource"}
         else:
             record = None
         return record
 
-    def get_incident_by_id(self, inc_type, inc_id):
+    def get_incident_by_id(self, inc_id):
+
+        sql = f"SELECT * FROM public.incident_view " f"WHERE id='{inc_id}';"
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+    def get_incident_by_id_and_type(self, inc_type, inc_id):
 
         sql = (
             f"SELECT * FROM public.incident_view "
@@ -112,11 +96,11 @@ class Incident:
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
 
-    def update_incident_location(self, inc_id, inc_type, location):
+    def update_incident_location(self, inc_id, location):
         location = (location[0], location[1])
         sql = (
             f"UPDATE incidents SET location='{location}' "
-            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,location;"
+            f"WHERE id='{inc_id}' returning id,location;"
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
@@ -125,17 +109,16 @@ class Incident:
         comment = comment.strip()
         sql = (
             f"UPDATE incidents SET comment='{comment}' "
-            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,comment;"
+            f"WHERE id='{inc_id}' returning id,comment;"
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()
-
 
     def update_incident_status(self, inc_id, inc_type, status):
         status = status.strip().lower().capitalize()
         sql = (
             f"UPDATE incidents SET status='{status}' "
-            f"WHERE id='{inc_id}' AND type='{inc_type}' returning id,status;"
+            f"WHERE id='{inc_id}' returning id,status;"
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()

@@ -6,29 +6,29 @@ from api.helpers.auth_token import (
     get_current_identity,
 )
 from api.helpers.responses import delete_not_allowed
-from api.helpers.validation import is_valid_uuid
+from api.helpers.validation import (
+    is_valid_uuid,
+    parse_incident_type,
+)
 from api.models.incident import Incident
 
 incident_obj = Incident()
-del_inc_bp = Blueprint(
-    "del_inc_bp", __name__, url_prefix="/api/v2"
-)
+del_inc_bp = Blueprint("del_inc_bp", __name__, url_prefix="/api/v2")
 
 
-@del_inc_bp.route(
-    "/<incident_type>/<incident_id>", methods=["DELETE"]
-)
+@del_inc_bp.route("/<incidents>/<incident_id>", methods=["DELETE"])
 @token_required
 @non_admin
+@parse_incident_type
 @is_valid_uuid
-def delete_record(incident_type, incident_id):
-    incident_type = incident_type[:-1]
+def delete_record(incidents, incident_id):
+    incident_type = incidents[:-1]
+    response = None
 
-    results = incident_obj.get_incident_by_id(
+    results = incident_obj.get_incident_by_id_and_type(
         inc_type=incident_type, inc_id=incident_id
     )
 
-    response = None
     if not results:
         response = (
             jsonify(
@@ -56,7 +56,7 @@ def delete_record(incident_type, incident_id):
                     "data": [
                         {
                             "incident": delete_id,
-                            "message": incident_type
+                            "success": incident_type
                                        + " record has been deleted",
                         }
                     ],

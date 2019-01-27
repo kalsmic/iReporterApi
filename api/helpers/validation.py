@@ -1,16 +1,15 @@
 """Module contains functions for validating user input"""
 import re
+from flask import jsonify, request, abort
 from functools import wraps
 from uuid import UUID
-
-from flask import jsonify, request
 
 from api.helpers.responses import (
     wrong_password,
     wrong_username,
     wrong_email,
     wrong_phone_number,
-    wrong_name
+    wrong_name,
 )
 
 
@@ -208,30 +207,18 @@ def validate_new_incident(**kwargs):
     errors["location"] = validate_location(kwargs.get("location"))
     errors["Images"] = validate_media(kwargs.get("images"), "Images")
     errors["Videos"] = validate_media(kwargs.get("videos"), "Videos")
+    errors["type"] = validate_type(kwargs.get("inc_type"))
     not_valid = {key: value for key, value in errors.items() if value}
 
     if not_valid:
-        return (
-            jsonify(
-                {
-                    "status": 400,
-                    "error": not_valid,
-                }
-            ),
-            400,
-        )
+        return (jsonify({"status": 400, "error": not_valid}), 400)
     return None
 
 
 def is_valid_uuid(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        # if 'red_flag_id' in kwargs:
         value = kwargs["incident_id"]
-        # elif 'intervention_id' in kwargs:
-        #     value = kwargs["intervention_id"]
-        #
-
 
         try:
             value = UUID(value, version=4)
@@ -267,12 +254,20 @@ def is_valid_status(status):
     return is_valid
 
 
+def validate_type(inc_type):
+    if inc_type == "red-flag" or inc_type == "intervention":
+        return None
+    else:
+        return "type must either be red-flag or intervention"
+
+
 def parse_incident_type(func):
     @wraps(func)
     def decorated_view(*args, **kwargs):
-        incident_type = kwargs["incident_type"]
+        incident_type = kwargs["incidents"]
 
         if incident_type == "red-flags" or incident_type == "interventions":
             return func(*args, **kwargs)
+        abort(404)
 
     return decorated_view

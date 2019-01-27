@@ -80,10 +80,9 @@ def test_register_with_valid_format_data(client):
     )
     assert response.status_code == 201
     data = json.loads(response.data.decode())
-    assert data["data"][0]["message"] == "Account created Successfully"
+    assert data["data"][0]["success"] == "Account created Successfully"
     assert "id" in data["data"][0]["user"]
     assert data["data"][0]["user"]["email"] == "jdmark@email.com"
-    assert "token" in data["data"][0]
 
 
 def test_register_user_with_duplicate_data(client):

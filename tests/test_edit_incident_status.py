@@ -74,7 +74,7 @@ def test_edit_a_red_flag_status_with_invalid_status_data(client):
 
 
 def test_edit_a_red_flag_status_for_a_red_flag_record_which_does_not_exist(
-        client
+    client
 ):
     response = client.patch(
         "api/v2/red-flags/10df0c67-5f2b-4e5d-8b45-7357ebf3bfbb/status",
@@ -84,7 +84,7 @@ def test_edit_a_red_flag_status_for_a_red_flag_record_which_does_not_exist(
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["status"] == 404
-    assert data["error"] == "red-flag record does not exist"
+    assert data["error"] == "red-flag record with specified id does not exist"
 
 
 def test_edit_a_red_flag_status(client):
@@ -97,7 +97,7 @@ def test_edit_a_red_flag_status(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "Updated red-flag record’s status"
+    assert data["data"][0]["success"] == "Updated red-flag record’s status"
     assert data["data"][0]["status"] == "Resolved"
 
 
@@ -111,5 +111,5 @@ def test_edit_a_intervention_status(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "Updated intervention record’s status"
+    assert data["data"][0]["success"] == "Updated intervention record’s status"
     assert data["data"][0]["status"] == "Resolved"

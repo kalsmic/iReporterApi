@@ -31,6 +31,7 @@ def test_delete_red_flag_with_red_flag_id_which_does_not_exist(client):
 
 def test_delete_red_flag_with_invalid_format_red_flag_id(client):
     response = client.delete("api/v2/red-flags/fdf", headers=user1_header)
+
     assert response.status_code == 400
     data = json.loads(response.data.decode())
     assert data["status"] == 400
@@ -69,7 +70,7 @@ def test_delete_red_flag(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "red-flag record has been deleted"
+    assert data["data"][0]["success"] == "red-flag record has been deleted"
 
 
 def test_delete_an_intervention(client):
@@ -80,4 +81,4 @@ def test_delete_an_intervention(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert data["data"][0]["message"] == "intervention record has been deleted"
+    assert data["data"][0]["success"] == "intervention record has been deleted"
