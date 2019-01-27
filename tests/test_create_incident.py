@@ -74,7 +74,7 @@ def test_create_a_red_flag_with_valid_data(client):
     assert data["data"][0]["red-flag"]["created_by"] == user1_id
 
 
-def test_create_a_red_flag_without_wrong_input(client):
+def test_create_a_red_flag_with_wrong_input(client):
     wrong_input_1 = new_red_flag
 
     new_red_flag["location"] = ["jk", 180]
