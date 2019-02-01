@@ -2,29 +2,39 @@
 
 [![Build Status](https://travis-ci.com/kalsmic/iReporterApi.svg?branch=api)](https://travis-ci.com/kalsmic/iReporterApi)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2b2df2ba4fc8d8138ab4/maintainability)](https://codeclimate.com/github/kalsmic/iReporterApi/maintainability)
-[![Coverage Status](https://coveralls.io/repos/github/kalsmic/iReporterApi/badge.svg?branch=api)](https://coveralls.io/github/kalsmic/iReporterApi?branch=api) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/dcaff2f8a36b474da2ed1c144d5630be)](https://www.codacy.com/app/kalsmic/iReporterApi?utm_source=github.com&utm_medium=referral&utm_content=kalsmic/iReporterApi&utm_campaign=Badge_Grade)
+[![Coverage Status](https://coveralls.io/repos/github/kalsmic/iReporterApi/badge.svg?branch=api)](https://coveralls.io/github/kalsmic/iReporterApi?branch=api-database)
 
 Corruption is a huge bane to Africa’s development. African countries must develop novel and
 localised solutions that will curb this menace, hence the birth of iReporter. iReporter enables
-any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention
+any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.
 
-[Link to API on Heroku api](https://ireporterapiv1.herokuapp.com/)
+## Complete Tasks
 
-[Link to API DOCUMENTATION on Swagger Hub](https://app.swaggerhub.com/apis-docs/kalsmiciReporter1/iReporter/v1)
+### User stories on Pivotal tracker
 
-**iReporter API ENDPOINTS**
+:link:  [Link to user stories](https://www.pivotaltracker.com/n/projects/2231809)
 
-| Methods | EndPoint                               | Functionality                                   |
-| ------- | -------------------------------------- | ----------------------------------------------- |
-| POST    | /api/v1/auth/signup                    | Sign up a user                                  |
-| POST    | /api/v1/auth/login                     | Login a user                                    |
-| POST    | /api/v1/red-flags                      | Create a red-flag record a user                 |
-| GET     | /api/v1/red-flags                      | Fetch all red-flag records.                     |
-| GET     | /api/v1/red-flags/red_flag_id          | Fetch a specific red-flag-record                |
-| PATCH   | /api/v1/red-flags/red_flag_id/location | Edit the location of a specific red-flag record |
-| PATCH   | /api/v1/red-flags/red_flag-id/comment  | Edit the comment of a specific red-flag record  |
-| PATCH   | /api/v1/red-flags/red_flag-id/status   | Edit the status of a specific red-flag record   |
-| DELETE  | /api/v1/red-flags/red_flag_id          | Delete a specific red flag record.              |
+### UI Templates
+
+:link: [Live project on gh-pages](https://kalsmic.github.io/iReporter/)
+
+:link: [Link to Source code](https://github.com/kalsmic/iReporter/tree/develop)
+
+### API V1 - python data structures
+
+:rocket: [Link to Deployment on Heroku API V1](https://ireporterapiv1.herokuapp.com/)
+
+:green_book: [Link to API V1 documentation](https://app.swaggerhub.com/apis-docs/kalsmiciReporter1/iReporter/v1)
+
+:link: [Link API V1 source code](https://github.com/kalsmic/iReporterApi/tree/api)
+
+### API V2 - PostgreSQL database
+
+:rocket: [Link to Deployment on Heroku API V2](https://ireporterapiv2.herokuapp.com/)
+
+:green_book: [Link to API V2 documentation](https://ireporterapiv2.herokuapp.com/api/v2/docs)
+
+:link: [Link API V2 Source code](https://github.com/kalsmic/iReporterApi/tree/api-database)
 
 ## How to set up the project
 
@@ -33,7 +43,7 @@ Open the terminal and run the following commands
 ```bash
     git clone https://github.com/kalsmic/iReporterApi.git
     cd iReporterApi
-    git checkout api
+    git checkout api-database
     python3 -m venv venv
     source venv/bin.activate
     pip3 install -r requirements.txt
@@ -42,8 +52,6 @@ Open the terminal and run the following commands
     export SECRET_KEY="your secret key"
     python deploy.py
 ```
-
-   **Note** Admin user in the system by default and you can use "admin" and "Password123" as username and password respectively to access admin Features
 
 ## How to run tests
 

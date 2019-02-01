@@ -1,99 +1,75 @@
 import datetime
 
+# from api.models.incident import Incident
 from jwt import encode
 
 from api.helpers.auth_token import encode_token, secret_key
-from api.models.incident import RedFlag, red_flags
-from api.models.user import users, User
+from database.db import Database
 
-user1_data = {
-    "first_name": "userOne",
-    "last_name": "userone",
-    "email": "userOne@ireporter.com",
-    "phone_number": "0773125678",
-    "password": "Password123",
-    "user_name": "user1",
-    "other_names": "",
-}
+db = Database()
 
-user2_data = {
-    "first_name": "userTwo",
-    "last_name": "lastTwo",
-    "email": "usertwo@ireporter.com",
-    "phone_number": "0774551567",
-    "password": "Password123",
-    "user_name": "user2",
-    "other_names": "",
-}
+
+def get_user_id(user_name):
+    sql = f"SELECT id FROM users WHERE user_name='{user_name}'"
+    db.cursor.execute(sql)
+    result = db.cursor.fetchone()
+    return result.get("id")
 
 
 def generate_token_header(token):
     return {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + token,
+        "Authorization": str("Bearer " + token),
     }
 
 
-admin_header = generate_token_header(encode_token(1, 1))
+admin_id = get_user_id("admin")
+admin_header = generate_token_header(encode_token(admin_id))
 
-user1 = User(**user1_data)
-user2 = User(**user2_data)
-users.extend([user1, user2])
-user1_id = user1.user_id
-user2_id = user2.user_id
+user1_id = get_user_id("user1")
+user2_id = get_user_id("user2")
 
 user1_header = generate_token_header(encode_token(user1_id))
 user2_header = generate_token_header(encode_token(user2_id))
 
-new_record = {
+new_red_flag = {
     "title": "My First red flag",
-    "comment": " ",
+    "comment": "Lorem ipsum eiusmod temport labore et dolore magna",
     "location": [-80, -174.4],
-    "tags": ["crime", "rape"],
     "Images": ["image1.jpg", "image2.jpg"],
-    "Videos": ["vid1.mp4", "vid2.mp4"]
+    "Videos": ["vid1.mp4", "vid2.mp4"],
+    "type": "red-flag",
+}
 
+new_intervention = {
+    "title": "Broken bridge",
+    "comment": (
+        "Mi proin sed libero enim sed faucibus turpis in."
+        "Adipiscing bibendum est ultricies integer quis auctor elit"
+    ),
+    "location": [-72, -154.4],
+    "Images": ["image6.jpg", "image7.jpg"],
+    "Videos": ["vid8.mp4", "vid5.mp4"],
+    "type": "intervention",
 }
-second_record = {
-    "title": "My Second red flag",
-    "location": [-78, -164.4],
-    "tags": ["crime", "murder"],
-    "images": ["image3.jpg", "image4.jpg"],
-    "videos": ["vid8.mp4", "vid5.mp4"],
-    "comment": "Caught in the very act",
-    "user_id": user2_id,
-}
-third_record = {
-    "title": "My Second red flag",
-    "location": [-78, -164.4],
-    "tags": ["crime", "murder"],
-    "images": ["image5.jpg", "image6.jpg"],
-    "videos": ["vid9.mp4", "vid5.mp10"],
-    "comment": "Caught in the very act",
-    "user_id": user1_id,
-}
-fourth_record = {
-    "title": "My third red flag",
-    "location": [-78, -164.4],
-    "tags": ["crime", "murder"],
-    "images": ["image5.jpg", "image6.jpg"],
-    "videos": ["vid9.mp4", "vid5.mp10"],
-    "comment": "Caught in the very act",
-    "user_id": user1_id,
-}
-red_flag_obj1 = RedFlag(**second_record)
-red_flag_obj2 = RedFlag(**third_record)
-red_flag_obj3 = RedFlag(**fourth_record)
-red_flag_obj1.status = "under investigation"
-red_flags.extend([red_flag_obj1, red_flag_obj2, red_flag_obj3])
 
 expired_token = encode(
     {
-        "userid": 1,
-        "isAdmin": 1,
+        "userid": user1_id,
         "exp": datetime.datetime.utcnow() - datetime.timedelta(hours=3),
     },
     secret_key,
     algorithm="HS256",
 ).decode("utf-8")
 expired_token_header = generate_token_header(expired_token)
+
+invalid_id_token = encode(
+    {
+        "userid": "58841703-eeab-46d2-ab3b-dcf93bf436c7",
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=1),
+    },
+    secret_key,
+    algorithm="HS256",
+).decode("utf-8")
+
+invalid_id_token_header = generate_token_header(invalid_id_token)

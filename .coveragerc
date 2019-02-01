@@ -1,7 +1,6 @@
 [report]
 omit =
     */python?.?/*
-    */site-packages/nose/*
     */__pycache__/*
     *.pyc
     */venv/*
@@ -10,3 +9,4 @@ omit =
     */__init__.py
     tests/*
     */api/models/*
+    */database/*

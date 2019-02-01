@@ -1,104 +1,133 @@
-from datetime import datetime
-
-from api.helpers.auth_token import get_current_role, get_current_identity
-
-red_flag_id = 1
-red_flags = []
-
-time_now = datetime.now().strftime("%Y-%m-%d %H:%M")
+from api.helpers.auth_token import get_current_identity, is_admin_user
+from database.db import Database
 
 
 class Incident:
-    def __init__(self, title, comment, **kwargs):
-        self.title = title
-        self.comment = comment
-        self.tags = kwargs.get("tags", [])
-        self.images = kwargs.get("images", [])
-        self.videos = kwargs.get("videos", [])
-        self.location = kwargs.get("location", {"Lat": "", "Long": ""})
-        self.created_on = time_now
-        self.created_by = kwargs.get("user_id")
-        self.status = "draft"
+    def __init__(self):
+        self.db = Database()
 
-    def get_details(self):
-        return {
-            "title": self.title,
-            "comment": self.comment,
-            "createdOn": self.created_on,
-            "createdBy": self.created_by,
-            "location": self.location,
-            "status": self.status,
-            "Images": self.images,
-            "Videos": self.videos,
-            "tags": self.tags,
-        }
+    def insert_incident(self, inc_type="red-flag", **kwargs):
+        title = kwargs.get("title")
+        comment = kwargs.get("comment")
+        location = (kwargs.get("location")[0], kwargs.get("location")[1])
+        created_by = kwargs.get("user_id")
+        images = kwargs.get("images")
+        videos = kwargs.get("videos")
+        sql = (
+            "INSERT INTO public.incidents ("
+            "title, comment, location, created_by, type"
+            ")VALUES ("
+            f"'{title}', '{comment}','{location}',"
+            f"'{created_by}', '{inc_type}') returning id;"
+        )
+        self.db.cursor.execute(sql)
+        last_insert_id = self.db.cursor.fetchone()
+        new_incident_id = last_insert_id.get("id")
+        self.insert_images(new_incident_id, images)
+        self.insert_videos(new_incident_id, videos)
+        return self.get_incident_by_id(new_incident_id)
 
+    def insert_images(self, incident_id, images):
+        for image in images:
+            sql = (
+                "INSERT INTO public.incident_images ("
+                "incident_id,image_url) VALUES ("
+                f"'{incident_id}','{image}');"
+            )
+            self.db.cursor.execute(sql)
 
-class RedFlag(Incident):
-    def __init__(self, title, comment, **kwargs):
-        global red_flag_id
-        self.incident_id = red_flag_id
-        self.incident_type = "Red-flag"
-        super().__init__(title, comment, **kwargs)
-        red_flag_id += 1
+    def insert_videos(self, incident_id, videos):
+        for video in videos:
+            sql = (
+                "INSERT INTO public.incident_videos ("
+                "incident_id,video_url) VALUES ("
+                f"'{incident_id}','{video}');"
+            )
+            self.db.cursor.execute(sql)
 
-    def get_details(self):
-        details = dict()
-        details["id"] = self.incident_id
-        details["type"] = self.incident_type
-        details.update(super().get_details())
-        return details
+    def get_all_incident_records(self, inc_type):
+        if is_admin_user():  # if user is admin
+            return self.get_all_records(inc_type)
+        user_id = str(get_current_identity())
 
+        return self.get_all_records_for_a_specific_user(inc_type, user_id)
 
-records = {"red-flag": {"db": red_flags, "id": red_flag_id}}
+    def get_all_records(self, inc_type):
+        sql = f"SELECT * FROM incident_view WHERE type='{inc_type}';"
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchall()
 
+    def get_all_records_for_a_specific_user(self, inc_type, user_id):
+        sql = (
+            "SELECT * FROM incident_view WHERE "
+            f"created_by='{user_id}' AND type='{inc_type}';"
+        )
+        self.db.cursor.execute(sql)
 
-def get_incident_record(record_id, collection):
-    """Returns a redflag or Intervention record"""
-    result = [
-        record.get_details()
-        for record in collection
-        if record.incident_id == record_id
-    ]
-    if not get_current_role():
-        result = [
-            record.get_details()
-            for record in collection
-            if record.incident_id == record_id
-               and record.created_by == get_current_identity()
-        ]
-    return result
+        return self.db.cursor.fetchall()
 
+    def get_an_incident_record_(self, inc_type, inc_id):
+        inc_id = str(inc_id)
+        user_id = get_current_identity()
 
-def get_all_incident_records(collection):
-    """ Parameter:Expects Intervention collection
-        Returns: all red-flags if collection is red-flags else
-        Returns: interventions if collection is interventions
-    """
-    result = None
-    if get_current_role():
-        result = [record.get_details() for record in collection]
-    else:
-        result = [
-            record.get_details()
-            for record in collection
-            if record.created_by == get_current_identity()
-        ]
-    return result
+        record = self.get_incident_by_id_and_type(inc_type, inc_id)
+        if record and is_admin_user():
+            pass
+        elif record and record["created_by"] == user_id:
+            pass
+        elif record and record["created_by"] != user_id:
+            record = {"error": "You're not Authorized to access this resource"}
+        else:
+            record = None
+        return record
 
+    def get_incident_by_id(self, inc_id):
 
-def get_incident_obj_by_id(incident_id, collection):
-    for record in collection:
-        if record.incident_id == incident_id:
-            return record
-    return None
+        sql = f"SELECT * FROM public.incident_view " f"WHERE id='{inc_id}';"
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
 
+    def get_incident_by_id_and_type(self, inc_type, inc_id):
 
-def incident_record_exists(title, comment, incident_results):
-    for incident_result in incident_results:
-        if (
-                incident_result.title == title
-                and incident_result.comment == comment
-        ):
-            return True
-    return False
+        sql = (
+            f"SELECT * FROM public.incident_view "
+            f"WHERE id='{inc_id}' AND type='{inc_type}';"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+    def update_incident_location(self, inc_id, location):
+        location = (location[0], location[1])
+        sql = (
+            f"UPDATE incidents SET location='{location}' "
+            f"WHERE id='{inc_id}' returning id,location;"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+    def update_incident_comment(self, inc_id, inc_type, comment):
+        comment = comment.strip()
+        sql = (
+            f"UPDATE incidents SET comment='{comment}' "
+            f"WHERE id='{inc_id}' returning id,comment;"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+    def update_incident_status(self, inc_id, inc_type, status):
+        status = status.strip().lower().capitalize()
+        sql = (
+            f"UPDATE incidents SET status='{status}' "
+            f"WHERE id='{inc_id}' returning id,status;"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+    def delete_incident_record(self, inc_id, inc_type, user_id):
+        sql = (
+            f"DELETE FROM incidents WHERE created_by='{user_id}' "
+            f"AND id='{inc_id}' AND type='{inc_type}' returning *;"
+        )
+        self.db.cursor.execute(sql)
+
+        return self.db.cursor.fetchone()

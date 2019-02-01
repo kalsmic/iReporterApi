@@ -1,41 +1,16 @@
 """Module contains functions for validating user input"""
 import re
+from flask import jsonify, request, abort
 from functools import wraps
-
-from flask import jsonify, request, json
+from uuid import UUID
 
 from api.helpers.responses import (
-    expected_new_incident_format,
     wrong_password,
     wrong_username,
     wrong_email,
     wrong_phone_number,
     wrong_name,
-    expected_signup_data,
 )
-
-
-def sign_up_data_required(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        response = None
-        if not request.data:
-
-            response = (
-                jsonify(
-                    {
-                        "error": "Provide provide valid data to register",
-                        "expected": expected_signup_data,
-                        "status": 400,
-                    }
-                ),
-                400,
-            )
-        else:
-            response = func(*args, **kwargs)
-        return response
-
-    return wrapper
 
 
 def request_data_required(func):
@@ -53,22 +28,26 @@ def request_data_required(func):
     return wrapper
 
 
-def is_valid_id(func):
+def sign_up_data_required(func):
     @wraps(func)
-    def decorated_view(*args, **kwargs):
-        value = kwargs["red_flag_id"]
-        try:
-            value = int(value, 10)
-        except ValueError:
-            return (
+    def wrapper(*args, **kwargs):
+        response = None
+        if not request.data:
+
+            response = (
                 jsonify(
-                    {"status": 400, "error": "Red-flag id must be an integer"}
+                    {
+                        "error": "Provide provide valid data to register",
+                        "status": 400,
+                    }
                 ),
                 400,
             )
-        return func(*args, **kwargs)
+        else:
+            response = func(*args, **kwargs)
+        return response
 
-    return decorated_view
+    return wrapper
 
 
 def is_number(num_value):
@@ -146,9 +125,24 @@ def validate_password(password):
 def validate_phone_number(phone_number):
     error = wrong_phone_number
 
-    if len(phone_number) == 10 and phone_number.isdigit():
+    if len(str(phone_number)) == 10 and str(phone_number).isdigit():
         error = None
     return error
+
+
+def validate_new_user(**kwargs):
+    errors = dict()
+    errors["firstname"] = validate_name(kwargs["first_name"])
+    errors["lastname"] = validate_name(kwargs["last_name"])
+    errors["othernames"] = validate_name(kwargs["other_names"], 0)
+    errors["username"] = validate_user_name(kwargs["user_name"])
+    errors["password"] = validate_password(kwargs["password"])
+    errors["email"] = validate_email(kwargs["email"])
+    errors["phoneNumber"] = validate_phone_number(kwargs["phone_number"])
+    invalid_fields = {key: value for key, value in errors.items() if value}
+    if invalid_fields:
+        return jsonify({"status": 400, "error": invalid_fields}), 400
+    return None
 
 
 def validate_sentence(sentence, min_len=0, max_len=0):
@@ -188,25 +182,6 @@ def validate_media(media_collection, media_type):
     return error
 
 
-def is_a_valid_tag(tags):
-    for tag in tags:
-        if not is_string(tag):
-            return False
-    return True
-
-
-def validate_tags(tags):
-    error = None
-    if not isinstance(tags, list):
-        error = (
-            "Please provide a list of tags i.e ['crime','rape'] or an "
-            "empty list"
-        )
-    elif not is_a_valid_tag(tags):
-        error = "Tags must be of string type i.e ['crime','rape']"
-    return error
-
-
 def validate_location(location):
     error = None
     if not isinstance(location, list) or not len(location) == 2:
@@ -225,52 +200,44 @@ def validate_location(location):
     return error
 
 
-def validate_new_user(**kwargs):
-    errors = {}
-    errors["firstname"] = validate_name(kwargs["first_name"])
-    errors["lastname"] = validate_name(kwargs["last_name"])
-    errors["othernames"] = validate_name(kwargs["other_names"], 0)
-    errors["username"] = validate_user_name(kwargs["user_name"])
-    errors["password"] = validate_password(kwargs["password"])
-    errors["email"] = validate_email(kwargs["email"])
-    errors["phoneNumber"] = validate_phone_number(kwargs["phone_number"])
-    invalid_fields = {key: value for key, value in errors.items() if value}
-    if invalid_fields:
-        return (jsonify({"status": 400, "error": invalid_fields}), 400)
-    return None
-
-
 def validate_new_incident(**kwargs):
-    errors = {}
+    errors = dict()
     errors["title"] = validate_sentence(kwargs.get("title"), 4, 100)
     errors["comment"] = validate_sentence(kwargs.get("comment"), 10)
     errors["location"] = validate_location(kwargs.get("location"))
-    errors["tags"] = validate_tags(kwargs.get("tags"))
     errors["Images"] = validate_media(kwargs.get("images"), "Images")
     errors["Videos"] = validate_media(kwargs.get("videos"), "Videos")
+    errors["type"] = validate_type(kwargs.get("inc_type"))
     not_valid = {key: value for key, value in errors.items() if value}
 
     if not_valid:
-        return (
-            jsonify(
-                {
-                    "status": 400,
-                    "error": not_valid,
-                    "expected": expected_new_incident_format,
-                }
-            ),
-            400,
-        )
+        return (jsonify({"status": 400, "error": not_valid}), 400)
     return None
 
 
-def validate_edit_location(data):
-    error = None
-    if not data:
-        error = "Please provide a valid location"
+def is_valid_uuid(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        value = kwargs["incident_id"]
+
+        try:
+            value = UUID(value, version=4)
+        except ValueError:
+            return (
+                jsonify({"status": 400, "error": "Invalid incident id"}),
+                400,
+            )
+        return func(*args, **kwargs)
+
+    return decorated_view
+
+
+def validate_edit_location(location):
+    error = validate_location(location)
+    if error:
+        return error
     else:
-        error = validate_location( request.get_json(force=True).get("location"))
-    return error
+        return None
 
 
 def is_valid_status(status):
@@ -278,9 +245,29 @@ def is_valid_status(status):
     if not status or not isinstance(status, str):
         is_valid = False
     elif str(status).lower() not in (
+            "draft",
             "resolved",
             "under investigation",
             "rejected",
     ):
         is_valid = False
     return is_valid
+
+
+def validate_type(inc_type):
+    if inc_type == "red-flag" or inc_type == "intervention":
+        return None
+    else:
+        return "type must either be red-flag or intervention"
+
+
+def parse_incident_type(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        incident_type = kwargs["incidents"]
+
+        if incident_type == "red-flags" or incident_type == "interventions":
+            return func(*args, **kwargs)
+        abort(404)
+
+    return decorated_view

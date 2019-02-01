@@ -1,21 +1,27 @@
 import pytest
 
 from api.app import create_app
+from database.db import Database
+
+db = Database()
+db.cursor.execute(open("database/schema.sql", "r").read())
+db.cursor.execute(open("database/empty_tables.sql", "r").read())
+db.cursor.execute(open("database/test_data.sql", "r").read())
 
 
-@pytest.fixture
-def app():
+@pytest.fixture(scope="session")
+def client():
     """Tells Flask that app is in test mode
     """
-    app = create_app({"TESTING": True})
 
-    with app.app_context():
-        yield app
+    app = create_app()
 
+    app.config.from_object("instance.config.TestingConfig")
 
-@pytest.fixture
-def client(app):
-    """ Tests will use the client to make requests to the
-      application without running the server.
-    """
-    return app.test_client()
+    client = app.test_client()
+
+    context = app.app_context()
+    context.push()
+
+    yield client
+    context.pop()

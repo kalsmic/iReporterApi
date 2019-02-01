@@ -1,19 +1,19 @@
 import datetime
+import jwt
+from flask import request, jsonify, abort
 from functools import wraps
 from os import environ
 
-import jwt
-from flask import request, jsonify
-
 from api.helpers.responses import expired_token_message, invalid_token_message
+from database.db import Database
 
 secret_key = environ.get("SECRET_KEY", "my_secret_key")
+db = Database()
 
 
-def encode_token(user_id, isAdmin=0):
+def encode_token(user_id):
     payload = {
         "userid": user_id,
-        "isAdmin": isAdmin,
         "iat": datetime.datetime.utcnow(),
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=3),
     }
@@ -43,8 +43,8 @@ def token_required(func):
     def wrapper(*args, **kwargs):
         response = None
         try:
-            token = extract_token_from_header()
-            decode_token(token)
+            extract_token_from_header()
+            get_current_identity()
             response = func(*args, **kwargs)
 
         except jwt.ExpiredSignatureError:
@@ -63,25 +63,36 @@ def token_required(func):
 
 
 def get_current_identity():
-    return decode_token(extract_token_from_header())["userid"]
+    user_id = decode_token(extract_token_from_header())["userid"]
+    sql = f"select id from users where id='{user_id}';"
+    db.cursor.execute(sql)
+    results = db.cursor.fetchone()
+    if results:
+        return results["id"]
+    else:
+        abort(401)
 
 
-def get_current_role():
-    return decode_token(extract_token_from_header())["isAdmin"]
+def is_admin_user():
+    user_id = get_current_identity()
+    sql = f"select is_admin from users where id='{user_id}';"
+    db.cursor.execute(sql)
+    is_admin = db.cursor.fetchone()
+    return is_admin["is_admin"]
 
 
 def non_admin(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if get_current_role():
+        if is_admin_user():
             return (
                 jsonify(
                     {
                         "error": "Admin cannot access this resource",
-                        "status": 403,
+                        "status": 401,
                     }
                 ),
-                403,
+                401,
             )
         return func(*args, **kwargs)
 
@@ -91,15 +102,15 @@ def non_admin(func):
 def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if not get_current_role():
+        if not is_admin_user():
             return (
                 jsonify(
                     {
                         "error": "Only Admin can access this resource",
-                        "status": 403,
+                        "status": 401,
                     }
                 ),
-                403,
+                401,
             )
         return func(*args, **kwargs)
 
