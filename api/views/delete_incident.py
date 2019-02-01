@@ -6,10 +6,7 @@ from api.helpers.auth_token import (
     get_current_identity,
 )
 from api.helpers.responses import delete_not_allowed
-from api.helpers.validation import (
-    is_valid_uuid,
-    parse_incident_type,
-)
+from api.helpers.validation import is_valid_uuid, parse_incident_type
 from api.models.incident import Incident
 
 incident_obj = Incident()
@@ -57,7 +54,7 @@ def delete_record(incidents, incident_id):
                         {
                             "incident": delete_id,
                             "success": incident_type
-                                       + " record has been deleted",
+                            + " record has been deleted",
                         }
                     ],
                 }

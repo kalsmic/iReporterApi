@@ -39,7 +39,7 @@ def get_a_red_flag(incidents, incident_id):
                 {
                     "status": 404,
                     "error": inc_type
-                             + " record with specified id does not exist",
+                    + " record with specified id does not exist",
                 }
             ),
             404,
