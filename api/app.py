@@ -51,7 +51,7 @@ def create_app(config=None):
     def _method_not_allowed(e):
         return (jsonify({"error": "Method not allowed"}), 405)
 
-   app.config.from_object(Config)
+    app.config.from_object(Config)
     app.register_blueprint(users_bp)
     app.register_blueprint(create_incident_bp)
     app.register_blueprint(get_inc_bp)
