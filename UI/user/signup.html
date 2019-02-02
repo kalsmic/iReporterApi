@@ -1,54 +1,92 @@
-
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>iReporter | Register</title>
-        <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    </head>
-    <body>
-        <div class="wrapper">
-            <header class="bg-blue">
-                <div class="logo">iReporter logo</div>
-            </header>
-            <div class="main-page">
-                <div class="login-register-container border-round-lg">
-                    <form class="vertical-form" name="register-form" action="../index.html">
-                        <fieldset>
-                            <legend>Register Here!</legend>
-                            <input type="text" name='user_name' placeholder ='ENTER USER NAME' class="input-control"  required>
-                            <input type="email" name='email' placeholder ='ENTER EMAIL ADDRESS' class="input-control" required>
-                            <input type="text" name='first_name' placeholder ='ENTER FIRST NAME' class="input-control" required>
-                            <input type="text" name='Last_name' placeholder ='ENTER LAST NAME' class="input-control" required>
-                            <input type="number" name="phone_number" placeholder="ENTER PHONE NUMBER" class="input-control" required>
-                            <input type="password" name="password"  id='password' name='password' placeholder="ENTER PASSWORD" class="input-control"  required>
-                            <input type="password" name="confirm_password"  id='confirm_password' name='confirm_password' placeholder="REPEAT PASSWORD" class="input-control" required>
-                            <input type="submit" name="btn-sign-up"  id='confirm_password' name='confirm_password' class="btn bg-lblue text-white btn-block" value="Register Account">
-                      
-                            <hr>
-                            <p class="text-blue">Already Registered!</p>
-                            <a href='../index.html' class="btn btn-small text-white bg-green">Click here to sign in</a>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-            <footer class="bg-blue">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iReporter | Register</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
 
-                <div class="logo">
-                    <span>i</span>
-                    <span>R</span>
-                    <span>e</span>
-                    <span>p</span>
-                    <span>o</span>
-                    <span>r</span>
-                    <span>t</span>
-                    <span>e</span>
-                    <span>r</span>
-                </div>
-    
-            </footer>
+</head>
+<body>
+<div class="wrapper">
+    <header class="bg-blue">
+        <div class="logo">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
         </div>
-    </body>
+    </header>
+    <div class="main-page">
+        <div class="login-register-container border-round-lg">
+            <form class="vertical-form" id="register-form" action="#">
+
+                <fieldset>
+
+                    <legend>Register Here!</legend>
+                    <span class="success" id="message"></span>
+
+
+                    <input type="text" id="username" placeholder='ENTER USER NAME' class="input-control"
+                           title="enter username" required>
+                    <span class="error" id="username-error"></span>
+
+                    <input type="email" id="email" placeholder='ENTER EMAIL ADDRESS' class="input-control"
+                           required>
+                    <span class="error" id="email-error"></span>
+                    <input type="text" id="firstname" placeholder='ENTER FIRST NAME'
+                           class="input-control" required>
+                    <i class="error" id="firstname-error"></i>
+                    <input type="text" id='lastname' placeholder='ENTER LAST NAME' class="input-control"
+                           required>
+                    <span class="error" id="lastname-error"></span>
+                    <input type="text" id='othernames' placeholder='ENTER OTHER NAMES'
+                           class="input-control">
+                    <span class="error" id="othernames-error"></span>
+
+                    <input type="number" id="phoneNumber" placeholder="ENTER PHONE NUMBER"
+                           class="input-control" required>
+                    <span class="error" id="phoneNumber-error"></span>
+
+                    <input type="password" id="password" placeholder="ENTER PASSWORD"
+                           class="input-control" required>
+                    <span class="error" id="password-error"></span>
+                    <input type="password" id="confirm_password" placeholder="REPEAT PASSWORD"
+                           class="input-control" required>
+                    <span class="error" id="confirm_pass-error"></span>
+
+                    <button  onclick="signUpAccount()" class="btn bg-lblue text-white btn-block">Register Account
+                    </button>
+
+                    <hr>
+                    <p class="text-blue">Already Registered!</p>
+                    <a href='../index.html' class="btn btn-small text-white bg-green">Click here to sign in</a>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <footer class="bg-blue">
+
+        <div class="logo center">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
+        </div>
+
+    </footer>
+</div>
+</body>
+<script src="../static/js/signup.js"></script>
 </html>
 
