@@ -29,8 +29,8 @@ password.onkeyup = validatePasswordStrength;
 password.onchange = validatePasswordStrength;
 
 function validatePassword() {
-    let confirmPasswordError = document.getElementById('confirm_pass-error');
-    if (password.value != confirmPassword.value) {
+    let confirmPasswordError = document.getElementById("confirm_pass-error");
+    if (password.value !== confirmPassword.value) {
         confirmPasswordError.style.display = "block";
         confirmPasswordError.innerHTML = "Passwords Do not  match";
     } else {
@@ -42,10 +42,6 @@ function validatePassword() {
 confirmPassword.onblur = validatePassword;
 confirmPassword.onkeyup = validatePassword;
 
-function validateName(name) {
-    return /^[a-zA-Z]{3,}$/.test(namefield.value)
-
-}
 
 userName.onkeyup = function () {
     let userNameError = document.getElementById("username-error");
@@ -129,8 +125,8 @@ phoneNumber.onkeyup = function () {
 function displayError(dataArray) {
     for (let key in dataArray) {
 
-        let fieldError = document.getElementById(key + '-error');
-        fieldError.style.display = 'block';
+        let fieldError = document.getElementById(key + "-error");
+        fieldError.style.display = "block";
         fieldError.innerHTML = dataArray[key];
 
     }
@@ -139,7 +135,7 @@ function displayError(dataArray) {
 function signUpAccount() {
 
 
-    let url = 'https://ireporterapiv3.herokuapp.com/api/v2/auth/signup';
+    let url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/signup";
     let newUser = {
         firstname: firstName.value,
         lastname: lastName.value,
@@ -151,9 +147,9 @@ function signUpAccount() {
     };
 
     fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'content-type': "application/json",
+            "content-type": "application/json",
         },
         body: JSON.stringify(newUser),
     })
@@ -171,8 +167,8 @@ function signUpAccount() {
             } else if (data.status === 201) {
                 //on success
 
-                document.getElementById('message').style.display = "block";
-                document.getElementById('message').innerHTML = data['data'][0].success;
+                document.getElementById("message").style.display = "block";
+                document.getElementById("message").innerHTML = data["data"][0].success;
                 window.setTimeout(function () {
                     window.location.replace("../index.html");
                 }, 5000);
@@ -181,6 +177,6 @@ function signUpAccount() {
 
 
         })
-        .catch((error) => console.log(error))
+        .catch((error) => console.log(error));
 
 }
