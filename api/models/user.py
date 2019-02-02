@@ -79,7 +79,7 @@ class User:
 
     def is_valid_credentials(self, user_name, user_password):
         sql = (
-            "SELECT id,user_name ,user_password FROM users where user_name="
+            "SELECT id,user_name ,user_password, is_admin FROM users where user_name="
             f"'{user_name}';"
         )
         self.db.cursor.execute(sql)
@@ -94,8 +94,15 @@ class User:
             )
         ):
             user_id = user_db_details.get("id")
+            is_admin =  user_db_details.get("is_admin")
+            url = "./user/profile.html"
+            if is_admin:
+                url = "./admin/profile.html"
 
-            return user_id
+            return {
+                "user_id": user_db_details.get("id"),
+                "url": url
+            }
         return None
 
     def add_token_in_db(self, token, user_id):
