@@ -123,12 +123,14 @@ phoneNumber.onkeyup = function () {
 };
 
 function displayError(dataArray) {
+
     for (let key in dataArray) {
 
-        let fieldError = document.getElementById(key + "-error");
-        fieldError.style.display = "block";
-        fieldError.innerHTML = dataArray[key];
-
+        if ({}.hasOwnProperty.call(dataArray, key)) {
+            let fieldError = document.getElementById(key + "-error");
+            fieldError.style.display = "block";
+            fieldError.innerHTML = dataArray[key];
+        }
     }
 }
 
