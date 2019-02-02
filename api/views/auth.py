@@ -1,6 +1,10 @@
 from flask import Blueprint, jsonify, request
 
-from api.helpers.auth_token import encode_token
+from api.helpers.auth_token import (
+    encode_token,
+    token_required,
+    blacklist_token,
+)
 from api.helpers.validation import validate_new_user, sign_up_data_required
 from api.models.user import User
 
@@ -89,6 +93,7 @@ def login():
         # submit credentials
         user_id = user_obj.is_valid_credentials(user_name, user_password)
         if user_id:
+
             response = (
                 jsonify(
                     {
@@ -120,3 +125,16 @@ def login():
             422,
         )
     return response
+
+
+@users_bp.route("/auth/logout", methods=["POST"])
+@token_required
+def logout():
+    blacklist_token()
+
+    return (
+        jsonify(
+            {"data": [{"success": "Logged out successfully"}], "status": 200}
+        ),
+        200,
+    )

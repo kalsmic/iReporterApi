@@ -1,6 +1,10 @@
 from flask import json
 
-from api.helpers.responses import invalid_token_message, expired_token_message
+from api.helpers.responses import (
+    invalid_token_message,
+     expired_token_message,     
+     auth_response
+)
 from .base import (
     user2_header,
     expired_token_header,
@@ -18,7 +22,7 @@ def test_get_all_red_flags_without_token(client):
     response = client.get("api/v2/red-flags")
     assert response.status_code == 401
     data = json.loads(response.data.decode())
-    assert data == {"error": invalid_token_message, "status": 401}
+    assert data == {"error": auth_response, "status": 401}
 
 
 def test_get_all_red_flags_with_expired_token(client):
@@ -105,7 +109,7 @@ def test_get_all_interventions_without_token(client):
     response = client.get("api/v2/interventions")
     assert response.status_code == 401
     data = json.loads(response.data.decode())
-    assert data == {"error": invalid_token_message, "status": 401}
+    assert data == {"error": auth_response, "status": 401}
 
 
 def test_get_all_interventions_with_expired_token(client):

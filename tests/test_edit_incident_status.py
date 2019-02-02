@@ -1,6 +1,10 @@
 from flask import json
 
-from api.helpers.responses import wrong_status, invalid_token_message
+from api.helpers.responses import (
+    wrong_status,
+     invalid_token_message,
+     auth_response
+)
 from .base import user1_header, admin_header
 
 
@@ -12,7 +16,7 @@ def test_edit_a_red_flag_status_without_a_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data["status"] == 401
-    assert data["error"] == invalid_token_message
+    assert data["error"] == auth_response
 
 
 def test_non_admin_edit_a_red_flag_status(client):

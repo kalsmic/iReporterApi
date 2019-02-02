@@ -87,13 +87,20 @@ class User:
         user_db_details = self.db.cursor.fetchone()
 
         if (
-                user_db_details
-                and user_db_details.get("user_name") == user_name
-                and check_password_hash(
-            user_db_details.get("user_password"), user_password
-        )
+            user_db_details
+            and user_db_details.get("user_name") == user_name
+            and check_password_hash(
+                user_db_details.get("user_password"), user_password
+            )
         ):
             user_id = user_db_details.get("id")
 
             return user_id
         return None
+
+    def add_token_in_db(self, token, user_id):
+        sql = (
+            "INSERT INTO users_auth (token,user_id) "
+            f"VALUES('{token}', '{user_id}');"
+        )
+        self.db.cursor.execute(sql)

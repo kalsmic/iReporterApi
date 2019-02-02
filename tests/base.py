@@ -61,7 +61,16 @@ expired_token = encode(
     secret_key,
     algorithm="HS256",
 ).decode("utf-8")
+
+sql = (
+    "INSERT INTO users_auth (token,user_id) "
+    f"VALUES('{expired_token}', '{user1_id}');"
+)
+db.cursor.execute(sql)
+
 expired_token_header = generate_token_header(expired_token)
+
+
 
 invalid_id_token = encode(
     {
@@ -73,3 +82,4 @@ invalid_id_token = encode(
 ).decode("utf-8")
 
 invalid_id_token_header = generate_token_header(invalid_id_token)
+

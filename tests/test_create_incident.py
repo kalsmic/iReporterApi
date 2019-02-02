@@ -1,6 +1,6 @@
 from flask import json
 
-from api.helpers.responses import invalid_token_message
+from api.helpers.responses import auth_response
 from .base import (
     admin_header,
     user1_header,
@@ -19,7 +19,7 @@ def test_create_a_red_flag_without_a_token(client):
     response = client.post("api/v2/incidents")
     assert response.status_code == 401
     data = json.loads(response.data.decode())
-    assert data == {"error": invalid_token_message, "status": 401}
+    assert data == {"error": auth_response, "status": 401}
 
 
 def test_create_a_red_flag_with_invalid_token(client):
@@ -28,7 +28,7 @@ def test_create_a_red_flag_with_invalid_token(client):
     assert response.status_code == 401
     data = json.loads(response.data.decode())
     assert data == {
-        "error": "You are not authorized to access this resource",
+        "error": auth_response,
         "status": 401,
     }
 
