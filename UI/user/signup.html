@@ -24,7 +24,8 @@
     </header>
     <div class="main-page">
         <div class="login-register-container border-round-lg">
-            <form class="vertical-form" id="register-form" action="#">
+            <form class="vertical-form" id="register-form" action="#"
+                  onsubmit="signUpAccount();return false">
 
                 <fieldset>
 
@@ -60,7 +61,7 @@
                            class="input-control" required>
                     <span class="error" id="confirm_pass-error"></span>
 
-                    <button  onclick="signUpAccount()" class="btn bg-lblue text-white btn-block">Register Account
+                    <button type="submit" class="btn bg-lblue text-white btn-block">Register Account
                     </button>
 
                     <hr>
