@@ -148,6 +148,7 @@ function signUpAccount() {
         phoneNumber: phoneNumber.value
     };
 
+
     fetch(url, {
         method: "POST",
         headers: {
@@ -173,7 +174,7 @@ function signUpAccount() {
                 document.getElementById("message").innerHTML = data["data"][0].success;
                 window.setTimeout(function () {
                     window.location.replace("../index.html");
-                }, 5000);
+                }, 3000);
 
             }
 
