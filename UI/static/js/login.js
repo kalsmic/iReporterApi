@@ -34,7 +34,7 @@ function login () {
 
                 window.setTimeout(function () {
                     window.location.replace(redirectUrl);
-                }, 5000);
+                }, 1000);
 
             }
 
