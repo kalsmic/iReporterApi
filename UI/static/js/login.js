@@ -20,6 +20,11 @@ function login () {
                 document.getElementById("success").style.display = "none";
                 document.getElementById("error").style.display = "block";
                 document.getElementById("error").innerHTML = data.error;
+                window.setTimeout(function () {
+                    // window.location.replace(redirectUrl);
+                    document.getElementById("error").style.display = "none";
+
+                }, 3000);
 
 
             } else if (data.status === 200) {
@@ -28,6 +33,7 @@ function login () {
                 document.getElementById("success").style.display = "block";
                 document.getElementById("success").innerHTML = data["data"][0].success;
                 localStorage.setItem("token", data["data"][0].token);
+
 
 
                 let redirectUrl = data["data"][0].url;
