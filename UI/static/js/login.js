@@ -1,4 +1,3 @@
-// document.forms["login-form"].onsubmit =
 function login () {
 
     let url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/login";
@@ -43,4 +42,4 @@ function login () {
         })
         .catch((error) => console.log(error))
 
-};
+}
