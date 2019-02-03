@@ -16,9 +16,9 @@ any/every citizen to bring any form of corruption to the notice of appropriate a
 
 ### UI Templates
 
-:link: [Live project on gh-pages](https://kalsmic.github.io/iReporter/)
+:link: [Live project on gh-pages](https://kalsmic.github.io/iReporterApi/UI/index.html)
 
-:link: [Link to Source code](https://github.com/kalsmic/iReporter/tree/develop)
+:link: [Link to Source code](https://github.com/kalsmic/iReporterApi/tree/api-db-with-ui)
 
 ### API V1 - python data structures
 
