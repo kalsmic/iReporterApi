@@ -1,4 +1,4 @@
-document.forms["login-form"].onsubmit = function () {
+function login () {
 
     let url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/login";
     let userCredentials = {
@@ -20,6 +20,11 @@ document.forms["login-form"].onsubmit = function () {
                 document.getElementById("success").style.display = "none";
                 document.getElementById("error").style.display = "block";
                 document.getElementById("error").innerHTML = data.error;
+                window.setTimeout(function () {
+                    // window.location.replace(redirectUrl);
+                    document.getElementById("error").style.display = "none";
+
+                }, 3000);
 
 
             } else if (data.status === 200) {
@@ -30,11 +35,12 @@ document.forms["login-form"].onsubmit = function () {
                 localStorage.setItem("token", data["data"][0].token);
 
 
+
                 let redirectUrl = data["data"][0].url;
 
                 window.setTimeout(function () {
                     window.location.replace(redirectUrl);
-                }, 5000);
+                }, 1000);
 
             }
 
@@ -42,4 +48,4 @@ document.forms["login-form"].onsubmit = function () {
         })
         .catch((error) => console.log(error))
 
-};
+}
