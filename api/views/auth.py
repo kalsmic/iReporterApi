@@ -91,8 +91,9 @@ def login():
         user_password = user_credentials["password"]
 
         # submit credentials
-        user_id = user_obj.is_valid_credentials(user_name, user_password)
-        if user_id:
+        user_details = user_obj.is_valid_credentials(user_name, user_password)
+        if user_details:
+
 
             response = (
                 jsonify(
@@ -100,8 +101,10 @@ def login():
                         "status": 200,
                         "data": [
                             {
-                                "token": encode_token(user_id),
+                                "token": encode_token(user_details["user_id"]),
                                 "success": "Logged in successfully",
+                                "url": user_details["url"]
+
                             }
                         ],
                     }
