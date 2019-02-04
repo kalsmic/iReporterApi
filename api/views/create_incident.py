@@ -28,8 +28,6 @@ def new_red_flag():
         "title": data.get("title"),
         "location": data.get("location"),
         "comment": data.get("comment"),
-        "images": data.get("Images"),
-        "videos": data.get("Videos"),
         "inc_type": data.get("type"),
     }
 

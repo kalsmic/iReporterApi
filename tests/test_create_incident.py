@@ -128,7 +128,7 @@ def test_create_a_red_flag_with_wrong_input(client):
         data["error"]["location"]
         == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
     )
-    assert len(data["error"]) == 4
+    assert len(data["error"]) == 2
 
     wrong_input_1["title"] = ""
 
