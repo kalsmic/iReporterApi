@@ -23,7 +23,6 @@ def test_create_a_red_flag_without_a_token(client):
 
 
 def test_create_a_red_flag_with_invalid_token(client):
-    # test onlcreate incident record with invalid token
     response = client.post("api/v2/incidents", headers=invalid_id_token_header)
     assert response.status_code == 401
     data = json.loads(response.data.decode())
@@ -89,8 +88,6 @@ def test_create_a_red_flag_with_wrong_input(client):
     wrong_input_1["title"] = "6"
     wrong_input_1["location"] = ""
     wrong_input_1["tags"] = ""
-    wrong_input_1["Images"] = ""
-    wrong_input_1["Videos"] = ""
     wrong_input_1["comment"] = "5"
 
     # create a red flag with one coordinate in the location
@@ -108,22 +105,12 @@ def test_create_a_red_flag_with_wrong_input(client):
         == "location must be a list with both Latitude and Longitude coordinates"
     )
 
-    assert (
-        data["error"]["Images"]
-        == "Please provide an empty list of Images if none"
-    )
-    assert (
-        data["error"]["Videos"]
-        == "Please provide an empty list of Videos if none"
-    )
     assert data["error"]["comment"] == "Field cannot be a number"
-    assert len(data["error"]) == 5
+    assert len(data["error"]) == 3
 
     wrong_input_1["title"] = "my"
     wrong_input_1["location"] = [-90, 180]
     wrong_input_1["tags"] = [12]
-    wrong_input_1["Images"] = ["mine.png"]
-    wrong_input_1["Videos"] = ["crime.mpeg"]
     wrong_input_1["comment"] = "Lorem ipsum"
 
     response = client.post(
@@ -141,10 +128,7 @@ def test_create_a_red_flag_with_wrong_input(client):
         data["error"]["location"]
         == "latitude must be between -90 and 90 and longitude coordinates must be between -180 and 180"
     )
-
-    assert data["error"]["Images"] == "Only JPEG Images are supported"
-    assert data["error"]["Videos"] == "Only MP4 Videos are supported"
-    assert len(data["error"]) == 4
+    assert len(data["error"]) == 2
 
     wrong_input_1["title"] = ""
 

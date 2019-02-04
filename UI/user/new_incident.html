@@ -4,110 +4,126 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iReporter | Register</title>
+    <title>iReporter | + Incident</title>
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+          integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
+          crossorigin="anonymous">
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
 
 
 </head>
 
 <body>
-    <div class="wrapper">
-        <header class="bg-blue">
-            <div class="logo">
-                <span>i</span>
-                <span>R</span>
-                <span>e</span>
-                <span>p</span>
-                <span>o</span>
-                <span>r</span>
-                <span>t</span>
-                <span>e</span>
-                <span>r</span>
-            </div>
-        </header>
-        <div class="main-page">
-            <div class="page-content-wrapper">
-                <div class="nav border-round-lg">
-                    <h3 class="text-blue">Welcome User</h3>
-                    <hr>
-
-                    <ul class="menu border-radius-30p">
-                        <li class="menu_item">
-                            <a href="profile.html" class="menu_link">
-                                <i class="fa fa-user" aria-hidden="true"> Profile</i>
-                            </a>
-                        </li>
-                        <li class="menu_item">
-                            <a href="new_incident.html" class="menu_link active">
-                                <i class="fa fa-plus" aria-hidden="true"> Incident</i>
-                            </a>
-                        </li>
-                        <li class="menu_item">
-                            <a href="view_red-flags.html" class="menu_link">
-                                <i class="fa fa-eye" aria-hidden="true"> RedFlags</i>
-                            </a>
-                        </li>
-                        <li class="menu_item">
-                            <a href="view_interventions.html" class="menu_link">
-                                <i class="fa fa-eye" aria-hidden="true"> Interventions</i>
-                            </a>
-                        </li>
-                        <li class="menu_item">
-                            <a href="../../index.html" class="menu_link">
-                                <i class="fa fa-unlock" aria-hidden="true"> Log out</i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="page-content border-round-lg">
-                    <h3 class="text-blue form-title">New Incident Record</h3>
-                    <hr>
-                    <form class="form-control">
-                        <label for="incident_type">Type of Incident : </label>
-                        <select id="pet-select">
-                            <option value="">Please Select Incident type</option>
-                            <option value="Red-flag">Red-flag</option>
-                            <option value="Intervention">Intervention</option>
-                        </select>
-
-                        <label for="details">Description </label>
-                        <textarea name="description" id="description" maxlength="800"></textarea>
-                        <label>Geo Cordinates</label>
-                        <input type="text" disabled id="set_location" placeholder="PICK A LOCATION FROM THE MAP">
-
-                        <label>Location Coordinates: </label>
-                        <div id="googleMap" style="height: 400px; width:100%"></div>
-                        <!-- <div class="mapouter"><div class="gmap_canvas"><iframe width="698" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=university%20of%20san%20francisco&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.embedgooglemap.net"></a></div><style>.mapouter{text-align:right;height:500px;width:698px;}.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:698px;}</style></div> -->
-                        <input type="submit" value="Add Incident Record" class="btn bg-green text-white">
-
-                    </form>
-                </div>
-
-            </div>
+<div class="wrapper">
+    <header class="bg-blue">
+        <div class="logo">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
         </div>
-        <footer class="bg-blue">
+    </header>
+    <div class="main-page">
+        <div class="page-content-wrapper">
+            <div class="nav border-round-lg">
+                <h3 class="text-blue">Welcome User</h3>
+                <hr>
 
-            <div class="logo">
-                <span>i</span>
-                <span>R</span>
-                <span>e</span>
-                <span>p</span>
-                <span>o</span>
-                <span>r</span>
-                <span>t</span>
-                <span>e</span>
-                <span>r</span>
+                <ul class="menu border-radius-30p">
+                    <li class="menu_item">
+                        <a href="profile.html" class="menu_link">
+                            <i class="fa fa-user" aria-hidden="true"> Profile</i>
+                        </a>
+                    </li>
+                    <li class="menu_item">
+                        <a href="new_incident.html" class="menu_link active">
+                            <i class="fa fa-plus" aria-hidden="true"> Incident</i>
+                        </a>
+                    </li>
+                    <li class="menu_item">
+                        <a href="view_red-flags.html" class="menu_link">
+                            <i class="fa fa-eye" aria-hidden="true"> RedFlags</i>
+                        </a>
+                    </li>
+                    <li class="menu_item">
+                        <a href="view_interventions.html" class="menu_link">
+                            <i class="fa fa-eye" aria-hidden="true"> Interventions</i>
+                        </a>
+                    </li>
+                    <li class="menu_item">
+                        <a href="../index.html" class="menu_link">
+                            <i class="fa fa-unlock" aria-hidden="true"> Log out</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-content border-round-lg" id="create_record">
+                <h3 class="text-blue form-title">New Incident Record</h3>
+                <hr>
+                <form class="form-control" action="#" onsubmit="createIncident(); return false">
+                    <label for="incident_type">Type of Incident : </label>
+                    <select id="incident_type" required>
+                        <option value="">Please Select Incident type</option>
+                        <option value="red-flag">Red-flag</option>
+                        <option value="intervention">Intervention</option>
+                    </select>
+
+                    <label for="incident_title">Title</label>
+                    <input type="text" id="incident_title" placeholder="What the incident is about ?" required>
+                    <span class="error" id="title-error"></span>
+
+
+                    <label for="comment">Comment </label>
+                    <textarea id="comment" placeholder="What happened ?"
+                              maxlength="800" required></textarea>
+                    <span class="error" id="comment-error"></span>
+
+
+                    <label>Geo Cordinates</label>
+                    <input type="text" disabled id="set_location" placeholder="PICK A LOCATION FROM THE MAP" required>
+                    <span class="error" id="location-error"></span>
+
+                    <label>Location Coordinates: </label>
+                    <div id="googleMap" style="height: 400px; width:100%"></div>
+                    <input type="submit" value="Add Incident Record" class="btn bg-green text-white">
+
+                </form>
             </div>
 
-        </footer>
+
+        </div>
     </div>
+    <footer class="bg-blue">
+
+        <div class="logo">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
+        </div>
+
+    </footer>
+</div>
 </body>
-<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
 
 <script src="../static/js/googlemaps.js"></script>
+<script src="../static/js/create_incident.js"></script>
 
 </html>
