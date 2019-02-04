@@ -71,21 +71,26 @@
                 <hr>
                 <form class="form-control" action="#" onsubmit="createIncident(); return false">
                     <label for="incident_type">Type of Incident : </label>
-                    <select id="incident_type">
+                    <select id="incident_type" required>
                         <option value="">Please Select Incident type</option>
                         <option value="red-flag">Red-flag</option>
                         <option value="intervention">Intervention</option>
                     </select>
 
                     <label for="incident_title">Title</label>
-                    <input type="text" id="incident_title" placeholder="What the incident is about ?">
+                    <input type="text" id="incident_title" placeholder="What the incident is about ?" required>
+                    <span class="error" id="title-error"></span>
 
-                    <label for="description">Description </label>
-                    <textarea id="description" placeholder="What happened ?"
-                              maxlength="800"></textarea>
+
+                    <label for="comment">Comment </label>
+                    <textarea id="comment" placeholder="What happened ?"
+                              maxlength="800" required></textarea>
+                    <span class="error" id="comment-error"></span>
+
 
                     <label>Geo Cordinates</label>
-                    <input type="text" disabled id="set_location" placeholder="PICK A LOCATION FROM THE MAP">
+                    <input type="text" disabled id="set_location" placeholder="PICK A LOCATION FROM THE MAP" required>
+                    <span class="error" id="location-error"></span>
 
                     <label>Location Coordinates: </label>
                     <div id="googleMap" style="height: 400px; width:100%"></div>
@@ -93,8 +98,6 @@
 
                 </form>
             </div>
-
-
 
 
         </div>
