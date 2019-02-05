@@ -11,7 +11,7 @@ let phoneNumber = document.getElementById("phoneNumber");
 function validatePasswordStrength() {
     let passwordError = document.getElementById("password-error");
 
-    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)((?!\W+).){8,}$/.test(password.value)) {
+    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password.value)) {
         passwordError.style.display = "none";
         password.setCustomValidity("");
 
@@ -148,6 +148,7 @@ function signUpAccount() {
         phoneNumber: phoneNumber.value
     };
 
+
     fetch(url, {
         method: "POST",
         headers: {
@@ -173,7 +174,7 @@ function signUpAccount() {
                 document.getElementById("message").innerHTML = data["data"][0].success;
                 window.setTimeout(function () {
                     window.location.replace("../index.html");
-                }, 5000);
+                }, 3000);
 
             }
 

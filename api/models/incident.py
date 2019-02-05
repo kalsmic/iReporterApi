@@ -23,8 +23,6 @@ class Incident:
         self.db.cursor.execute(sql)
         last_insert_id = self.db.cursor.fetchone()
         new_incident_id = last_insert_id.get("id")
-        self.insert_images(new_incident_id, images)
-        self.insert_videos(new_incident_id, videos)
         return self.get_incident_by_id(new_incident_id)
 
     def insert_images(self, incident_id, images):

@@ -205,8 +205,6 @@ def validate_new_incident(**kwargs):
     errors["title"] = validate_sentence(kwargs.get("title"), 4, 100)
     errors["comment"] = validate_sentence(kwargs.get("comment"), 10)
     errors["location"] = validate_location(kwargs.get("location"))
-    errors["Images"] = validate_media(kwargs.get("images"), "Images")
-    errors["Videos"] = validate_media(kwargs.get("videos"), "Videos")
     errors["type"] = validate_type(kwargs.get("inc_type"))
     not_valid = {key: value for key, value in errors.items() if value}
 
