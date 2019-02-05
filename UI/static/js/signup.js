@@ -11,7 +11,7 @@ let phoneNumber = document.getElementById("phoneNumber");
 function validatePasswordStrength() {
     let passwordError = document.getElementById("password-error");
 
-    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)((?!\W+).){8,}$/.test(password.value)) {
+    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password.value)) {
         passwordError.style.display = "none";
         password.setCustomValidity("");
 
