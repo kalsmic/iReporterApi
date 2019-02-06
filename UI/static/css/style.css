@@ -311,7 +311,10 @@ hr {
 	height: 10em;
 	width: 100%;
 }
-
+.map-pct-80 {
+	height: 18em;
+	width: 100%;
+}
 .flex-col-sp-btn {
 	display: flex;
 	align-items: center;
