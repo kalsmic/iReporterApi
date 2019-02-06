@@ -31,3 +31,16 @@ def test_welcome_message(client):
     data =json.loads(response.data.decode())
     assert data["message"] == "Welcome to iReporter API V2"
     assert data["status"] == 200
+
+
+def test_user_already_logged_in(client):
+    response = client.post(
+            "api/v2/auth/secure",
+            headers=user1_header,
+        )
+    assert response.status_code == 200
+    data =json.loads(response.data.decode())
+    assert data["data"][0]["user"]["firstname"] == "userOne"
+    assert data["data"][0]["user"]["lastname"] == "userone"
+    assert data["data"][0]["user"]["username"] == "user1"
+    assert data["status"] == 200
