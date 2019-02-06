@@ -69,7 +69,7 @@ function getIncidents(incidentType) {
                             <p>
                                 ${incident.comment}
                             </p> <a onclick="deleteIncident(${incident.type},${incident.id})"><i class="fas fa-trash-alt text-red "></i></a>
-                            <a href="./details.html?type=${incident.type}s&id=${incident.id}" class="text-blue">view details</a>
+                            <a href="../incidents/details.html?type=${incident.type}s&id=${incident.id}" class="text-blue">view details</a>
                             
                             
                             <p class="text-orange"><b>status: <i>${incident.status}</i></b></p>

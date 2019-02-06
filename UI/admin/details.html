@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iReporter | Interventions</title>
+    <title>iReporter | Red-flags</title>
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
         crossorigin="anonymous">
@@ -47,7 +47,7 @@
                             </a>
                         </li>
                         <li class="menu_item">
-                            <a href="view_red-flags.html" class="menu_link">
+                            <a href="view_red-flags.html" class="menu_link active">
                                 <i class="fa fa-eye" aria-hidden="true"> RedFlags</i>
                             </a>
                         </li>
@@ -57,48 +57,46 @@
                             </a>
                         </li>
                         <li class="menu_item">
-                            <a href="../../index.html" class="menu_link">
+                            <a href="../index.html" class="menu_link">
                                 <i class="fa fa-unlock" aria-hidden="true"> Log out</i>
                             </a>
                         </li>
                     </ul>
                 </div>
-
-                <div class="page-content border-round-lg">
-                    <h3 class="text-blue">View Intervention Record Details page</h3>
+                <div class="page-content border-round-lg" id="incidents_output">
+                    <h3 class="text-blue" id="incident_type">View Incident Details page</h3>
                     <hr>
                     <section class="flex-col-sp-btn border-radius-30p border-round-lg">
-                        <div><b>Description : </b>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            ut labore et dolore magna aliqua. Dignissim suspendisse in est ante in nibh mauris. Nunc
-                            sed velit dignissim sodales ut eu sem. Morbi quis commodo odio aenean sed adipiscing diam
-                            donec. Malesuada fames ac turpis egestas integer. Lectus mauris ultrices eros in cursus.
-                            Venenatis a condimentum vitae sapien pellentesque habitant. Pharetra et ultrices neque
-                            ornare.
-                            <p>Est ante in nibh mauris. Eleifend mi in nulla posuere sollicitudin aliquam ultrices
-                                sagittis. Molestie a iaculis at erat pellentesque adipiscing commodo elit. Tristique
-                                nulla
-                                aliquet enim tortor at. Et magnis dis parturient montes. Vitae purus faucibus ornare
-                                suspendisse sed nisi. Est sit amet facilisis magna etiam tempor orci eu. Laoreet id
-                                donec
-                                ultrices tincidunt arcu non. Pretium nibh ipsum consequat nisl vel pretium. Nam at
-                                lectus
-                                urna duis convallis convallis. Neque ornare aenean euismod elementum nisi quis
-                                eleifend.
-                                Donec adipiscing tristique risus nec.</p>
-                        </div>
-                        <div id="googleMap" class="map-pct-50"></div>
+                        <h2 id="incident_title">What happened?</h2>
 
+                        <span class="text-blue" id="created_on"><b><i>Date:</i> </b> </span>
                         <div class="flex-row-sp-btn">
-                            <p class="text-blue"><b><i>Created On:</i> </b> 01/02/2018</p>
-                            <span class="text-red">Rejected !</span>
+
+
+                            <span class="text-lblack" id="created_by">
+                                <img class="bg-blue  img-circle-small" src="../static/img/profile-pics/user1.png">User
+
+
+                            </span>
+                        </div>
+                        <div ><b>COMMENT : </b>
+                            <p id="incident_comment">A description of what happened!</p>
+                            <p class="text-orange" id="incident_status" ><b>status: <i>Draft</i></b></p>
+
+                        </div>
+
+                        <div id="googleMap" class="map-pct-80"></div>
+                        <div class="flex-row-sp-btn">
                             <a href="edit_incident.html"><i class="fas fa-edit text-white bg-blue border-radius-pct-50 ">
-                                </i> </a>
+                            </i> </a>
+
 
                         </div>
                     </section>
-
                 </div>
+
+
+
             </div>
         </div>
         <footer class="bg-blue">
@@ -119,12 +117,10 @@
 
     </div>
 </body>
-<style>
+<script src="../static/js/incident_details.js"></script>
 
-
-</style>
-<script src="../static/js/main.js"></script>
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
 
 <script src="../static/js/incident_details_map.js"></script>
+
 </html>
