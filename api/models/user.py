@@ -93,13 +93,9 @@ class User:
                 user_db_details.get("user_password"), user_password
             )
         ):
-            user_id = user_db_details.get("id")
-            is_admin =  user_db_details.get("is_admin")
-            url = "./user/index.html"
 
             return {
-                "user_id": user_db_details.get("id"),
-                "url": url
+                "user_id": user_db_details.get("id")
             }
         return None
 
