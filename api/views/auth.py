@@ -104,7 +104,6 @@ def login():
                             {
                                 "token": encode_token(user_details["user_id"]),
                                 "success": "Logged in successfully",
-                                "url": user_details["url"]
 
                             }
                         ],
