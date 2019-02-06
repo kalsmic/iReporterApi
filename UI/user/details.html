@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iReporter | + Incident</title>
+    <title>iReporter | Details</title>
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
           integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
@@ -38,23 +38,24 @@
                 <hr>
 
                 <ul class="menu border-radius-30p">
+
                     <li class="menu_item">
                         <a href="profile.html" class="menu_link">
                             <i class="fa fa-user" aria-hidden="true"> Profile</i>
                         </a>
                     </li>
                     <li class="menu_item">
-                        <a href="new_incident.html" class="menu_link active">
+                        <a href="new_incident.html" class="menu_link">
                             <i class="fa fa-plus" aria-hidden="true"> Incident</i>
                         </a>
                     </li>
                     <li class="menu_item">
-                        <a href="incidents.html?type=red-flags" class="menu_link">
+                        <a href="incidents.html?type=red-flags" class="menu_link active">
                             <i class="fa fa-eye" aria-hidden="true"> RedFlags</i>
                         </a>
                     </li>
                     <li class="menu_item">
-                        <a href="incidents.html?type=interventions.html" class="menu_link">
+                        <a href="incidents.html?type=interventions" class="menu_link">
                             <i class="fa fa-eye" aria-hidden="true"> Interventions</i>
                         </a>
                     </li>
@@ -65,64 +66,67 @@
                     </li>
                 </ul>
             </div>
-            <div class="page-content border-round-lg" id="create_record">
-                <h3 class="text-blue form-title">New Incident Record</h3>
+            <div class="page-content border-round-lg" id="incidents_output">
+                <h3 class="text-blue" id="incident_type">View Incident Details page</h3>
                 <hr>
-                <form class="form-control" action="#" onsubmit="createIncident(); return false">
-                    <label for="incident_type">Type of Incident : </label>
-                    <select id="incident_type" required>
-                        <option value="">Please Select Incident type</option>
-                        <option value="red-flag">Red-flag</option>
-                        <option value="intervention">Intervention</option>
-                    </select>
+                <section class="flex-col-sp-btn border-radius-30p border-round-lg">
+                    <h2 id="incident_title">What happened?</h2>
 
-                    <label for="incident_title">Title</label>
-                    <input type="text" id="incident_title" placeholder="What the incident is about ?" required>
-                    <span class="error" id="title-error"></span>
+                    <span class="text-blue" id="created_on"><b><i>Date:</i> </b> </span>
+                    <div class="flex-row-sp-btn">
 
 
-                    <label for="comment">Comment </label>
-                    <textarea id="comment" placeholder="What happened ?"
-                              maxlength="800" required></textarea>
-                    <span class="error" id="comment-error"></span>
+                            <span class="text-lblack" id="created_by">
+                                <img class="bg-blue  img-circle-small" src="../static/img/profile-pics/user1.png">User
 
 
-                    <label>Geo Cordinates</label>
-                    <input type="text" disabled id="set_location" placeholder="PICK A LOCATION FROM THE MAP" required>
-                    <span class="error" id="location-error"></span>
+                            </span>
+                    </div>
+                    <div ><b>COMMENT : </b>
+                        <p id="incident_comment">A description of what happened!</p>
+                        <p class="text-orange" id="incident_status" ><b>status: <i>Draft</i></b></p>
 
-                    <label>Location Coordinates: </label>
-                    <div id="googleMap" style="height: 400px; width:100%"></div>
-                    <input type="submit" value="Add Incident Record" class="btn bg-green text-white">
+                    </div>
 
-                </form>
+                    <div id="googleMap" class="map-pct-80"></div>
+                    <div class="flex-row-sp-btn">
+                        <a href="edit_incident.html"><i class="fas fa-edit text-white bg-blue border-radius-pct-50 ">
+                        </i> </a>
+                        <a><i
+                                class="fas fa-trash-alt text-white border-radius-pct-50 bg-red">
+                        </i></a>
+
+                    </div>
+                </section>
             </div>
-
-
         </div>
     </div>
-    <footer class="bg-blue">
+</div>
+<footer class="bg-blue">
 
-        <div class="logo">
-            <span>i</span>
-            <span>R</span>
-            <span>e</span>
-            <span>p</span>
-            <span>o</span>
-            <span>r</span>
-            <span>t</span>
-            <span>e</span>
-            <span>r</span>
-        </div>
+    <div class="logo">
+        <span>i</span>
+        <span>R</span>
+        <span>e</span>
+        <span>p</span>
+        <span>o</span>
+        <span>r</span>
+        <span>t</span>
+        <span>e</span>
+        <span>r</span>
+    </div>
 
-    </footer>
+</footer>
+
 </div>
 </body>
+
+<script src="../static/js/incident_details.js"></script>
 <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
 
-<script src="../static/js/googlemaps.js"></script>
-<script src="../static/js/create_incident.js"></script>
+<script src="../static/js/incident_details_map.js"></script>
+
 
 </html>

@@ -1,6 +1,5 @@
 let authorizationHeader = "Bearer ".concat(localStorage.getItem("token"));
 
-
 let params = new URL(location.href).searchParams;
 let urlParameter = params.get('type');
 if (urlParameter === 'red-flags' || urlParameter === 'interventions') {
@@ -70,14 +69,17 @@ function getIncidents(incidentType) {
                             <p>
                                 ${incident.comment}
                             </p> <a onclick="deleteIncident(${incident.type},${incident.id})"><i class="fas fa-trash-alt text-red "></i></a>
-                            <a href="./incidents_details.html?type=${incident.type}?id=${incident.id}" class="text-blue">view details</a>
+                            <a href="./details.html?type=${incident.type}s&id=${incident.id}" class="text-blue">view details</a>
+                            
+                            
                             <p class="text-orange"><b>status: <i>${incident.status}</i></b></p>
                         </div>
 
 
-
+                    
                     </section>
             `;
+
 
                 });
                 document.getElementById('incidents_output').innerHTML = output;
