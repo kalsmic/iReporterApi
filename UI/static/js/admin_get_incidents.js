@@ -70,7 +70,8 @@ function getIncidents(incidentType) {
                             <p>
                                 ${incident.comment}
                             </p>
-                            <a href="./incidents_details.html?type=${incident.type}?id=${incident.id}" class="text-blue">view details</a>
+                            <a href="../incidents/details.html?type=${incident.type}s&id=${incident.id}" class="text-blue">view details</a>
+
                             <p class="text-orange"><b>status: <i>${incident.status}</i></b> <a href="edit_incident.html"> update</a></p>
                         </div>
 
