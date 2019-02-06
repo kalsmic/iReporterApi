@@ -1,0 +1,92 @@
+let authorizationHeader = "Bearer ".concat(localStorage.getItem("token"));
+
+
+let params = new URL(location.href).searchParams;
+let urlParameter = params.get('type');
+if (urlParameter === 'red-flags' || urlParameter === 'interventions') {
+
+    getIncidents(urlParameter);
+}
+
+
+function getIncidents(incidentType) {
+
+    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType);
+
+    fetch(url, {
+        method: "GET",
+        headers: {
+            "content-type": "application/json",
+            "Authorization": authorizationHeader,
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 401) {
+                window.setTimeout(function () {
+                    window.location.replace("../index.html");
+                }, 5000);
+
+
+            } else if (data.status === 200) {
+                //on success
+                let incidents = data["data"];
+                console.log("length", incidents.length);
+                let output = `
+                <h3 class="text-blue">View ${incidentType} page</h3>
+                <hr>
+               `;
+                if (incidents.length == 0) {
+                    output += `
+            
+                
+                <section class="flex-col-sp-btn border-radius-30p border-round-lg">
+                        <h2>No  ${incidentType} records are available !</h2>
+                      
+                </section>
+               `
+
+                }
+                incidents.forEach(function (incident) {
+
+
+                    output += `
+
+
+                <section class="flex-col-sp-btn border-radius-30p border-round-lg">
+                        <h2>${incident.title}</h2>
+                                                    <span class="text-blue"><b><i>Date:</i> </b> ${incident.created_on}</span>
+
+                        <div class="flex-row-sp-btn">
+
+
+                            <span class="text-lblack ">
+                                <img class="bg-blue  img-circle-small" src="../static/img/profile-pics/user1.png">${incident.owner}
+
+
+                            </span>
+                        </div>
+                        <div><b>Description : </b>
+                            <p>
+                                ${incident.comment}
+                            </p> <a onclick="deleteIncident(${incident.type},${incident.id})"><i class="fas fa-trash-alt text-red "></i></a>
+                            <a href="./incidents_details.html?type=${incident.type}?id=${incident.id}" class="text-blue">view details</a>
+                            <p class="text-orange"><b>status: <i>${incident.status}</i></b></p>
+                        </div>
+
+
+
+                    </section>
+            `;
+
+                });
+                document.getElementById('incidents_output').innerHTML = output;
+
+            }
+
+
+        })
+        .catch((error) => console.log(error));
+
+
+}
