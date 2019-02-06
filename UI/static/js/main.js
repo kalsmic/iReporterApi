@@ -1,42 +1,92 @@
-document.getElementById("login-form").onsubmit=function() {
-    var userName = document.getElementById("userName").value;
-    if (userName =="admin") {
-     
-    window.location.replace("admin/profile.html");
-    return false;
-    }else{
-        window.location.replace("user/profile.html");
-        return false;
-    } 
- }  
+let authorizationHeader = "Bearer ".concat(localStorage.getItem("iReporterToken"));
 
+if (localStorage.getItem('iReporterToken')) {
 
+    getUserInfo()
+} else {
+    window.location.replace("../index.html");
 
-function deleteIncident(incidentType, delStatus, hideContent) {
+}
+window.setInterval(getUserInfo, 300000);
 
-    if (delStatus == 1) {
-        if (confirm("Are you sure you want to delete this record!")) {
+function getUserInfo() {
+    console.log("loggedin");
+    fetch("https://ireporterapiv3.herokuapp.com/api/v2/auth/secure", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+            "Authorization": "Bearer ".concat(localStorage.getItem("iReporterToken")),
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 401) {
+                alert(data.error);
+                window.location.replace("../index.html");
 
-            secId = document.getElementById("sec-1")
-            switch (incidentType) {
-                case "red-flag":
-                    if (hideContent == "true") {
-                        secId.style.display = "none";
-                        break;
+            } else if (data.status === 200) {
+                //on success
+                let userInfo = data["data"][0]["user"];
+                let sessionUserName = userInfo["username"];
+                let sessionFirstName = userInfo["firstname"];
+                let sessionLastName = userInfo["lastname"];
+                let sessionIsAdmin = userInfo["is_admin"];
+                document.getElementById('sessionUserName').innerHTML = sessionUserName;
 
-                    } else {
-                        window.location.href = "https://kalsmic.github.io/iReporter/UI/user/view_red-flags.html";
-                        break;
-                    }
-                case "intervention":
-                    window.location.href = "https://kalsmic.github.io/iReporter/UI/user/view_interventions.html";
-                    break;
-                default:
-                    console.log("Invalid request");
+                if (sessionIsAdmin) {
+                    setElementDisplay(".hideAdmin", "none");
+                    setElementDisplay(".showAdmin", "block");
+                } else {
+
+                    setElementDisplay(".hideAdmin", "block");
+                    setElementDisplay(".showAdmin", "none");
+
+                }
             }
 
-        }
-    } else {
-        alert("You cannot delete this record");
-    }
+
+        })
+        .catch((error) => console.log(error));
+
+}
+
+function setElementDisplay(elemRef, displayPropety) {
+    Array.from(document.querySelectorAll(elemRef))
+        .forEach(function (elem) {
+            elem.style.display = displayPropety
+        });
+
+}
+
+
+function logOut() {
+
+    fetch("https://ireporterapiv3.herokuapp.com/api/v2/auth/logout", {
+        method: "POST",
+        headers: {
+            "content-type": "application/json",
+            "Authorization": "Bearer ".concat(localStorage.getItem("iReporterToken")),
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 200) {
+                alert(data['data'][0].success);
+                redirectLoggedOut()
+            } else if (data.status === 401) {
+                alert(data.error);
+                redirectLoggedOut()
+
+            }
+
+
+        })
+        .catch((error) => console.log(error));
+
+}
+
+function redirectLoggedOut() {
+    localStorage.removeItem('iReporterToken');
+    window.location.replace("../index.html");
+
 }
