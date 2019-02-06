@@ -1,5 +1,3 @@
-let authorizationHeader = "Bearer ".concat(localStorage.getItem("token"));
-
 let params = new URL(location.href).searchParams;
 let urlParameter = params.get('type');
 if (urlParameter === 'red-flags' || urlParameter === 'interventions') {

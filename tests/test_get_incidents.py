@@ -117,7 +117,7 @@ def test_get_all_interventions_with_expired_token(client):
     response = client.get("api/v2/interventions", headers=expired_token_header)
     assert response.status_code == 401
     data = json.loads(response.data.decode())
-    assert data == {"error": expired_token_message, "status": 401}
+    assert data == {"error": "Please login in again or sign up an account to access this resource", "status": 401}
 
 
 def test_get_all_interventions(client):

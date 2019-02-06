@@ -96,8 +96,6 @@ class User:
             user_id = user_db_details.get("id")
             is_admin =  user_db_details.get("is_admin")
             url = "./user/index.html"
-            if is_admin:
-                url = "./admin/index.html"
 
             return {
                 "user_id": user_db_details.get("id"),
