@@ -33,12 +33,8 @@ function login () {
                 document.getElementById("success").innerHTML = data["data"][0].success;
                 localStorage.setItem("iReporterToken", data["data"][0].token);
 
-
-
-                let redirectUrl = data["data"][0].url;
-
                 window.setTimeout(function () {
-                    window.location.replace(redirectUrl);
+                    window.location.replace("./user/index.html");
                 }, 1000);
 
             }
