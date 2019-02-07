@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <script src="../static/js/main.js"></script>
 
 
 
@@ -33,12 +34,12 @@
         <div class="main-page">
             <div class="page-content-wrapper">
                 <div class="nav border-round-lg">
-                    <h3 class="text-blue">Welcome Admin</h3>
+                    <h3 class="text-blue">Welcome <b id="sessionUserName">User</b></h3>
                     <hr>
 
                     <ul class="menu border-radius-30p">
                         <li class="menu_item">
-                            <a href="profile.html" class="menu_link">
+                            <a href="../user/index.html" class="menu_link">
                                 <i class="fa fa-user" aria-hidden="true"> Dashbaord</i>
                             </a>
                         </li>
@@ -54,7 +55,7 @@
                             </a>
                         </li>
                         <li class="menu_item">
-                            <a href="../index.html" class="menu_link">
+                            <a href="#" class="menu_link" onclick="logOut()">
                                 <i class="fa fa-unlock" aria-hidden="true"> Log out</i>
                             </a>
                         </li>

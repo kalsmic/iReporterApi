@@ -69,8 +69,8 @@ class User:
 
     def get_user_details(self, user_id):
         user_sql = (
-            "SELECT id, user_name,first_name,last_name,other_names, "
-            "email,is_admin FROM users "
+            "SELECT user_name as username, first_name as firstname, "
+            " last_name as lastname, is_admin FROM users "
             f"WHERE id='{user_id}';"
         )
         self.db.cursor.execute(user_sql)
@@ -93,15 +93,9 @@ class User:
                 user_db_details.get("user_password"), user_password
             )
         ):
-            user_id = user_db_details.get("id")
-            is_admin =  user_db_details.get("is_admin")
-            url = "./user/profile.html"
-            if is_admin:
-                url = "./admin/profile.html"
 
             return {
-                "user_id": user_db_details.get("id"),
-                "url": url
+                "user_id": user_db_details.get("id")
             }
         return None
 

@@ -21,7 +21,6 @@ function login () {
                 document.getElementById("error").style.display = "block";
                 document.getElementById("error").innerHTML = data.error;
                 window.setTimeout(function () {
-                    // window.location.replace(redirectUrl);
                     document.getElementById("error").style.display = "none";
 
                 }, 3000);
@@ -32,14 +31,10 @@ function login () {
                 document.getElementById("error").style.display = "none";
                 document.getElementById("success").style.display = "block";
                 document.getElementById("success").innerHTML = data["data"][0].success;
-                localStorage.setItem("token", data["data"][0].token);
-
-
-
-                let redirectUrl = data["data"][0].url;
+                localStorage.setItem("iReporterToken", data["data"][0].token);
 
                 window.setTimeout(function () {
-                    window.location.replace(redirectUrl);
+                    window.location.replace("./user/index.html");
                 }, 1000);
 
             }

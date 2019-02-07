@@ -1,4 +1,5 @@
 import datetime
+
 import jwt
 from flask import request, jsonify, abort
 from functools import wraps
@@ -15,7 +16,7 @@ def encode_token(user_id):
     payload = {
         "userid": user_id,
         "iat": datetime.datetime.utcnow(),
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=3),
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=6),
     }
     token = jwt.encode(payload, secret_key, algorithm="HS256").decode("utf-8")
     # Insert token into database
@@ -62,6 +63,7 @@ def token_required(func):
             response = func(*args, **kwargs)
 
         except jwt.ExpiredSignatureError:
+            blacklist_token()
             response = (
                 jsonify({"error": expired_token_message, "status": 401}),
                 401,
@@ -132,3 +134,4 @@ def blacklist_token():
         f"True WHERE token='{extract_token_from_header()}';"
     )
     db.cursor.execute(sql)
+
