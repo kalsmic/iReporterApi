@@ -10,7 +10,6 @@ if (localStorage.getItem('iReporterToken')) {
 window.setInterval(getUserInfo, 300000);
 
 function getUserInfo() {
-    console.log("loggedin");
     fetch("https://ireporterapiv3.herokuapp.com/api/v2/auth/secure", {
         method: "POST",
         headers: {
@@ -22,7 +21,7 @@ function getUserInfo() {
         .then((data) => {
             if (data.status === 401) {
                 alert(data.error);
-                window.location.replace("../index.html");
+                redirectLoggedOut()
 
             } else if (data.status === 200) {
                 //on success
@@ -74,6 +73,7 @@ function logOut() {
                 alert(data['data'][0].success);
                 redirectLoggedOut()
             } else if (data.status === 401) {
+                localStorage.removeItem('iReporterToken');
                 alert(data.error);
                 redirectLoggedOut()
 
