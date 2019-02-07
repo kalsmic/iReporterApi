@@ -72,6 +72,7 @@ function getIncidents(incidentType) {
                             
                             <p class="text-orange"><b>status: <i>${incident.status}</i></b></p>
                         </div>
+                        
 
 
                     

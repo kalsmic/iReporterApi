@@ -67,8 +67,11 @@
                     </li>
                 </ul>
             </div>
+
             <div class="page-content border-round-lg" id="incidents_output">
                 <h3 class="text-blue" id="incident_type">View Incident Details page</h3>
+
+
                 <hr>
                 <section class="flex-col-sp-btn border-radius-30p border-round-lg">
                     <h2 id="incident_title">What happened?</h2>
@@ -84,7 +87,13 @@
                             </span>
                     </div>
                     <div ><b>COMMENT : </b>
-                        <p id="incident_comment">A description of what happened!</p>
+                        <div id="incident_comment" contenteditable="false">A description oeef what happened!</div>
+                        <button class="hide" id='updateCommentBtn' >Save Changes</button>
+                        <button class="hideAdmin" id='editCommentBtn'>Edit comment</button>
+                        <button class="hide" id='cancelEditCommentBtn'>Cancel</button>
+                        <span class="success" id="commentMessage"></span>
+                        <span class="error" id="commentError"></span>
+
                         <p class="text-orange" id="incident_status" ><b>status: <i>Draft</i></b></p>
 
                     </div>
