@@ -191,7 +191,7 @@ editStatusBtn.onclick = function(){
 
     statusField.innerHTML = `
         <select id="incident_status" required   class="showAdmin">
-          <option value="${originalStatus}.toLowerCase()">${originalStatus}</option>
+          <option value="${originalStatus}">${originalStatus}</option>
           <option value="draft">Draft</option>
           <option value="resolved">Resolved</option>
           <option value="Under Investigation">Under Investigation</option>
