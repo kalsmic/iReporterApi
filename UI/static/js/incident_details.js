@@ -44,6 +44,7 @@ function getIncident(incidentType, incidentId) {
                 if (incident.status !== "Draft") {
                     document.getElementById('editCommentBtn').style.display = 'none';
                     document.getElementById('editLocationBtn').style.display = 'none';
+                    document.getElementById('editStatusBtn').style.display = 'none';
                 }
                 let locationCoords = incident.location.replace('(', '').replace(')', '').split(",");
                 let latitude = locationCoords[0];
