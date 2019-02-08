@@ -113,7 +113,7 @@ class Incident:
         return self.db.cursor.fetchone()
 
     def update_incident_status(self, inc_id, inc_type, status):
-        status = status.strip().lower().capitalize()
+        status = str(status.strip().lower().title())
         sql = (
             f"UPDATE incidents SET status='{status}' "
             f"WHERE id='{inc_id}' returning id,status;"

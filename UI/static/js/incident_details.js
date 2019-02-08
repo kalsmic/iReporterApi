@@ -34,13 +34,12 @@ function getIncident(incidentType, incidentId) {
                 document.getElementById("incident_title").innerHTML = incident.title;
                 document.getElementById("incident_type").innerHTML = "View " + incident.type + " Details page";
                 document.getElementById("incident_comment").innerHTML = incident.comment;
-                document.getElementById("incident_status");
-                document.getElementById("incident_status").innerHTML = incident.status;
                 document.getElementById("created_by").innerHTML = `
                     <img class="bg-blue  img-circle-small" src="../static/img/profile-pics/user1.png">${incident.owner}
                 `;
 
-                document.getElementById("incident_status").innerHTML = `<b>status: <i>${incident.status}</i></b>`;
+                document.getElementById("incident_status").innerHTML =incident.status;
+
                 //Hide the edit comment button if status is not draft
                 if (incident.status !== "Draft") {
                     document.getElementById('editCommentBtn').style.display = 'none';
@@ -74,7 +73,6 @@ function getIncident(incidentType, incidentId) {
 }
 
 function updateComment() {
-    newComment = document.getElementById('incident_comment').innerHTML;
 
     incidentType = params.get('type');
     incidentId = params.get('id');
@@ -173,4 +171,144 @@ function displayUpdateFields(incidentFieldId, updateButtonId, cancelButtonId, ed
 }
 
 
+
 document.getElementById('updateCommentBtn').onclick = updateComment;
+
+let UpdateStatusBtn = document.getElementById('updateStatusBtn');
+let cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
+let editStatusBtn = document.getElementById('editStatusBtn');
+let statusField = document.getElementById('statusField');
+
+editStatusBtn.onclick = function(){
+
+   cancelEditStatusBtn.style.display = 'block';
+   UpdateStatusBtn.style.display = 'block';
+   editStatusBtn.style.display = 'none';
+   // save origin value of status
+   sessionStorage.setItem('originalStatus',document.getElementById('incident_status').innerText);
+
+   let originalStatus = sessionStorage.getItem('originalStatus');
+
+    statusField.innerHTML = `
+        <select id="incident_status" required   class="showAdmin">
+          <option value="${originalStatus}">${originalStatus}</option>
+          <option value="draft">Draft</option>
+          <option value="resolved">Resolved</option>
+          <option value="Under Investigation">Under Investigation</option>
+          <option value="rejected">Rejected</option>
+        </select>
+    `
+};
+
+
+function cancelEditStatus (){
+
+    cancelEditStatusBtn.style.display = 'none';
+    UpdateStatusBtn.style.display = 'none';
+    editStatusBtn.style.display = 'block';
+
+    // Restore the status to its original value
+    statusField.innerHTML = `
+        status:<b id="incident_status">${sessionStorage.getItem('originalStatus')}</b>
+    `;
+
+    // Remove the original value of status from session storage
+    sessionStorage.removeItem('originalStatus');
+
+}
+cancelEditStatusBtn.onclick =cancelEditStatus;
+
+UpdateStatusBtn.onclick = function(){
+
+    cancelEditStatusBtn.style.display = 'none';
+    UpdateStatusBtn.style.display = 'none';
+    editStatusBtn.style.display = 'block';
+
+    // Restore the status to its original value
+    statusField.innerHTML = `
+        status:<b id="incident_status">${sessionStorage.getItem('originalStatus')}</b>
+    `;
+
+    // Remove the original value of status from session storage
+    sessionStorage.removeItem('originalStatus');
+
+};
+
+
+function updateStatus() {
+
+    incidentType = params.get('type');
+    incidentId = params.get('id');
+    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/status");
+    let newStatus = document.getElementById('incident_status').value;
+
+
+
+    fetch(url, {
+        method: "PATCH",
+        headers: {
+            "content-type": "application/json",
+            "Authorization": authorizationHeader,
+        },
+        body: JSON.stringify({"status": newStatus})
+
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 200) {
+                UpdateStatusBtn.style.display = 'none';
+                cancelEditStatusBtn.style.display = 'none';
+                editStatusBtn.style.display = 'none';
+
+                // Display the new value of incident record status
+                statusField.innerHTML = `
+                    status:<b id="incident_status">${data['data'][0].status}</b>
+                `;
+                let statusMessage = document.getElementById('statusMessage');
+                statusMessage.style.display = 'block';
+
+                statusMessage.innerHTML = data['data'][0].success;
+                window.setTimeout(function () {
+
+                    statusMessage.style.display = 'none';
+                    editStatusBtn.style.display = 'block';
+
+                }, 3000);
+
+                //Remove origin value of status from memory
+                sessionStorage.removeItem('originalStatus');
+
+
+            } else if (data.status === 400) {
+
+                let statusError = document.getElementById('statusError');
+                statusError.style.display = 'block';
+
+                statusError.innerHTML = data.error;
+                window.setTimeout(function () {
+                    statusError.style.display = 'none';
+                    cancelEditStatus()
+                }, 3000);
+            } else if (data.status === 401) {
+
+
+                // if session is expired
+                alert(data.error);
+                window.setTimeout(function () {
+                    localStorage.removeItem('iReporterToken');
+
+                }, 3000);
+
+            }
+            else {
+
+
+                // if session is expired
+                alert(JSON.stringify(data.error));
+
+            }
+        })
+        .catch((error) => console.log(error.json()));
+}
+
+UpdateStatusBtn.onclick = updateStatus;
