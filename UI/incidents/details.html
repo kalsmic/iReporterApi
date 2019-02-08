@@ -94,14 +94,19 @@
                         <span class="success" id="commentMessage"></span>
                         <span class="error" id="commentError"></span>
 
-                        <p class="text-orange" id="incident_status" ><b>status: <i>Draft</i></b></p>
+                        <div class="text-orange" id="statusField">status:<b id="incident_status"></b></div>
+                        <button class="showAdmin" id='editStatusBtn'>Edit status</button>
+                        <button class="hide" id='updateStatusBtn' >Save Changes</button>
+                        <button class="hide" id='cancelEditStatusBtn'>Cancel</button>
+                        <span class="success" id="statusMessage"></span>
+                        <span class="error" id="statusError"></span>
 
-                    </div>
+
+                    </div><br/>
 
                     <div id="googleMap" class="map-pct-80"></div>
                     <div class="flex-row-sp-btn">
-                        <a href="../user/edit_incident.html"><i class="fas fa-edit text-white bg-blue border-radius-pct-50 ">
-                        </i> </a>
+
                         <a><i
                                 class="fas fa-trash-alt text-white border-radius-pct-50 bg-red">
                         </i></a>
