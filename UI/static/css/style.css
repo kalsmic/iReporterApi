@@ -178,7 +178,7 @@ input:required:valid {
 	}
 }
 
-@media screen and (min-width:700px) {
+@media screen and (min-width:1050px) {
 	.nav {
 		height: fit-content;
 	}
@@ -351,4 +351,9 @@ hr {
 	color: #31e071;
 	font-weight: bold;
 	padding-top: 0.25em;
+}
+
+
+.hide {
+	display: none;
 }
