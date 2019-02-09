@@ -2,7 +2,14 @@ let newlocationCoordinates;
 sessionStorage.removeItem('showPopUp');
 
 function displayMap(geoCoordinates) {
-    var map = L.map("googleMap").setView(geoCoordinates, 17);
+    L.mapbox.accessToken = 'pk.eyJ1Ijoia2Fsc21pYyIsImEiOiJjanJ3dnI2ZzkwZmZtNDRuMWN2Ymxkb3gyIn0.GAIeAW40W9zFy0YKCCb2Yw';
+    let map = L.mapbox.map('googleMap', 'mapbox.streets').setView(geoCoordinates, 17)
+        .addControl(L.mapbox.geocoderControl('mapbox.places', {
+            keepOpen: false,
+            autocomplete: true,
+        }));
+
+
     var circle = L.circle(geoCoordinates, {
         color: 'red',
         fillColor: '#f03',
@@ -19,7 +26,6 @@ function displayMap(geoCoordinates) {
 
 
     function onMapClick(e) {
-        console.log(e.latlng);
 
         if (sessionStorage.getItem('showPopUp') === 'enabled') {
 
@@ -31,9 +37,11 @@ function displayMap(geoCoordinates) {
 
 
     map.on('click', onMapClick);
+    L.control.fullscreen().addTo(map);
+    L.control.locate().addTo(map);
+
 
 }
-
 
 L.TiltHandler = L.Handler.extend({
     addHooks: function () {
