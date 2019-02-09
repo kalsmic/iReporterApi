@@ -10,7 +10,6 @@ function displayError(dataArray) {
     }
 }
 
-let authorizationHeader = "Bearer ".concat(localStorage.getItem("token"));
 
 let incidentType = document.getElementById("incident_type");
 let incidentTitle = document.getElementById("incident_title");
