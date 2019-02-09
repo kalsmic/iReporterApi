@@ -66,7 +66,7 @@ function getIncidents(incidentType) {
                         <div class="flex-row-sp-btn"><b>Description : </b>
                             <p class="wrap_content">
                                 ${incident.comment}
-                            </p> <a onclick="deleteIncident(${incident.type},${incident.id})"><i class="fas fa-trash-alt text-red "></i></a>
+                           
                             <a href="../incidents/details.html?type=${incident.type}s&id=${incident.id}" class="text-blue">view details</a>
                             
                             
