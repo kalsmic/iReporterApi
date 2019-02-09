@@ -66,6 +66,8 @@ function getIncidents(incidentType) {
                         <div class="flex-row-sp-btn"><b>Description : </b>
                             <p class="wrap_content">
                                 ${incident.comment}
+                            </p>
+
                            
                             <a href="../incidents/details.html?type=${incident.type}s&id=${incident.id}" class="text-blue">view details</a>
                             
