@@ -14,7 +14,7 @@ function displayError(dataArray) {
 let incidentType = document.getElementById("incident_type");
 let incidentTitle = document.getElementById("incident_title");
 let incidentComment = document.getElementById("comment");
-let incidentlocation = document.getElementById("set_location");
+let incidentLocation = document.getElementById("set_location");
 let locationError = document.getElementById("location-error");
 
 incidentTitle.onkeyup = function () {
@@ -54,14 +54,14 @@ incidentComment.onkeyup = function () {
 
 incidentComment.onblur = function () {
 
-    if (incidentlocation.value === "") {
+    if (incidentLocation.value === "") {
         locationError.style.display = "block";
         locationError.innerHTML = "Please pick a location from the map";
-        incidentlocation.setCustomValidity("Invalid location Coordinates.");
+        incidentLocation.setCustomValidity("Invalid location Coordinates.");
 
     } else {
         locationError.style.display = "none";
-        incidentlocation.setCustomValidity("");
+        incidentLocation.setCustomValidity("");
 
     }
 
@@ -69,7 +69,7 @@ incidentComment.onblur = function () {
 
 document.getElementById('googleMap').onclick = function () {
     locationError.style.display = "none";
-    incidentlocation.setCustomValidity("");
+    incidentLocation.setCustomValidity("");
 
 };
 

@@ -5,15 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iReporter | Details</title>
+    <script src="../static/js/main.js"></script>
+
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
           integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
           crossorigin="anonymous">
-
     <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
     <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
 
-    <script src="../static/js/main.js"></script>
+
 
 </head>
 
@@ -83,7 +84,6 @@
                             <span class="text-lblack" id="created_by">
                                 <img class="bg-blue  img-circle-small" src="../static/img/profile-pics/user1.png">User
 
-
                             </span>
                     </div>
                     <div><b>COMMENT : </b>
@@ -114,12 +114,7 @@
                     <button class="hide" id='cancelEditLocationBtn'>Cancel</button>
 
 
-                    <div class="flex-row-sp-btn">
-                        <div id="output"></div>
-
-                        <a><i
-                                class="fas fa-trash-alt text-white border-radius-pct-50 bg-red">
-                        </i></a>
+                    <div class="flex-row-sp-btn" id="delete_incident">
 
                     </div>
                 </section>
@@ -155,7 +150,6 @@
 <![endif]-->
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
 <script src="../static/js/incident_details.js"></script>
-
 
 <script src="../static/js/incident_details_map.js"></script>
 
