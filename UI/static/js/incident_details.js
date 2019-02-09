@@ -54,7 +54,6 @@ function getIncident(incidentType, incidentId) {
                 if (incident.status !== "Draft") {
                     document.getElementById('editCommentBtn').style.display = 'none';
                     editLocationBtn.style.display = 'none';
-                    editStatusBtn.style.display = 'none';
                     document.getElementById('delete_incident').style.display = 'none';
                 }
 

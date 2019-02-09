@@ -51,8 +51,8 @@ function getIncidents(incidentType) {
 
 
                 <section class="flex-col-sp-btn border-radius-30p border-round-lg">
-                        <h2>${incident.title}</h2>
-                                                    <span class="text-blue"><b><i>Date:</i> </b> ${incident.created_on}</span>
+                        <h2 class="wrap_content">${incident.title}</h2>
+                        <span class="text-blue"><b><i>Date:</i> </b> ${incident.created_on}</span>
 
                         <div class="flex-row-sp-btn">
 
@@ -63,8 +63,8 @@ function getIncidents(incidentType) {
 
                             </span>
                         </div>
-                        <div><b>Description : </b>
-                            <p>
+                        <div class="flex-row-sp-btn"><b>Description : </b>
+                            <p class="wrap_content">
                                 ${incident.comment}
                             </p> <a onclick="deleteIncident(${incident.type},${incident.id})"><i class="fas fa-trash-alt text-red "></i></a>
                             <a href="../incidents/details.html?type=${incident.type}s&id=${incident.id}" class="text-blue">view details</a>
