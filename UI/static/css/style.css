@@ -178,7 +178,7 @@ input:required:valid {
 	}
 }
 
-@media screen and (min-width:1050px) {
+@media screen and (min-width:1080px) {
 	.nav {
 		height: fit-content;
 	}
@@ -356,4 +356,9 @@ hr {
 
 .hide {
 	display: none;
+}
+
+.wrap_content {
+	word-wrap: break-word;
+	overflow-x: hidden;
 }
