@@ -6,6 +6,23 @@ if (urlParameter === "red-flags" || urlParameter === "interventions") {
 }
 
 
+let updateCommentBtn = document.getElementById('updateCommentBtn');
+let cancelEditCommentBtn = document.getElementById('cancelEditCommentBtn`');
+let editCommentBtn = document.getElementById('editCommentBtn');
+let commentError = document.getElementById('commentError');
+let commentMessage = document.getElementById('commentMessage');
+
+let UpdateStatusBtn = document.getElementById('updateStatusBtn');
+let cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
+let editStatusBtn = document.getElementById('editStatusBtn');
+let statusField = document.getElementById('statusField');
+
+let updatesLocationBtn = document.getElementById('updateLocationBtn');
+let cancelEditLocationBtn = document.getElementById('cancelEditLocationBtn');
+let editLocationBtn = document.getElementById('editLocationBtn');
+let locationError = document.getElementById('locationError');
+let locationMessage = document.getElementById('locationMessage');
+
 function getIncident(incidentType, incidentId) {
 
     let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId);
@@ -42,10 +59,17 @@ function getIncident(incidentType, incidentId) {
 
                 //Hide the edit comment button if status is not draft
                 if (incident.status !== "Draft") {
-                    document.getElementById('editCommentBtn').style.display = 'none';
-                    document.getElementById('editLocationBtn').style.display = 'none';
-                    document.getElementById('editStatusBtn').style.display = 'none';
+                    editCommentBtn.style.display = 'none';
+                    editLocationBtn.style.display = 'none';
+                    editStatusBtn.style.display = 'none';
+                    document.getElementById('delete_incident').style.display = 'none';
                 }
+
+                document.getElementById('delete_incident').innerHTML = `
+                    <button onclick="deleteIncident('${incident.id}')">
+                            <i class="fas fa-trash-alt text-white border-radius-pct-50 bg-red">
+                        </i></button>
+                `;
                 let locationCoords = incident.location.replace('(', '').replace(')', '').split(",");
                 let latitude = locationCoords[0];
                 let longitude = locationCoords[1];
@@ -93,28 +117,28 @@ function updateComment() {
         .then((response) => response.json())
         .then((data) => {
             if (data.status === 200) {
-                document.getElementById('updateCommentBtn').style.display = 'none';
-                document.getElementById('cancelEditCommentBtn').style.display = 'none';
-                document.getElementById('editCommentBtn').style.display = 'none';
+                updateCommentBtn.style.display = 'none';
+                cancelEditCommentBtn.style.display = 'none';
+                editCommentBtn.style.display = 'none';
                 newComment.innerHTML = data['data'][0].comment;
-                document.getElementById('commentMessage').style.display = 'block';
+                commentMessage.style.display = 'block';
 
-                document.getElementById('commentMessage').innerHTML = data['data'][0].success;
+                commentMessage.innerHTML = data['data'][0].success;
                 window.setTimeout(function () {
-                    document.getElementById('commentMessage').style.display = 'none';
-                    document.getElementById('editCommentBtn').style.display = 'block';
+                    commentMessage.style.display = 'none';
+                    editCommentBtn.style.display = 'block';
 
                 }, 3000);
                 //    remove original comment content from memory
                 sessionStorage.removeItem('originalContent');
 
             } else if (data.status === 400) {
-                document.getElementById('commentError').style.display = 'block';
+                commentError.style.display = 'block';
 
-                document.getElementById('commentError').innerHTML = data.error;
+                commentError.innerHTML = data.error;
                 window.setTimeout(function () {
-                    document.getElementById('commentError').style.display = 'none';
-                    document.getElementById('editCommentBtn').style.display = 'block';
+                    commentError.style.display = 'none';
+                    editCommentBtn.style.display = 'block';
                     document.getElementById('incident_comment').innerHTML = sessionStorage.getItem('originalContent');
 
                 }, 3000);
@@ -132,14 +156,14 @@ function updateComment() {
 }
 
 
-displayUpdateFields("incident_comment", "updateCommentBtn", "cancelEditCommentBtn", "editCommentBtn");
+displayUpdateFields("incident_comment", updateCommentBtn, cancelEditCommentBtn, editCommentBtn);
 
 
-function displayUpdateFields(incidentFieldId, updateButtonId, cancelButtonId, editButtonId) {
+function displayUpdateFields(incidentFieldId, updateButton, cancelButton, editButton) {
     let incidentField = document.getElementById(incidentFieldId);
-    let updateField = document.getElementById(updateButtonId);
-    let cancelEditField = document.getElementById(cancelButtonId);
-    let editField = document.getElementById(editButtonId);
+    let updateField = updateButton;
+    let cancelEditField = cancelButton;
+    let editField = editButton;
 
     editField.onclick = function () {
         sessionStorage.setItem('originalContent', incidentField.innerHTML);
@@ -173,12 +197,7 @@ function displayUpdateFields(incidentFieldId, updateButtonId, cancelButtonId, ed
 }
 
 
-document.getElementById('updateCommentBtn').onclick = updateComment;
-
-let UpdateStatusBtn = document.getElementById('updateStatusBtn');
-let cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
-let editStatusBtn = document.getElementById('editStatusBtn');
-let statusField = document.getElementById('statusField');
+updateCommentBtn.onclick = updateComment;
 
 editStatusBtn.onclick = function () {
 
@@ -312,11 +331,6 @@ function updateStatus() {
 
 UpdateStatusBtn.onclick = updateStatus;
 
-let updatesLocationBtn = document.getElementById('updateLocationBtn');
-let cancelEditLocationBtn = document.getElementById('cancelEditLocationBtn');
-let editLocationBtn = document.getElementById('editLocationBtn');
-let locationError = document.getElementById('locationError');
-let locationMessage = document.getElementById('locationMessage');
 
 function editLocation() {
 
@@ -419,3 +433,9 @@ function updateLocation() {
 }
 
 updatesLocationBtn.onclick = updateLocation;
+
+
+function deleteIncident(incidentId) {
+    alert(incidentId);
+
+}
