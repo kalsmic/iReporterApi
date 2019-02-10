@@ -169,3 +169,24 @@ def test_admin_get_a_intervention(client):
     assert (
         data["data"][0]["title"] == "leo vel fringilla. Egestas tellus rutru"
     )
+def test_get_statistics(client):
+    response = client.get(
+        "api/v2/statistics",
+        headers=admin_header,
+    )
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert (data["data"][0]["statistics"]["total"] == 9)
+    assert (data["data"][0]["statistics"]["red-flags"]["total"] == 4)
+    assert (data["data"][0]["statistics"]["red-flags"]["draft"] == 2)
+    assert (data["data"][0]["statistics"]["red-flags"]["resolved"] == 2)
+    assert (data["data"][0]["statistics"]["red-flags"]["rejected"] == 0)
+    assert (data["data"][0]["statistics"]["red-flags"]["under_investigations"] == 0)
+    assert (data["data"][0]["statistics"]["interventions"]["total"] == 5)
+    assert (data["data"][0]["statistics"]["interventions"]["draft"] == 3)
+    assert (data["data"][0]["statistics"]["interventions"]["resolved"] == 2)
+    assert (data["data"][0]["statistics"]["interventions"]["rejected"] == 0)
+    assert (data["data"][0]["statistics"]["interventions"]["under_investigations"] == 0)
+
+

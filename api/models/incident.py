@@ -129,3 +129,46 @@ class Incident:
         self.db.cursor.execute(sql)
 
         return self.db.cursor.fetchone()
+
+    def get_incidents_statistics(self):
+        sql = (
+            "SELECT "
+            "count (*) as total,"
+            "count(*) FILTER (WHERE type='red-flag') AS r_total,"
+            "count(*) FILTER (WHERE status = 'Draft' and type='red-flag') AS r_draft,"
+            "count(*) FILTER (WHERE status ='Under Investigation' and type='red-flag') as r_under_investigations, "
+            "count(*) FILTER (WHERE status ='Resolved' and type='red-flag') as r_resolved, "
+            "count(*) FILTER (WHERE status ='Rejected' and type='red-flag') as r_rejected, "
+            "count(*) FILTER (WHERE type='intervention') AS i_total, "
+            "count(*) FILTER (WHERE status = 'Draft' and type='intervention') AS i_draft, "
+            "count(*) FILTER (WHERE status ='Under Investigation' and type='intervention') as i_under_investigations, "
+            "count(*) FILTER (WHERE status ='Resolved' and type='intervention') as i_resolved, "
+            "count(*) FILTER (WHERE status ='Rejected' and type='intervention') as i_rejected "
+            "FROM public.incident_view "
+
+        )
+
+        if not is_admin_user:
+            sql += f"WHERE created_by='{get_current_identity()}'"
+
+        self.db.cursor.execute(sql + ";")
+
+        results = self.db.cursor.fetchone()
+        return {
+            "total": results['total'],
+            "red-flags": {
+                "total": results['r_total'],
+                "draft": results['r_draft'],
+                "under_investigations": results['r_under_investigations'],
+                "resolved": results['r_resolved'],
+                "rejected": results['r_rejected']
+            },
+            "interventions": {
+                "total": results['i_total'],
+                "draft": results['i_draft'],
+                "under_investigations": results['i_under_investigations'],
+                "resolved": results['i_resolved'],
+                "rejected": results['i_rejected']
+            }
+
+        }
