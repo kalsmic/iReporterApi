@@ -8,7 +8,6 @@ if (localStorage.getItem('iReporterToken')) {
 
 }
 window.setInterval(getUserInfo, 300000);
-let userSessionData;
 
 
 function getUserInfo() {
@@ -16,7 +15,7 @@ function getUserInfo() {
         method: "POST",
         headers: {
             "content-type": "application/json",
-            "Authorization": "Bearer ".concat(authorizationHeader),
+            "Authorization": authorizationHeader,
 
         },
     })
@@ -52,7 +51,6 @@ function getUserInfo() {
                     setElementDisplay(".showAdmin", "none");
 
                 }
-                return userSessionData
 
             }
 
@@ -109,5 +107,4 @@ function redirectLoggedOut() {
     window.location.replace("../index.html");
 
 }
-getUserInfo();
 

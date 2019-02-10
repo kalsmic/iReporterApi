@@ -5,7 +5,7 @@ fetch(url, {
     headers: {
         "content-type": "application/json",
 
-        "Authorization": "Bearer ".concat(authorizationHeader)
+        "Authorization": authorizationHeader
     },
 })
     .then((response) => response.json())

@@ -148,7 +148,7 @@ class Incident:
 
         )
 
-        if not is_admin_user:
+        if not is_admin_user():
             sql += f"WHERE created_by='{get_current_identity()}'"
 
         self.db.cursor.execute(sql + ";")
