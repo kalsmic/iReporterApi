@@ -28,7 +28,6 @@ function getIncidents(incidentType) {
             } else if (data.status === 200) {
                 //on success
                 let incidents = data["data"];
-                console.log("length", incidents.length);
                 let output = `
                 <h3 class="text-blue">View ${incidentType} page</h3>
                 <hr>

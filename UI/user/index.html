@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
         crossorigin="anonymous">
     <script src="../static/js/main.js"></script>
+    <script src="../static/js/statistics.js"></script>
 
 </head>
 
@@ -68,65 +69,15 @@
                             <h3 class="text-blue ">Profile page</h3>
                             <hr>
                         </span>
-                        <div class="dashboard-left border-radius-30p">
-                            <h3 class="text-red">
-                                <i class="fa fa-flag text-lred" aria-hidden="true">&nbsp;</i>
-                                Red-flags
-                            </h3>
-                            <div class="dashboard-items">
-                                <div class="dash bg-lyellow text-orange">
-                                    <div class="dash-stat bg-orange">12
-                                    </div>
-                                    <div>Draft</div>
-                                </div>
-                                <div class="dash bg-lblue text-blue">
-                                    <div class="dash-stat bg-blue">3</div>
-                                    <div> Under Investigation</div>
-                                </div>
-                                <div class="dash bg-lgreen text-green">
-                                    <div class="dash-stat bg-green">23</div>
-                                    <div>Resolved</div>
-                                </div>
-                                <div class="dash bg-pink text-red">
-                                    <div class="dash-stat bg-red">1</div>
-                                    <div>Rejected</div>
-                                </div>
-                            </div>
+                        <div class="dashboard-left border-radius-30p" id="red-flags">
+
                         </div>
 
-                        <div class="dashboard-center border-radius-30p">
-                            <h3 class="text-green">
-                                <i class="fa fa-cubes text-green" aria-hidden="true">&nbsp;</i>
-                                Interventions
-                            </h3>
+                        <div class="dashboard-center border-radius-30p" id="interventions">
 
-                            <div class="dashboard-items">
-                                <div class="dash bg-lyellow text-orange">
-                                    <div class="dash-stat bg-orange">1</div>
-                                    <div>Draft</div>
-                                </div>
-                                <div class="dash bg-lblue text-blue">
-                                    <div class="dash-stat bg-blue">7</div>
-                                    <div>Under Investigation</div>
-                                </div>
-                                <div class="dash bg-lgreen text-green">
-                                    <div class="dash-stat bg-green">26</div>
-                                    <div>Resolved</div>
-                                </div>
-                                <div class="dash bg-pink text-red">
-                                    <div class="dash-stat bg-red">1</div>
-                                    <div>Rejected</div>
-                                </div>
-                            </div>
                         </div>
-                        <div class="dashboard-right bg-lblue text-white border-radius-30p">
-                            <img src="../static/img/profile-pics/user1.png" class="img-profile" alt="profile picture">
-                            <p>USername: Kalsmic</p>
-                            <p>First Name: Arthur</p>
-                            <p>Last Name: Kalule</p>
-                            <p>Tel: +256772019937</p>
-                            <p>Email: kalulearthur@gmail.com</p>
-                          
+                        <div class="dashboard-right bg-lblue text-white border-radius-30p" id="user_dash_info">
+
                         </div>
                     </div>
                 </div>
