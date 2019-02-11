@@ -25,14 +25,15 @@ class Incident:
         new_incident_id = last_insert_id.get("id")
         return self.get_incident_by_id(new_incident_id)
 
-    def insert_images(self, incident_id, images):
-        for image in images:
-            sql = (
-                "INSERT INTO public.incident_images ("
-                "incident_id,image_url) VALUES ("
-                f"'{incident_id}','{image}');"
-            )
-            self.db.cursor.execute(sql)
+    def insert_images(self, incident_id, image):
+        # for image in images:
+        sql = (
+            "INSERT INTO public.incident_images ("
+            "incident_id,image_url) VALUES ("
+            f"'{incident_id}','{image}') returning incident_id;"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()['incident_id']
 
     def insert_videos(self, incident_id, videos):
         for video in videos:

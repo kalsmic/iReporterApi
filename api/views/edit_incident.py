@@ -235,3 +235,4 @@ def edit_incident_status(incidents, incident_id):
         )
 
     return response
+

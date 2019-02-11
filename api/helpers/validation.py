@@ -12,6 +12,7 @@ from api.helpers.responses import (
     wrong_name,
 )
 
+ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def request_data_required(func):
     @wraps(func)
@@ -269,3 +270,8 @@ def parse_incident_type(func):
         abort(404)
 
     return decorated_view
+
+def allowed_image_files(filename,):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS
+
