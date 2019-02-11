@@ -159,30 +159,6 @@ def validate_sentence(sentence, min_len=0, max_len=0):
     return error
 
 
-media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
-
-
-def is_validate_media_type(collection, media_type):
-    for media in collection:
-        if not media.endswith(media_format.get(media_type)[0]):
-            return False
-    return True
-
-
-def validate_media(media_collection, media_type):
-    media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
-    error = None
-    if not isinstance(media_collection, list):
-        error = f"Please provide an empty list of {media_type} if none"
-    elif not is_validate_media_type(media_collection, media_type):
-        error = (
-            f"Only {media_format.get(media_type)[1]} {media_type} are "
-            "supported"
-        )
-
-    return error
-
-
 def validate_location(location):
     error = None
     if not isinstance(location, list) or not len(location) == 2:
