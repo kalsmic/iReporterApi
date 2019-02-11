@@ -74,9 +74,9 @@ def new_red_flag():
 @create_incident_bp.route(
     "/<incidents>/<incident_id>/addImage", methods=["PATCH"]
 )
-@token_required
+#@token_required
 @parse_incident_type
-@non_admin
+#@non_admin
 @is_valid_uuid
 def new_image(incidents, incident_id):
 
