@@ -7,6 +7,7 @@ from api.helpers.auth_token import (
     token_required,
     non_admin,
     get_current_identity,
+    non_admin,
 )
 
 create_incident_bp = Blueprint("new_incident", __name__, url_prefix="/api/v2")
@@ -16,7 +17,7 @@ from api.helpers.validation import (
     parse_incident_type,
     is_valid_uuid,
     allowed_image_files,
-    ALLOWED_IMAGE_EXTENSIONS
+    ALLOWED_IMAGE_EXTENSIONS,
 )
 
 incident_obj = Incident()
@@ -70,21 +71,26 @@ def new_red_flag():
     return response
 
 
-@create_incident_bp.route("/<incidents>/<incident_id>/addImage", methods=["PATCH"])
+@create_incident_bp.route(
+    "/<incidents>/<incident_id>/addImage", methods=["PATCH"]
+)
 @token_required
 @parse_incident_type
+@non_admin
 @is_valid_uuid
 def new_image(incidents, incident_id):
+
+    response = None
     if "image" in request.files:
-        image = request.files.get('image')
+        image = request.files.get("image")
 
         if image and allowed_image_files(image.filename):
             filename = secure_filename(image.filename)
 
-            extension = filename.rsplit('.', 1)[1].lower()
+            extension = filename.rsplit(".", 1)[1].lower()
 
             imageName = str(uuid4()) + "." + str(extension)
-            image.save(path.join('./uploads/images/', imageName))
+            image.save(path.join("./uploads/images/", imageName))
             image_id = incident_obj.insert_images(incident_id, str(imageName))
             return (
                 jsonify(
@@ -93,34 +99,32 @@ def new_image(incidents, incident_id):
                         "data": [
                             {
                                 "id": image_id,
-                                "success": "Image added to " + incidents[:-1] + " record"
+                                "success": "Image added to "
+                                + incidents[:-1]
+                                + " record",
                             }
                         ],
                     }
                 ),
                 200,
+            )
+        else:
 
+            return (
+                jsonify(
+                    {
+                        "status": 400,
+                        "error": "Only Image files of type {'png', 'jpeg', 'jpg', 'gif'} are supported",
+                    }
+                ),
+                400,
             )
 
-        return (
-            jsonify(
-                {
-                    "status": 400,
-                    "error": "Only Image files of type {'png', 'jpeg', 'jpg', 'gif'} are supported"
+    else:
 
-                }
-            ),
+        response = (
+            jsonify({"status": 400, "error": "Please provide an image file"}),
             400,
-
         )
 
-    return (
-        jsonify(
-            {
-                "status": 400,
-                "error": "Please provide an image file"
-            }
-        ),
-        400,
-
-    )
+    return response
