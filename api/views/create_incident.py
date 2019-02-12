@@ -1,5 +1,5 @@
 from os import path
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, request
 from uuid import uuid4
 from werkzeug.utils import secure_filename
 
@@ -90,7 +90,7 @@ def new_image(incidents, incident_id):
             extension = filename.rsplit(".", 1)[1].lower()
 
             imageName = str(uuid4()) + "." + str(extension)
-            image.save(path.join("./uploads/images/", imageName))
+            image.save(os.path.join('uploads/images/', imageName))
             image_id = incident_obj.insert_images(incident_id, str(imageName))
             return (
                 jsonify(
@@ -128,3 +128,4 @@ def new_image(incidents, incident_id):
         )
 
     return response
+
