@@ -1,11 +1,11 @@
 import os
-from flask import Blueprint, jsonify, request, send_from_directory
 from uuid import uuid4
+
+from flask import Blueprint, jsonify, request, send_from_directory
 from werkzeug.utils import secure_filename
 
 from api.helpers.auth_token import (
     token_required,
-    non_admin,
     get_current_identity,
     non_admin,
 )
@@ -17,7 +17,6 @@ from api.helpers.validation import (
     parse_incident_type,
     is_valid_uuid,
     allowed_image_files,
-    ALLOWED_IMAGE_EXTENSIONS,
 )
 
 incident_obj = Incident()
@@ -74,12 +73,11 @@ def new_red_flag():
 @create_incident_bp.route(
     "/<incidents>/<incident_id>/addImage", methods=["PATCH"]
 )
-#@token_required
+@token_required
 @parse_incident_type
-#@non_admin
+@non_admin
 @is_valid_uuid
 def new_image(incidents, incident_id):
-
     response = None
     if "image" in request.files:
         image = request.files.get("image")
@@ -90,7 +88,7 @@ def new_image(incidents, incident_id):
             extension = filename.rsplit(".", 1)[1].lower()
 
             imageName = str(uuid4()) + "." + str(extension)
-            imageName = str(imageName).replace("-","_")
+            imageName = str(imageName).replace("-", "_")
             image.save(os.path.join('uploads/images/', imageName))
             image_id = incident_obj.insert_images(incident_id, str(imageName))
             return (
@@ -102,8 +100,8 @@ def new_image(incidents, incident_id):
                                 "id": image_id,
                                 "imageName": imageName,
                                 "success": "Image added to "
-                                + incidents[:-1]
-                                + " record",
+                                           + incidents[:-1]
+                                           + " record",
                             }
                         ],
                     }
@@ -131,6 +129,7 @@ def new_image(incidents, incident_id):
 
     return response
 
-@create_incident_bp.route('/images/<filename>')
-def uploaded_file(filename):
-    return send_from_directory('../uploads/images/',filename)
+
+@create_incident_bp.route('/incidents/images/<imageFileName>')
+def uploaded_file(imageFileName):
+    return send_from_directory('../uploads/images/', imageFileName), 200
