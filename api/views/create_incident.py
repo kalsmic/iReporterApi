@@ -1,14 +1,23 @@
-from flask import Blueprint, jsonify, request
+import os
+from uuid import uuid4
+
+from flask import Blueprint, jsonify, request, send_from_directory
+from werkzeug.utils import secure_filename
 
 from api.helpers.auth_token import (
     token_required,
-    non_admin,
     get_current_identity,
+    non_admin,
 )
 
 create_incident_bp = Blueprint("new_incident", __name__, url_prefix="/api/v2")
 from api.models.incident import Incident
-from api.helpers.validation import validate_new_incident
+from api.helpers.validation import (
+    validate_new_incident,
+    parse_incident_type,
+    is_valid_uuid,
+    allowed_image_files,
+)
 
 incident_obj = Incident()
 
@@ -59,3 +68,70 @@ def new_red_flag():
         )
 
     return response
+
+
+@create_incident_bp.route(
+    "/<incidents>/<incident_id>/addImage", methods=["PATCH"]
+)
+@token_required
+@parse_incident_type
+@non_admin
+@is_valid_uuid
+def new_image(incidents, incident_id):
+    response = None
+    if "image" in request.files:
+        image = request.files.get("image")
+
+        if image and allowed_image_files(image.filename):
+            filename = secure_filename(image.filename)
+
+            extension = filename.rsplit(".", 1)[1].lower()
+
+            imageName = str(uuid4()) + "." + str(extension)
+            imageName = str(imageName).replace("-", "_")
+            image.save(os.path.join('uploads/images/', imageName))
+            image_id = incident_obj.insert_images(incident_id, str(imageName))
+            return (
+                jsonify(
+                    {
+                        "status": 200,
+                        "data": [
+                            {
+                                "id": image_id,
+                                "imageName": imageName,
+                                "success": "Image added to "
+                                           + incidents[:-1]
+                                           + " record",
+                            }
+                        ],
+                    }
+                ),
+                200,
+            )
+        else:
+
+            return (
+                jsonify(
+                    {
+                        "status": 400,
+                        "error": "Only Image files of type {'png', 'jpeg', 'jpg', 'gif'} are supported",
+                    }
+                ),
+                400,
+            )
+
+    else:
+
+        response = (
+            jsonify({"status": 400, "error": "Please provide an image file"}),
+            400,
+        )
+
+    return response
+
+
+@create_incident_bp.route('/incidents/images/<imageFileName>')
+@token_required
+def uploaded_file(imageFileName):
+    return send_from_directory('../uploads/images/', imageFileName), 200
+

@@ -67,6 +67,11 @@ function getIncident(incidentType, incidentId) {
                 let longitude = locationCoords[1];
                 displayMap([latitude, longitude]);
 
+                let imagesList = incident.images;
+                for (let i in imagesList) {
+                    retrieveImage(imagesList[i]);
+                }
+
             }
             if (data.status === 400 || data.status === 404) {
                 let output = `
@@ -443,19 +448,16 @@ function deleteIncident(incidentId) {
     })
         .then((response) => response.json())
         .then((data) => {
-            if(data.status == 200){
+            if (data.status == 200) {
                 document.getElementById('incident_type').innerHTML = data["data"][0].success;
 
                 alert(data["data"][0].success);
                 window.location.replace("../user/incidents.html?type=".concat(incidentType));
-            }
-            else if(data.status == 400 || data.status == 404) {
+            } else if (data.status == 400 || data.status == 404) {
                 alert(data.error)
-            }
-            else if(data.status == 401) {
+            } else if (data.status == 401) {
                 alert(data.error)
-            }
-            else if(data.status == 403) {
+            } else if (data.status == 403) {
                 alert(data.error)
             }
 
