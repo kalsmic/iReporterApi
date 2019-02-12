@@ -69,9 +69,7 @@ function getIncident(incidentType, incidentId) {
 
                 let imagesList = incident.images;
                 for (let i in imagesList) {
-                    let node = document.createElement("img");
-                    node.src = "https://ireporterapiv3.herokuapp.com/api/v2/incidents/images/" + imagesList[i];
-                    document.getElementById("serve_images").appendChild(node);
+                    retrieveImage(imagesList[i]);
                 }
 
             }
