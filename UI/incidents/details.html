@@ -69,7 +69,7 @@
                 </ul>
             </div>
 
-            <div class="page-content border-round-lg" id="incidents_output">
+            <div class="page-content border-round-lg hide" id="incidents_output">
                 <h3 class="text-blue wrap_content" id="incident_type">View Incident Details page</h3>
 
 
@@ -120,14 +120,16 @@
                     <div class="flex-row-sp-btn" id="serve_images">
 
                     </div>
-                    <div class="flex-row-sp-btn hideAdmin">
+                    <div class="flex-row-sp-btn hideAdmin" id="add_image">
+                        <span class="text-blue">Add image</span>
 
                         <form enctype="multipart/form-data" action="#" onsubmit="uploadImage(); return false">
-
                             <input type='file' id="image"  accept="image/*" onchange="previewImage(event)" />
-                            <br><img id="myImg" src="#" alt="" height=200 width=100>
+
+                            <br/><img id="myImg" src="#" alt="" height=200 width=100>
+
                             <img src="../static/img/progress.svg"  id="progres_img" class="hide">
-                            <button  >upload</button>
+                            <button type="submit">upload Image</button>
                         </form>
                     </div>
 

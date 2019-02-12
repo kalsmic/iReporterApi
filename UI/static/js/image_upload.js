@@ -4,6 +4,12 @@ var fileField = document.querySelector("input[type='file']");
 var previewImage = function (event) {
     var output = document.getElementById('myImg');
     output.src = URL.createObjectURL(event.target.files[0]);
+
+};
+let clearPreview = function(){
+    document.getElementById("myImg").src = '';
+    document.getElementById("image").value = '';
+
 };
 
 function uploadImage() {
@@ -24,8 +30,7 @@ function uploadImage() {
         .then(response => {
             if (response.status == 200) {
                 uploadProgress.style.display = 'none';
-                document.getElementById("myImg").src = '';
-                document.getElementById("image").value = '';
+                clearPreview();
                 retrieveImage(response.data[0].imageName)
             }
         })

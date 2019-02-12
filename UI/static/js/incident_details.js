@@ -39,6 +39,7 @@ function getIncident(incidentType, incidentId) {
             } else if (data.status === 200) {
                 //on success
                 let incident = data["data"][0];
+                document.getElementById('incidents_output').style.display = 'block';
                 document.getElementById("created_on").innerHTML = `
                     <b><i>Date:</i> </b> ${incident.created_on}`;
                 document.getElementById("incident_title").innerHTML = incident.title;
@@ -55,6 +56,7 @@ function getIncident(incidentType, incidentId) {
                     document.getElementById('editCommentBtn').style.display = 'none';
                     editLocationBtn.style.display = 'none';
                     document.getElementById('delete_incident').style.display = 'none';
+                    document.getElementById('add_image').style.display = 'none';
                 }
 
                 document.getElementById('delete_incident').innerHTML = `
@@ -84,6 +86,8 @@ function getIncident(incidentType, incidentId) {
                           
                     </section>
                 `;
+                document.getElementById("incident_status").style.display = 'block';
+
                 document.getElementById('incidents_output').innerHTML = output;
 
 
