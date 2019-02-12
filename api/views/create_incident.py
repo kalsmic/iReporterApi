@@ -131,5 +131,7 @@ def new_image(incidents, incident_id):
 
 
 @create_incident_bp.route('/incidents/images/<imageFileName>')
+@token_required
 def uploaded_file(imageFileName):
     return send_from_directory('../uploads/images/', imageFileName), 200
+

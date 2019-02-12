@@ -117,13 +117,17 @@
                     <div class="flex-row-sp-btn hideAdmin" id="delete_incident">
 
                     </div>
+                    <div class="flex-row-sp-btn" id="serve_images">
+
+                    </div>
                     <div class="flex-row-sp-btn hideAdmin">
 
-                        <form enctype="multipart/form-data" action="#">
+                        <form enctype="multipart/form-data" action="#" onsubmit="uploadImage(); return false">
 
                             <input type='file' id="image"  accept="image/*" onchange="previewImage(event)" />
-                            <br><img id="myImg" src="#" alt="your image" height=200 width=100>
-                            <button  onclick="uploadImage()">upload</button>
+                            <br><img id="myImg" src="#" alt="" height=200 width=100>
+                            <img src="../static/img/progress.svg"  id="progres_img" class="hide">
+                            <button  >upload</button>
                         </form>
                     </div>
 
