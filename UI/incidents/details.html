@@ -124,12 +124,32 @@
                         <span class="text-blue">Add image</span>
 
                         <form enctype="multipart/form-data" action="#" onsubmit="uploadImage(); return false">
-                            <input type='file' id="image"  accept="image/*" onchange="previewImage(event)" />
+                            <input type='file' id="image"  accept="image/*" />
 
                             <br/><img id="myImg" src="#" alt="" height=200 width=100>
                             <span id="image_error" class="error">s</span>
-                            <img src="../static/img/progress.svg"  id="progres_img" class="hide">
+                            <img src="../static/img/progress.svg"  id="progress_img" class="hide">
                             <button type="submit" id="upload_image">upload Image</button>
+                        </form>
+                    </div>
+
+                    <div class="flex-row-sp-btn" id="serve_videos">
+
+
+                    </div>
+
+                    <div class="flex-row-sp-btn hideAdmin" id="add_video">
+                        <span class="text-blue">Add Video</span>
+
+                        <form enctype="multipart/form-data" action="#" onsubmit="uploadVideo(); return false">
+                            <input type='file' id="video"  accept="video/*" />
+
+                            <br/>
+                            <video width="320" height="240" id="myVideo" class="hide" controls>
+                            </video>
+                            <span id="video_error" class="error">s</span>
+                            <img src="../static/img/progress.svg"  id="progress_video" class="hide">
+                            <button type="submit" id="upload_video">upload Video</button>
                         </form>
                     </div>
 
@@ -168,7 +188,7 @@
 <script src="../static/js/incident_details.js"></script>
 
 <script src="../static/js/incident_details_map.js"></script>
-<script src="../static/js/image_upload.js"></script>
+<script src="../static/js/media_upload.js"></script>
 
 
 </html>
