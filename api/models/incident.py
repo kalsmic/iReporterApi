@@ -40,7 +40,7 @@ class Incident:
             sql = (
                 "INSERT INTO public.incident_videos ("
                 "incident_id,video_url) VALUES ("
-                f"'{incident_id}','{video}');"
+                f"'{incident_id}','{video}') returning incident_id;"
             )
             self.db.cursor.execute(sql)
 
