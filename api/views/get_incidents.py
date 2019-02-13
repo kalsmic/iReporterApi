@@ -39,7 +39,7 @@ def get_a_red_flag(incidents, incident_id):
                 {
                     "status": 404,
                     "error": inc_type
-                    + " record with specified id does not exist",
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -48,13 +48,9 @@ def get_a_red_flag(incidents, incident_id):
     return response
 
 
-
-
-
 @get_inc_bp.route("/statistics", methods=["GET"])
 @token_required
 def get_statistics():
-
     results = incident_obj.get_incidents_statistics()
 
-    return jsonify({"status": 200, "data": [{"statistics":results}]}), 200
+    return jsonify({"status": 200, "data": [{"statistics": results}]}), 200

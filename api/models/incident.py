@@ -35,14 +35,14 @@ class Incident:
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()['incident_id']
 
-    def insert_videos(self, incident_id, videos):
-        for video in videos:
-            sql = (
-                "INSERT INTO public.incident_videos ("
-                "incident_id,video_url) VALUES ("
-                f"'{incident_id}','{video}');"
-            )
-            self.db.cursor.execute(sql)
+    def insert_videos(self, incident_id, video):
+        sql = (
+            "INSERT INTO public.incident_videos ("
+            "incident_id,video_url) VALUES ("
+            f"'{incident_id}','{video}') returning incident_id;"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()['incident_id']
 
     def get_all_incident_records(self, inc_type):
         if is_admin_user():  # if user is admin

@@ -57,6 +57,7 @@ function getIncident(incidentType, incidentId) {
                     editLocationBtn.style.display = 'none';
                     document.getElementById('delete_incident').style.display = 'none';
                     document.getElementById('add_image').style.display = 'none';
+                    document.getElementById('add_video').style.display = 'none';
                 }
 
                 document.getElementById('delete_incident').innerHTML = `
@@ -74,6 +75,11 @@ function getIncident(incidentType, incidentId) {
                     retrieveImage(imagesList[i]);
                 }
 
+
+                let videosList = incident.videos;
+                for (let i in videosList) {
+                    retrieveVideo(videosList[i]);
+                }
             }
             if (data.status === 400 || data.status === 404) {
                 let output = `

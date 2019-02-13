@@ -17,6 +17,7 @@ from api.helpers.validation import (
     parse_incident_type,
     is_valid_uuid,
     allowed_image_files,
+    allowed_video_files,
 )
 
 incident_obj = Incident()
@@ -78,7 +79,6 @@ def new_red_flag():
 @non_admin
 @is_valid_uuid
 def new_image(incidents, incident_id):
-    response = None
     if "image" in request.files:
         image = request.files.get("image")
 
@@ -122,12 +122,10 @@ def new_image(incidents, incident_id):
 
     else:
 
-        response = (
+        return (
             jsonify({"status": 400, "error": "Please provide an image file"}),
             400,
         )
-
-    return response
 
 
 @create_incident_bp.route('/incidents/images/<imageFileName>')
@@ -135,3 +133,65 @@ def new_image(incidents, incident_id):
 def uploaded_file(imageFileName):
     return send_from_directory('../uploads/images/', imageFileName), 200
 
+
+@create_incident_bp.route(
+    "/<incidents>/<incident_id>/addVideo", methods=["PATCH"]
+)
+@token_required
+@parse_incident_type
+@non_admin
+@is_valid_uuid
+def new_video(incidents, incident_id):
+    if "video" in request.files:
+        video = request.files.get("video")
+
+        if video and allowed_video_files(video.filename):
+            filename = secure_filename(video.filename)
+
+            extension = filename.rsplit(".", 1)[1].lower()
+
+            videoName = str(uuid4()) + "." + str(extension)
+            videoName = str(videoName).replace("-", "_")
+            video.save(os.path.join('uploads/videos/', videoName))
+            video_id = incident_obj.insert_videos(incident_id, str(videoName))
+            return (
+                jsonify(
+                    {
+                        "status": 200,
+                        "data": [
+                            {
+                                "id": video_id,
+                                "videoName": videoName,
+                                "success": "Video added to "
+                                           + incidents[:-1]
+                                           + " record",
+                            }
+                        ],
+                    }
+                ),
+                200,
+            )
+        else:
+
+            return (
+                jsonify(
+                    {
+                        "status": 400,
+                        "error": "Only video files of type {'mp4', '3gp', 'mpeg', 'mov'} are supported",
+                    }
+                ),
+                400,
+            )
+
+    else:
+
+        return (
+            jsonify({"status": 400, "error": "Please provide a video file"}),
+            400,
+        )
+
+
+@create_incident_bp.route('/incidents/videos/<videoFileName>')
+@token_required
+def uploaded__video(videoFileName):
+    return send_from_directory('../uploads/videos/', videoFileName), 200
