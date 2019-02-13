@@ -79,7 +79,6 @@ def new_red_flag():
 @non_admin
 @is_valid_uuid
 def new_image(incidents, incident_id):
-    response = None
     if "image" in request.files:
         image = request.files.get("image")
 
@@ -123,12 +122,10 @@ def new_image(incidents, incident_id):
 
     else:
 
-        response = (
+        return (
             jsonify({"status": 400, "error": "Please provide an image file"}),
             400,
         )
-
-    return response
 
 
 @create_incident_bp.route('/incidents/images/<imageFileName>')
@@ -145,7 +142,6 @@ def uploaded_file(imageFileName):
 @non_admin
 @is_valid_uuid
 def new_video(incidents, incident_id):
-
     if "video" in request.files:
         video = request.files.get("video")
 
@@ -195,3 +191,7 @@ def new_video(incidents, incident_id):
         )
 
 
+@create_incident_bp.route('/incidents/videos/<videoFileName>')
+@token_required
+def uploaded__video(videoFileName):
+    return send_from_directory('../uploads/videos/', videoFileName), 200
