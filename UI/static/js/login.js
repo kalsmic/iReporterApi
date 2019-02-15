@@ -34,7 +34,7 @@ function login () {
                 localStorage.setItem("iReporterToken", data["data"][0].token);
 
                 window.setTimeout(function () {
-                    window.location.replace("./user/index.html");
+                    window.location.replace("./incidents/index.html");
                 }, 1000);
 
             }
