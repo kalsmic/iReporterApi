@@ -111,26 +111,14 @@ function createIncident() {
                 //on success
                 let newRecord = data["data"][0][incidentType.value];
                 let successMsg = data["data"][0]["success"];
-                let newRecordDetails = `
-                       <h3 class="text-green">Successfully ${successMsg} !</h3>
+                document.getElementById('success_msg').style.display = "block";
+                document.getElementById('success_msg').innerHTML = `Successfully ${successMsg} !`;
+                window.setTimeout(function () {
+                    window.location.replace(`./details.html?type=${newRecord.type}s&id=${newRecord.id}`);
+                }, 1000);
 
-                    <hr>
-                    <section class="flex-col-sp-btn border-radius-30p border-round-lg">
 
-                        <h4>${newRecord.title}</h4>
-                        <div><b>Description : </b>
-                           ${newRecord.comment}
-                        </div>
-                     
-                        <div class="flex-row-sp-btn">
-                            <p class="text-blue"><b><i>Created On:</i> </b> ${newRecord.created_on}</p>
-                            status: <span class="text-blue">${newRecord.status}</span>
-                        </div>
-                    </section>
 
-                `;
-
-                document.getElementById('create_record').innerHTML = newRecordDetails;
 
             }
 

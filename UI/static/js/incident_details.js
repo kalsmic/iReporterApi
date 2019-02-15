@@ -462,7 +462,7 @@ function deleteIncident(incidentId) {
                 document.getElementById('incident_type').innerHTML = data["data"][0].success;
 
                 alert(data["data"][0].success);
-                window.location.replace("../user/incidents.html?type=".concat(incidentType));
+                window.location.replace("../incidents/records.html?type=".concat(incidentType));
             } else if (data.status == 400 || data.status == 404) {
                 alert(data.error)
             } else if (data.status == 401) {
