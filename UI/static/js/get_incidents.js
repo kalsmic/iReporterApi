@@ -32,7 +32,7 @@ function getIncidents(incidentType) {
                 <h3 class="text-blue">View ${incidentType} page</h3>
                 <hr>
                `;
-                if (incidents.length == 0) {
+                if (incidents.length === 0) {
                     output += `
             
                 
