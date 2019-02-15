@@ -158,7 +158,7 @@ function retrieveVideo(videoName) {
             method: 'GET',
             headers: {
                 "Authorization": authorizationHeader,
-            }, retrieveImage
+            },
         }
     ).then(response => response.blob())
         .then(video => {

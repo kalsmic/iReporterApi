@@ -23,7 +23,7 @@ function displayMap(geoCoordinates) {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    let marker = new L.marker(geoCoordinates).addTo(map);
+    let marker = new L.Marker(geoCoordinates).addTo(map);
 
 
     function onMapClick(e) {
@@ -43,21 +43,4 @@ function displayMap(geoCoordinates) {
 
 
 }
-
-L.TiltHandler = L.Handler.extend({
-    addHooks: function () {
-        L.DomEvent.on(window, 'deviceorientation', this._tilt, this);
-    },
-
-    removeHooks: function () {
-        L.DomEvent.off(window, 'deviceorientation', this._tilt, this);
-    },
-
-    _tilt: function (ev) {
-        this._map.panBy(L.point(ev.gamma, ev.beta));
-    }
-});
-
-L.Map.addInitHook('addHandler', 'tilt', L.TiltHandler);
-
 
