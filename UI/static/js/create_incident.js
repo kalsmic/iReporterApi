@@ -10,12 +10,11 @@ function displayError(dataArray) {
     }
 }
 
-let authorizationHeader = "Bearer ".concat(localStorage.getItem("token"));
 
 let incidentType = document.getElementById("incident_type");
 let incidentTitle = document.getElementById("incident_title");
 let incidentComment = document.getElementById("comment");
-let incidentlocation = document.getElementById("set_location");
+let incidentLocation = document.getElementById("set_location");
 let locationError = document.getElementById("location-error");
 
 incidentTitle.onkeyup = function () {
@@ -55,14 +54,14 @@ incidentComment.onkeyup = function () {
 
 incidentComment.onblur = function () {
 
-    if (incidentlocation.value === "") {
+    if (incidentLocation.value === "") {
         locationError.style.display = "block";
         locationError.innerHTML = "Please pick a location from the map";
-        incidentlocation.setCustomValidity("Invalid location Coordinates.");
+        incidentLocation.setCustomValidity("Invalid location Coordinates.");
 
     } else {
         locationError.style.display = "none";
-        incidentlocation.setCustomValidity("");
+        incidentLocation.setCustomValidity("");
 
     }
 
@@ -70,7 +69,7 @@ incidentComment.onblur = function () {
 
 document.getElementById('googleMap').onclick = function () {
     locationError.style.display = "none";
-    incidentlocation.setCustomValidity("");
+    incidentLocation.setCustomValidity("");
 
 };
 
@@ -112,26 +111,14 @@ function createIncident() {
                 //on success
                 let newRecord = data["data"][0][incidentType.value];
                 let successMsg = data["data"][0]["success"];
-                let newRecordDetails = `
-                       <h3 class="text-green">Successfully ${successMsg} !</h3>
+                document.getElementById('success_msg').style.display = "block";
+                document.getElementById('success_msg').innerHTML = `Successfully ${successMsg} !`;
+                window.setTimeout(function () {
+                    window.location.replace(`./details.html?type=${newRecord.type}s&id=${newRecord.id}`);
+                }, 1000);
 
-                    <hr>
-                    <section class="flex-col-sp-btn border-radius-30p border-round-lg">
 
-                        <h4>${newRecord.title}</h4>
-                        <div><b>Description : </b>
-                           ${newRecord.comment}
-                        </div>
-                     
-                        <div class="flex-row-sp-btn">
-                            <p class="text-blue"><b><i>Created On:</i> </b> ${newRecord.created_on}</p>
-                            status: <span class="text-blue">${newRecord.status}</span>
-                        </div>
-                    </section>
 
-                `;
-
-                document.getElementById('create_record').innerHTML = newRecordDetails;
 
             }
 
