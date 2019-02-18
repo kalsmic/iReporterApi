@@ -70,7 +70,8 @@ class User:
     def get_user_details(self, user_id):
         user_sql = (
             "SELECT user_name as username, first_name as firstname, "
-            " last_name as lastname, is_admin FROM users "
+            " last_name as lastname, other_names as othernames,"
+            "email, phone_number, is_admin FROM users "
             f"WHERE id='{user_id}';"
         )
         self.db.cursor.execute(user_sql)
@@ -105,3 +106,21 @@ class User:
             f"VALUES('{token}', '{user_id}');"
         )
         self.db.cursor.execute(sql)
+
+    def get_no_of_users(self):
+        sql = (
+            "SELECT count(*) as users FROM users "
+            "WHERE user_name != 'admin';"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()
+
+    def get_users(self):
+        sql = (
+            "SELECT first_name, last_name, other_names, "
+            "email, phone_number, user_name, "
+            "registered_on FROM users "
+            "WHERE user_name != 'admin';"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchall()

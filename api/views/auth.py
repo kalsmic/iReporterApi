@@ -4,7 +4,8 @@ from api.helpers.auth_token import (
     encode_token,
     token_required,
     blacklist_token,
-    get_current_identity
+    get_current_identity,
+    admin_required,
 )
 from api.helpers.validation import validate_new_user, sign_up_data_required
 from api.models.user import User
@@ -95,7 +96,6 @@ def login():
         user_details = user_obj.is_valid_credentials(user_name, user_password)
         if user_details:
 
-
             response = (
                 jsonify(
                     {
@@ -133,7 +133,6 @@ def login():
 @users_bp.route("/auth/logout", methods=["POST"])
 @token_required
 def logout():
-
     blacklist_token()
 
     return (
@@ -144,15 +143,27 @@ def logout():
     )
 
 
-
 @users_bp.route("/auth/secure", methods=["POST"])
 @token_required
 def is_logged_in():
     user_id = get_current_identity()
-    user_details = user_obj.get_user_details(user_id);
+    user_details = user_obj.get_user_details(user_id)
     return (
         jsonify(
             {"data": [{"user": user_details}], "status": 200}
+        ),
+        200,
+    )
+
+
+@users_bp.route("/users", methods=["GET"])
+@token_required
+@admin_required
+def get_users():
+    users_list = user_obj.get_users()
+    return (
+        jsonify(
+            {"data": [{"users": users_list}], "status": 200}
         ),
         200,
     )
