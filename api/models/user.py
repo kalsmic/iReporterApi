@@ -70,7 +70,8 @@ class User:
     def get_user_details(self, user_id):
         user_sql = (
             "SELECT user_name as username, first_name as firstname, "
-            " last_name as lastname, is_admin FROM users "
+            " last_name as lastname, other_names as othernames,"
+            "email, phone_number, is_admin FROM users "
             f"WHERE id='{user_id}';"
         )
         self.db.cursor.execute(user_sql)
