@@ -74,7 +74,7 @@ let clearVideoPreview = function () {
 
 
 function uploadImage() {
-    imageFormData.append('image', fileField.files[0]);
+    imageFormData.append('image', imageFileField.files[0]);
 
     let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(params.get('type'), "/", params.get('id'), '/addImage');
 
