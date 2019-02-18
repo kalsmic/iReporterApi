@@ -96,7 +96,6 @@ def login():
         user_details = user_obj.is_valid_credentials(user_name, user_password)
         if user_details:
 
-
             response = (
                 jsonify(
                     {
@@ -134,7 +133,6 @@ def login():
 @users_bp.route("/auth/logout", methods=["POST"])
 @token_required
 def logout():
-
     blacklist_token()
 
     return (
@@ -143,7 +141,6 @@ def logout():
         ),
         200,
     )
-
 
 
 @users_bp.route("/auth/secure", methods=["POST"])

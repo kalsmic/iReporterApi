@@ -37,5 +37,5 @@ def test_get_users_with_admin_token(client):
     assert response.status_code == 200
     data = json.loads(response.data.decode())
     assert data["status"] == 200
-    assert len(data["data"][0]["users"]) == 3
-    assert data["data"][0]["users"][0]["user_name"] == "admin"
+    assert len(data["data"][0]["users"]) == 2
+    assert data["data"][0]["users"][0]["user_name"] == "user1"
