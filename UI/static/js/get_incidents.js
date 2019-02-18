@@ -6,9 +6,14 @@ if (urlParameter === 'red-flags' || urlParameter === 'interventions') {
 }
 
 
-function getIncidents(incidentType) {
+function getIncidents(incidentType, status = "") {
 
     let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType);
+    let incidentStatus = params.get('status');
+    if (params.get('status')) {
+        console.log('status', incidentStatus);
+        url += "?status=" + incidentStatus;
+    }
 
     fetch(url, {
         method: "GET",
@@ -32,15 +37,26 @@ function getIncidents(incidentType) {
                 <h3 class="text-blue">View ${incidentType} page</h3>
                 <hr>
                `;
+
                 if (incidents.length === 0) {
-                    output += `
-            
-                
-                <section class="flex-col-sp-btn border-radius-30p border-round-lg">
-                        <h2>No  ${incidentType} records are available !</h2>
-                      
-                </section>
-               `
+                    if (incidentStatus) {
+                        output += `
+                            
+                            <section class="flex-col-sp-btn border-radius-30p border-round-lg">
+                                    <h2>No  ${incidentType} records are ${incidentStatus.replace("_", " ")} !</h2>
+                                  
+                            </section>
+                        `;
+                    } else {
+                        output += `
+                            
+                            <section class="flex-col-sp-btn border-radius-30p border-round-lg">
+                                    <h2>No  ${incidentType} records are available !</h2>
+                                  
+                            </section>
+                            
+                       `;
+                    }
 
                 }
                 incidents.forEach(function (incident) {
@@ -51,7 +67,7 @@ function getIncidents(incidentType) {
 
                 <section class="flex-col-sp-btn border-radius-30p border-round-lg">
                         <h2 class="wrap_content">${incident.title}</h2>
-                        <span class="text-blue"><b><i>Date:</i> </b> ${incident.created_on}</span>
+                        <span class="text-blue"><b><i>Date:</i> </b> ${incident.created_on.substring(0, 17)}</span>
 
                         <div class="flex-row-sp-btn">
 
