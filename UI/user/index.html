@@ -1,0 +1,211 @@
+<!-- users page -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iReporter | Users</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+          integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP"
+          crossorigin="anonymous">
+    <script src="../static/js/main.js"></script>
+
+</head>
+
+<body onload="getUserInfo()">
+<div class="wrapper">
+    <header class="bg-blue">
+        <div class="logo">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
+        </div>
+    </header>
+    <div class="main-page">
+        <div class="page-content-wrapper">
+            <div class="nav border-round-lg">
+                <h3 class="text-blue">Welcome <b id="sessionUserName">User</b></h3>
+                <hr>
+
+                <ul class="menu border-radius-30p">
+                    <li class="menu_item">
+                        <a href="../incidents/index.html" class="menu_link active">
+                            <i class="fa fa-user" aria-hidden="true"> Profile</i>
+                        </a>
+                    </li>
+                    <li class="menu_item hideAdmin">
+                        <a href="../incidents/create.html" class="menu_link">
+                            <i class="fa fa-plus" aria-hidden="true"> Incident</i>
+                        </a>
+                    </li>
+                    <li class="menu_item">
+                        <a href="../incidents/records.html?type=red-flags" class="menu_link">
+                            <i class="fa fa-eye" aria-hidden="true"> RedFlags</i>
+                        </a>
+                    </li>
+                    <li class="menu_item">
+                        <a href="../incidents/records.html?type=interventions" class="menu_link">
+                            <i class="fa fa-eye" aria-hidden="true"> Interventions</i>
+                        </a>
+                    </li>
+                    <li class="menu_item">
+                        <a href="#" class="menu_link" onclick="logOut()">
+                            <i class="fa fa-unlock" aria-hidden="true"> Log out</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-content  border-round-lg">
+                  <span class="dashboard-title">
+                        <h3 class="text-blue ">Users</h3>
+                      <hr/>
+                  </span>
+                <div class="users showAdmin">
+
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="bg-lblue text-red border-radius-30p">
+                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
+                                     alt="profile picture">
+                                <p>Username: arthur2</p>
+                                <p>First Name: Arthur</p>
+                                <p>Last Name: Kalule</p>
+                                <p id="other_names" style="display: none;">Other Names: </p>
+                                <p>Tel: 0772019936</p>
+                                <p>Email: kalulearthur2@gmail.com</p>
+                                <p>Registered On: 12/12/1990</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="bg-lblue text-red border-radius-30p">
+                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
+                                     alt="profile picture">
+                                <p>Username: arthur2</p>
+                                <p>First Name: Arthur</p>
+                                <p>Last Name: Kalule</p>
+                                <p id="other_names" style="display: none;">Other Names: </p>
+                                <p>Tel: 0772019936</p>
+                                <p>Email: kalulearthur2@gmail.com</p>
+                                <p>Registered On: 12/12/1990</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="bg-lblue text-red border-radius-30p">
+                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
+                                     alt="profile picture">
+                                <p>Username: arthur2</p>
+                                <p>First Name: Arthur</p>
+                                <p>Last Name: Kalule</p>
+                                <p id="other_names" style="display: none;">Other Names: </p>
+                                <p>Tel: 0772019936</p>
+                                <p>Email: kalulearthur2@gmail.com</p>
+                                <p>Registered On: 12/12/1990</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="bg-lblue text-red border-radius-30p">
+                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
+                                     alt="profile picture">
+                                <p>Username: arthur2</p>
+                                <p>First Name: Arthur</p>
+                                <p>Last Name: Kalule</p>
+                                <p id="other_names" style="display: none;">Other Names: </p>
+                                <p>Tel: 0772019936</p>
+                                <p>Email: kalulearthur2@gmail.com</p>
+                                <p>Registered On: 12/12/1990</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="bg-lblue text-red border-radius-30p">
+                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
+                                     alt="profile picture">
+                                <p>Username: arthur2</p>
+                                <p>First Name: Arthur</p>
+                                <p>Last Name: Kalule</p>
+                                <p id="other_names" style="display: none;">Other Names: </p>
+                                <p>Tel: 0772019936</p>
+                                <p>Email: kalulearthur2@gmail.com</p>
+                                <p>Registered On: 12/12/1990</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="bg-lblue text-red border-radius-30p">
+                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
+                                     alt="profile picture">
+                                <p>Username: arthur2</p>
+                                <p>First Name: Arthur</p>
+                                <p>Last Name: Kalule</p>
+                                <p id="other_names" style="display: none;">Other Names: </p>
+                                <p>Tel: 0772019936</p>
+                                <p>Email: kalulearthur2@gmail.com</p>
+                                <p>Registered On: 12/12/1990</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="content">
+                            <div class="bg-lblue text-red border-radius-30p">
+                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
+                                     alt="profile picture">
+                                <p>Username: arthur2</p>
+                                <p>First Name: Arthur</p>
+                                <p>Last Name: Kalule</p>
+                                <p id="other_names" style="display: none;">Other Names: </p>
+                                <p>Tel: 0772019936</p>
+                                <p>Email: kalulearthur2@gmail.com</p>
+                                <p>Registered On: 12/12/1990</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer class="bg-blue">
+
+        <div class="logo">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
+        </div>
+
+    </footer>
+
+</div>
+</body>
+
+</html>
