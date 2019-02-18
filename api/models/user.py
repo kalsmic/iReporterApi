@@ -106,3 +106,12 @@ class User:
             f"VALUES('{token}', '{user_id}');"
         )
         self.db.cursor.execute(sql)
+
+    def get_users(self):
+        sql = (
+            "SELECT first_name, last_name, other_names, "
+            "email, phone_number, user_name, "
+            "registered_on FROM users"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchall()
