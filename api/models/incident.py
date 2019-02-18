@@ -45,23 +45,33 @@ class Incident:
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()['incident_id']
 
-    def get_all_incident_records(self, inc_type):
+    def get_all_incident_records(self, inc_type, status):
+        status = str(status.strip().lower().title()).replace('_', " ")
+
         if is_admin_user():  # if user is admin
-            return self.get_all_records(inc_type)
+            return self.get_all_records(inc_type, status)
         user_id = str(get_current_identity())
 
-        return self.get_all_records_for_a_specific_user(inc_type, user_id)
+        return self.get_all_records_for_a_specific_user(inc_type, user_id, status)
 
-    def get_all_records(self, inc_type):
-        sql = f"SELECT * FROM incident_view WHERE type='{inc_type}';"
+    def get_all_records(self, inc_type, status):
+        sql = f"SELECT * FROM incident_view WHERE type='{inc_type}'"
+        if status:
+            sql += f" AND status='{status}' "
+        sql += ";"
+
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchall()
 
-    def get_all_records_for_a_specific_user(self, inc_type, user_id):
+    def get_all_records_for_a_specific_user(self, inc_type, user_id, status):
         sql = (
             "SELECT * FROM incident_view WHERE "
-            f"created_by='{user_id}' AND type='{inc_type}';"
+            f"created_by='{user_id}' AND type='{inc_type}'"
         )
+        if status:
+            sql += f" AND status='{status}' "
+        sql += ";"
+
         self.db.cursor.execute(sql)
 
         return self.db.cursor.fetchall()

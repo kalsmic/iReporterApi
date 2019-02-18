@@ -40,7 +40,7 @@ function getIncident(incidentType, incidentId) {
                 let incident = data["data"][0];
                 document.getElementById('incidents_output').style.display = 'block';
                 document.getElementById("created_on").innerHTML = `
-                    <b><i>Date:</i> </b> ${incident.created_on}`;
+                    <b><i>Date:</i> </b> ${incident.created_on.substring(0, 17)}`;
                 document.getElementById("incident_title").innerHTML = incident.title;
                 document.getElementById("incident_type").innerHTML = "View " + incident.type + " Details page";
                 document.getElementById("incident_comment").innerHTML = incident.comment;

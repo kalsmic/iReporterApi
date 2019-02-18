@@ -30,19 +30,27 @@ fetch(url, {
                     <div class="dash bg-lyellow text-orange">
                         <div class="dash-stat bg-orange">${incidents['red-flags']['draft']}
                         </div>
-                    <div>Draft</div>
+                        <a href="records.html?type=red-flags&&status=draft">
+                            <div>Draft</div>
+                        </a>
                     </div>
                     <div class="dash bg-lblue text-blue">
                     <div class="dash-stat bg-blue">${incidents['red-flags']['under_investigations']}</div>
-                    <div> Under Investigation</div>
+                    <a href="records.html?type=red-flags&&status=under_investigation">
+                        <div> Under Investigation</div>
+                    </a>
                 </div>
                 <div class="dash bg-lgreen text-green">
                     <div class="dash-stat bg-green">${incidents['red-flags']['resolved']}</div>
-                    <div>Resolved</div>
+                    <a href="records.html?type=red-flags&&status=resolved">
+                        <div>Resolved</div>
+                    </a>
                     </div>
                     <div class="dash bg-pink text-red">
                       <div class="dash-stat bg-red">${incidents['red-flags']['rejected']}</div>
-                      <div>Rejected</div>
+                      <a href="records.html?type=red-flags&&status=rejected">
+                        <div>Rejected</div>
+                      </a>
                     </div>
                 </div>
             `;
@@ -55,19 +63,28 @@ fetch(url, {
                 <div class="dashboard-items">
                     <div class="dash bg-lyellow text-orange">
                         <div class="dash-stat bg-orange">${incidents['interventions']['draft']}</div>
-                        <div>Draft</div>
+                        <a href="records.html?type=interventions&&status=draft">
+
+                            <div>Draft</div>
+                        </a>
                     </div>
                     <div class="dash bg-lblue text-blue">
                         <div class="dash-stat bg-blue">${incidents['interventions']['under_investigations']}</div>
-                        <div>Under Investigation</div>
+                        <a href="records.html?type=interventions&&status=under_investigation">
+                            <div>Under Investigation</div>
+                        </a>
                     </div>
                     <div class="dash bg-lgreen text-green">
                         <div class="dash-stat bg-green">${incidents['interventions']['resolved']}</div>
-                        <div>Resolved</div>
+                        <a href="records.html?type=interventions&&status=resolved">
+                            <div>Resolved</div>
+                        </a>
                     </div>
                     <div class="dash bg-pink text-red">
                         <div class="dash-stat bg-red">${incidents['interventions']['rejected']}</div>
-                        <div>Rejected</div>
+                        <a href="records.html?type=interventions&&status=rejected">
+                            <div>Rejected</div>
+                        </a>
                     </div>
                   
                 </div>
