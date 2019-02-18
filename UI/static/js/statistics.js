@@ -19,6 +19,8 @@ fetch(url, {
         } else if (data.status === 200) {
             //on success
             let incidents = data["data"][0]["statistics"];
+
+            sessionStorage.setItem('iRUsers',incidents["users"]);
             document.getElementById('red-flags').innerHTML = `
                 <h3 class="text-red">
                     <i class="fa fa-flag text-lred" aria-hidden="true">&nbsp;</i>
@@ -71,7 +73,23 @@ fetch(url, {
                 </div>
 
             `;
-            let userInfo = `
+            let userInfo = ``;
+            if("users" in incidents === true) {
+                userInfo += `
+                <h3 class="text-blue">
+                    <i class="fa fa-users text-lblue" aria-hidden="true">&nbsp;</i>
+                        Users 
+                </h3>
+                <div class="dash bg-lblue text-blue">
+                    <div class="dash-stat bg-lblue">${incidents['users']}</div>
+                    <a href="../user/index.html">
+                        <div class="bg-purple">Users</div>
+                    </a>
+                </div><br/>`;
+            }
+
+
+            userInfo += `
                 <img src="../static/img/profile-pics/user1.png" class="img-profile" alt="profile picture">
                 <p>Username: ${sessionStorage.getItem('iRUsername')}</p>
                 <p>First Name: ${sessionStorage.getItem('iRFirstName')}</p>
@@ -80,19 +98,7 @@ fetch(url, {
                 <p>Tel: ${sessionStorage.getItem('iRPhoneNumber')}</p>
                 <p>Email: ${sessionStorage.getItem('iREmail')}</p>
                 `;
-                if("users" in incidents === true) {
-                    userInfo += `
-                    <h3 class="text-blue">
-                        <i class="fa fa-users text-lblue" aria-hidden="true">&nbsp;</i>
-                            Users 
-                    </h3>
-                    <a href="../user/index.html">
-                    <div class="dash bg-lblue text-blue">
-                        <div class="dash-stat bg-lblue">${incidents['users']}</div>
-                        <div class="bg-purple">Users</div>
-                    </div></a>`;
-                }
-                          
+
 
             document.getElementById('user_dash_info').innerHTML = userInfo;
 

@@ -14,7 +14,8 @@
 
 </head>
 
-<body onload="getUserInfo()">
+<!--<body onload="getUserInfo()">-->
+<body>
 <div class="wrapper">
     <header class="bg-blue">
         <div class="logo">
@@ -65,124 +66,10 @@
             </div>
             <div class="page-content  border-round-lg">
                   <span class="dashboard-title">
-                        <h3 class="text-blue ">Users</h3>
+                        <h3 class="text-blue">Users <span id="no_users"></span></h3>
                       <hr/>
                   </span>
-                <div class="users showAdmin">
-
-
-                    <div class="card">
-                        <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
-                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
-                                     alt="profile picture">
-                                <p>Username: arthur2</p>
-                                <p>First Name: Arthur</p>
-                                <p>Last Name: Kalule</p>
-                                <p id="other_names" style="display: none;">Other Names: </p>
-                                <p>Tel: 0772019936</p>
-                                <p>Email: kalulearthur2@gmail.com</p>
-                                <p>Registered On: 12/12/1990</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
-                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
-                                     alt="profile picture">
-                                <p>Username: arthur2</p>
-                                <p>First Name: Arthur</p>
-                                <p>Last Name: Kalule</p>
-                                <p id="other_names" style="display: none;">Other Names: </p>
-                                <p>Tel: 0772019936</p>
-                                <p>Email: kalulearthur2@gmail.com</p>
-                                <p>Registered On: 12/12/1990</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
-                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
-                                     alt="profile picture">
-                                <p>Username: arthur2</p>
-                                <p>First Name: Arthur</p>
-                                <p>Last Name: Kalule</p>
-                                <p id="other_names" style="display: none;">Other Names: </p>
-                                <p>Tel: 0772019936</p>
-                                <p>Email: kalulearthur2@gmail.com</p>
-                                <p>Registered On: 12/12/1990</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
-                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
-                                     alt="profile picture">
-                                <p>Username: arthur2</p>
-                                <p>First Name: Arthur</p>
-                                <p>Last Name: Kalule</p>
-                                <p id="other_names" style="display: none;">Other Names: </p>
-                                <p>Tel: 0772019936</p>
-                                <p>Email: kalulearthur2@gmail.com</p>
-                                <p>Registered On: 12/12/1990</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
-                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
-                                     alt="profile picture">
-                                <p>Username: arthur2</p>
-                                <p>First Name: Arthur</p>
-                                <p>Last Name: Kalule</p>
-                                <p id="other_names" style="display: none;">Other Names: </p>
-                                <p>Tel: 0772019936</p>
-                                <p>Email: kalulearthur2@gmail.com</p>
-                                <p>Registered On: 12/12/1990</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
-                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
-                                     alt="profile picture">
-                                <p>Username: arthur2</p>
-                                <p>First Name: Arthur</p>
-                                <p>Last Name: Kalule</p>
-                                <p id="other_names" style="display: none;">Other Names: </p>
-                                <p>Tel: 0772019936</p>
-                                <p>Email: kalulearthur2@gmail.com</p>
-                                <p>Registered On: 12/12/1990</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
-                                <img src="../static/img/profile-pics/user1.png" class="img-profile"
-                                     alt="profile picture">
-                                <p>Username: arthur2</p>
-                                <p>First Name: Arthur</p>
-                                <p>Last Name: Kalule</p>
-                                <p id="other_names" style="display: none;">Other Names: </p>
-                                <p>Tel: 0772019936</p>
-                                <p>Email: kalulearthur2@gmail.com</p>
-                                <p>Registered On: 12/12/1990</p>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="users" id="users_list">
 
                 </div>
             </div>
@@ -207,5 +94,6 @@
 
 </div>
 </body>
+<script src="../static/js/users_list.js"></script>
 
 </html>
