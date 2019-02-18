@@ -1,5 +1,6 @@
 from api.helpers.auth_token import get_current_identity, is_admin_user
 from database.db import Database
+from .user import User
 
 
 class Incident:
@@ -155,7 +156,7 @@ class Incident:
         self.db.cursor.execute(sql + ";")
 
         results = self.db.cursor.fetchone()
-        return {
+        statistics = {
             "total": results['total'],
             "red-flags": {
                 "total": results['r_total'],
@@ -173,3 +174,9 @@ class Incident:
             }
 
         }
+
+        if is_admin_user():
+            user_statistics = User().get_no_of_users()
+            statistics['users'] = user_statistics['users']
+
+        return statistics

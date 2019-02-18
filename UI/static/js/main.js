@@ -104,6 +104,7 @@ function redirectLoggedOut() {
     sessionStorage.removeItem('iROtherNames');
     sessionStorage.removeItem('iREmail');
     sessionStorage.removeItem('iRPhoneNumber');
+    sessionStorage.removeItem('iRUsers');
     window.location.replace("../index.html");
 
 }

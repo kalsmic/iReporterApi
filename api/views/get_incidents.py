@@ -53,4 +53,5 @@ def get_a_red_flag(incidents, incident_id):
 def get_statistics():
     results = incident_obj.get_incidents_statistics()
 
+
     return jsonify({"status": 200, "data": [{"statistics": results}]}), 200
