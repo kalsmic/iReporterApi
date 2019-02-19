@@ -42,7 +42,7 @@ fetch("https://ireporterapiv3.herokuapp.com/api/v2/users", {
                     output +=
                         `<div class="card">
                             <div class="content">
-                            <div class="bg-lblue text-red border-radius-30p">
+                            <div class="bg-lblue  border-radius-30p">
                                 <img src="../static/img/profile-pics/user1.png" class="img-profile"
                             alt="profile picture">
                                 <p>Username: ${users[idx].user_name}</p>
