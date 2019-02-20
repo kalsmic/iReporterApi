@@ -6,6 +6,9 @@ function login() {
         password: password.value
     };
 
+    const submitProgress = document.getElementById("submit_progress");
+    submitProgress.style.display = 'block';
+
     fetch(url, {
         method: "POST",
         headers: {
@@ -16,7 +19,9 @@ function login() {
         .then(response => response.json())
         .then((data) => {
             if (data.status === 401) {
+
                 // Invalid credentials
+                submitProgress.style.display = 'none';
                 document.getElementById("success").style.display = "none";
                 document.getElementById("error").style.display = "block";
                 document.getElementById("error").innerHTML = data.error;
@@ -27,7 +32,9 @@ function login() {
 
 
             } else if (data.status === 200) {
+
                 //on success
+                submitProgress.style.display = 'none';
                 document.getElementById("error").style.display = "none";
                 document.getElementById("success").style.display = "block";
                 document.getElementById("success").innerHTML = data["data"][0].success;

@@ -360,3 +360,6 @@ hr {
 .user_profile .content {
     flex: 1 1 auto;
 }
+#submit_progress {
+    margin: auto
+}
