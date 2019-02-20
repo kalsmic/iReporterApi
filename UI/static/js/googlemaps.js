@@ -1,7 +1,7 @@
 let locationCoordinates;
 
 L.mapbox.accessToken = 'pk.eyJ1Ijoia2Fsc21pYyIsImEiOiJjanJ3dnI2ZzkwZmZtNDRuMWN2Ymxkb3gyIn0.GAIeAW40W9zFy0YKCCb2Yw';
-let mymap = L.mapbox.map('googleMap', 'mapbox.streets').setView([0.580584670867283, 32.53452250031705], 17)
+const mymap = L.mapbox.map('googleMap', 'mapbox.streets').setView([0.580584670867283, 32.53452250031705], 17)
     .addControl(L.mapbox.geocoderControl('mapbox.places', {
         keepOpen: false,
         autocomplete: true,
@@ -10,9 +10,7 @@ L.control.fullscreen().addTo(mymap);
 L.control.locate().addTo(mymap);
 
 
-
-
-let popup = L.popup();
+const popup = L.popup();
 
 function onMapClick(e) {
 

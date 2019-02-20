@@ -9,7 +9,7 @@ if (urlParameter === 'red-flags' || urlParameter === 'interventions') {
 function getIncidents(incidentType, status = "") {
 
     let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType);
-    let incidentStatus = params.get('status');
+    const incidentStatus = params.get('status');
     if (params.get('status')) {
         console.log('status', incidentStatus);
         url += "?status=" + incidentStatus;

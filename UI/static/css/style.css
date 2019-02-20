@@ -12,8 +12,6 @@ body {
 
 .wrapper {
     margin: 0 auto;
-    /* font: 1.2em Helvetica, arial, sans-serif; */
-    background: white;
 }
 
 .wrapper {
@@ -172,7 +170,7 @@ input:required:valid {
     .form-control input,
     .form-control button,
     .form-control textarea,
-    .form-control .form-title {
+    .form-control {
         grid-area: control;
         grid-row: auto;
     }
@@ -298,19 +296,8 @@ hr {
     border: 2px solid var(--blue);
 }
 
-.pull-right {
-    float: right;
-    right: 0;
-}
 
-.pull-right:after {
-    float: none;
-}
 
-.map-pct-50 {
-    height: 10em;
-    width: 100%;
-}
 .map-pct-80 {
     height: 18em;
     width: 100%;
@@ -368,10 +355,7 @@ hr {
     grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
     grid-gap: 1.6em;
 }
-.user_profile {
-    display: flex;
-    flex-direction: column;
-}
+
 
 .user_profile .content {
     flex: 1 1 auto;

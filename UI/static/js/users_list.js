@@ -1,4 +1,3 @@
-
 fetch("https://ireporterapiv3.herokuapp.com/api/v2/users", {
     method: "GET",
     headers: {
@@ -16,8 +15,8 @@ fetch("https://ireporterapiv3.herokuapp.com/api/v2/users", {
 
         } else if (data.status === 200) {
             //on success
-            let users = data["data"][0]['users'];
-            let noOfUsers = sessionStorage.getItem('iRUsers');
+            const users = data["data"][0]['users'];
+            const noOfUsers = sessionStorage.getItem('iRUsers');
             document.getElementById('no_users').innerHTML = `
                 (${noOfUsers})`;
 

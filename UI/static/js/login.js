@@ -1,7 +1,7 @@
-function login () {
+function login() {
 
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/login";
-    let userCredentials = {
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/login";
+    const userCredentials = {
         username: username.value,
         password: password.value
     };
