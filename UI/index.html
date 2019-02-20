@@ -31,15 +31,20 @@
 
                 <fieldset>
                     <legend>Login Here!</legend>
+                    <img src="static/img/loading.svg" id="submit_progress" class="hide">
+
                     <span class="error" id="error"></span>
                     <span class="success" id="success"></span>
                     <input type="text" id="username" placeholder='ENTER USERNAME' class="input-control" required>
                     <input type="password" id="password" placeholder="ENTER PASSWORD"
                            class="input-control" required>
+
                     <input type="submit" class="btn bg-blue text-white btn-block" value="Login">
+
                     <hr>
                     <p class="text-blue">No Account yet!</p>
                     <a href='signup.html' class="btn btn-small text-white bg-green">Click here to sign up</a>
+                    
                 </fieldset>
             </form>
         </div>

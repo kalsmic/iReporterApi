@@ -136,6 +136,8 @@ function displayError(dataArray) {
 
 function signUpAccount() {
 
+    const submitProgress = document.getElementById("submit_progress");
+    submitProgress.style.display = 'block';
 
     const url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/signup";
     const newUser = {
@@ -160,15 +162,19 @@ function signUpAccount() {
         .then((data) => {
             if (data.status === 400) {
                 //Bad format data
+                submitProgress.style.display = 'none';
                 displayError(data.error);
 
 
             } else if (data.status === 409) {
                 //Duplicate username, email or phone number
+                submitProgress.style.display = 'none';
+
                 displayError(data.error);
 
             } else if (data.status === 201) {
                 //on success
+                submitProgress.style.display = 'none';
 
                 document.getElementById("message").style.display = "block";
                 document.getElementById("message").innerHTML = data["data"][0].success;

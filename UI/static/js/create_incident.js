@@ -67,14 +67,15 @@ incidentComment.onblur = function () {
 
 };
 
+
 document.getElementById('googleMap').onclick = function () {
     locationError.style.display = "none";
     incidentLocation.setCustomValidity("");
 
 };
-
-
 function createIncident() {
+    const submitProgress = document.getElementById("submit_progress");
+    submitProgress.style.display = 'block';
 
     const url = "https://ireporterapiv3.herokuapp.com/api/v2/incidents";
     const newIncident = {
@@ -97,6 +98,8 @@ function createIncident() {
         .then((data) => {
             if (data.status === 400) {
                 //Bad format data
+                submitProgress.style.display = 'hide';
+
                 displayError(data.error);
 
 
@@ -109,6 +112,8 @@ function createIncident() {
 
             } else if (data.status === 201) {
                 //on success
+                submitProgress.style.display = 'hide';
+
                 let newRecord = data["data"][0][incidentType.value];
                 let successMsg = data["data"][0]["success"];
                 document.getElementById('success_msg').style.display = "block";
