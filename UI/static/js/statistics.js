@@ -1,6 +1,4 @@
-let url = "https://ireporterapiv3.herokuapp.com/api/v2/statistics";
-
-fetch(url, {
+fetch("https://ireporterapiv3.herokuapp.com/api/v2/statistics", {
     method: "GET",
     headers: {
         "content-type": "application/json",
@@ -18,9 +16,9 @@ fetch(url, {
 
         } else if (data.status === 200) {
             //on success
-            let incidents = data["data"][0]["statistics"];
+            const incidents = data["data"][0]["statistics"];
 
-            sessionStorage.setItem('iRUsers',incidents["users"]);
+            sessionStorage.setItem('iRUsers', incidents["users"]);
             document.getElementById('red-flags').innerHTML = `
                 <h3 class="text-red">
                     <i class="fa fa-flag text-lred" aria-hidden="true">&nbsp;</i>
@@ -91,7 +89,7 @@ fetch(url, {
 
             `;
             let userInfo = ``;
-            if("users" in incidents === true) {
+            if ("users" in incidents === true) {
                 userInfo += `
                 <h3 class="text-blue">
                     <i class="fa fa-users text-lblue" aria-hidden="true">&nbsp;</i>

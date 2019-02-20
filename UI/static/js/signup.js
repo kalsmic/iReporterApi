@@ -1,15 +1,15 @@
-let confirmPassword = document.getElementById("confirm_password");
-let password = document.getElementById("password");
-let firstName = document.getElementById("firstname");
-let lastName = document.getElementById("lastname");
-let otherNames = document.getElementById("othernames");
-let email = document.getElementById("email");
-let userName = document.getElementById("username");
-let phoneNumber = document.getElementById("phoneNumber");
+const confirmPassword = document.getElementById("confirm_password");
+const password = document.getElementById("password");
+const firstName = document.getElementById("firstname");
+const lastName = document.getElementById("lastname");
+const otherNames = document.getElementById("othernames");
+const email = document.getElementById("email");
+const userName = document.getElementById("username");
+const phoneNumber = document.getElementById("phoneNumber");
 
 
 function validatePasswordStrength() {
-    let passwordError = document.getElementById("password-error");
+    const passwordError = document.getElementById("password-error");
 
     if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password.value)) {
         passwordError.style.display = "none";
@@ -29,7 +29,7 @@ password.onkeyup = validatePasswordStrength;
 password.onchange = validatePasswordStrength;
 
 function validatePassword() {
-    let confirmPasswordError = document.getElementById("confirm_pass-error");
+    const confirmPasswordError = document.getElementById("confirm_pass-error");
     if (password.value !== confirmPassword.value) {
         confirmPasswordError.style.display = "block";
         confirmPasswordError.innerHTML = "Passwords Do not  match";
@@ -44,7 +44,7 @@ confirmPassword.onkeyup = validatePassword;
 
 
 userName.onkeyup = function () {
-    let userNameError = document.getElementById("username-error");
+    const userNameError = document.getElementById("username-error");
 
     if (/^(?=.*[a-zA-Z0-9])((?!\W+).){5,}$/.test(userName.value)) {
         userNameError.style.display = "none";
@@ -59,7 +59,7 @@ userName.onkeyup = function () {
 };
 
 firstName.onkeyup = function () {
-    let firstNameError = document.getElementById("firstname-error");
+    const firstNameError = document.getElementById("firstname-error");
 
     if (/^[a-zA-Z]{3,}$/.test(firstName.value)) {
         firstNameError.style.display = "none";
@@ -74,7 +74,7 @@ firstName.onkeyup = function () {
 };
 
 lastName.onkeyup = function () {
-    let lastNameError = document.getElementById("lastname-error");
+    const lastNameError = document.getElementById("lastname-error");
 
     if (/^[a-zA-Z]{3,}$/.test(lastName.value)) {
         lastNameError.style.display = "none";
@@ -90,7 +90,7 @@ lastName.onkeyup = function () {
 
 
 otherNames.onkeyup = function () {
-    let otherNamesError = document.getElementById("othernames-error");
+    const otherNamesError = document.getElementById("othernames-error");
 
     if (/^[a-zA-Z]{0,}$/.test(otherNames.value)) {
         otherNamesError.style.display = "none";
@@ -107,7 +107,7 @@ otherNames.onkeyup = function () {
 
 
 phoneNumber.onkeyup = function () {
-    let phoneNumberError = document.getElementById("phoneNumber-error");
+    const phoneNumberError = document.getElementById("phoneNumber-error");
 
     if (/^\d{10}/.test(phoneNumber.value)) {
         phoneNumberError.style.display = "none";
@@ -137,8 +137,8 @@ function displayError(dataArray) {
 function signUpAccount() {
 
 
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/signup";
-    let newUser = {
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/auth/signup";
+    const newUser = {
         firstname: firstName.value,
         lastname: lastName.value,
         othernames: otherNames.value,

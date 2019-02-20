@@ -15,10 +15,8 @@
 .btn:focus {
   outline: none;
 }
-.btn-tiny{
-	font-size:.1rem;
-}
-.btn-small{
+
+  .btn-small{
 	font-size:1.2rem;
 }
 .btn-medium{
@@ -46,7 +44,7 @@
   .bg-green { background: var(--green); }
   .bg-orange {  background: var(--orange); }
   .bg-blue { background: var(--blue); }
-  .bg-black { background: var(--black); }
+
   .bg-pink { background: var(--pink); }
   
   

@@ -1,17 +1,17 @@
-let imageFormData = new FormData();
-let imageFileField = document.querySelector("#image");
-let imageError = document.getElementById("image_error");
+const imageFormData = new FormData();
+const imageFileField = document.querySelector("#image");
+const imageError = document.getElementById("image_error");
 
-let videoFormData = new FormData();
-let videoFileField = document.querySelector("#video");
-let videoError = document.getElementById("video_error");
+const videoFormData = new FormData();
+const videoFileField = document.querySelector("#video");
+const videoError = document.getElementById("video_error");
 
 //uploaded image preview and file size validation
 imageFileField.onchange = function () {
-    let fileSize = imageFileField.files[0].size / 1024 / 1024;
+    const fileSize = imageFileField.files[0].size / 1024 / 1024;
 
-    let imageUploadButton = document.getElementById("upload_image");
-    let output = document.getElementById('myImg');
+    const imageUploadButton = document.getElementById("upload_image");
+    const output = document.getElementById('myImg');
 
 
     if (fileSize > 2) {
@@ -33,10 +33,10 @@ imageFileField.onchange = function () {
 
 //uploaded video preview and file size validation
 videoFileField.onchange = function () {
-    let fileSize = videoFileField.files[0].size / 1024 / 1024;
+    const fileSize = videoFileField.files[0].size / 1024 / 1024;
 
-    let videoUploadButton = document.getElementById("upload_video");
-    let videoPreview = document.getElementById('myVideo');
+    const videoUploadButton = document.getElementById("upload_video");
+    const videoPreview = document.getElementById('myVideo');
 
 
     if (fileSize > 10) {
@@ -76,9 +76,9 @@ let clearVideoPreview = function () {
 function uploadImage() {
     imageFormData.append('image', imageFileField.files[0]);
 
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(params.get('type'), "/", params.get('id'), '/addImage');
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(params.get('type'), "/", params.get('id'), '/addImage');
 
-    let uploadProgress = document.getElementById('progress_img');
+    const uploadProgress = document.getElementById('progress_img');
     uploadProgress.style.display = 'block';
 
     fetch(url, {
@@ -101,7 +101,7 @@ function uploadImage() {
 }
 
 function retrieveImage(imageName) {
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/incidents/images/" + imageName;
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/incidents/images/" + imageName;
     fetch(url,
         {
             method: 'GET',
@@ -111,8 +111,8 @@ function retrieveImage(imageName) {
         }
     ).then(response => response.blob())
         .then(image => {
-                imageUrl = URL.createObjectURL(image);
-                var node = document.createElement("img");
+                const imageUrl = URL.createObjectURL(image);
+                const node = document.createElement("img");
                 node.src = imageUrl;
                 document.getElementById("serve_images").appendChild(node);
 
@@ -124,9 +124,9 @@ function retrieveImage(imageName) {
 function uploadVideo() {
     videoFormData.append('video', videoFileField.files[0]);
 
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(params.get('type'), "/", params.get('id'), '/addVideo');
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(params.get('type'), "/", params.get('id'), '/addVideo');
 
-    let videoUploadProgress = document.getElementById('progress_video');
+    const videoUploadProgress = document.getElementById('progress_video');
     videoUploadProgress.style.display = 'block';
 
     fetch(url, {
@@ -152,7 +152,7 @@ function uploadVideo() {
 }
 
 function retrieveVideo(videoName) {
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/incidents/videos/" + videoName;
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/incidents/videos/" + videoName;
     fetch(url,
         {
             method: 'GET',
@@ -164,8 +164,8 @@ function retrieveVideo(videoName) {
         .then(video => {
 
 
-                let videoUrl = URL.createObjectURL(video);
-                var node = document.createElement("video");
+                const videoUrl = URL.createObjectURL(video);
+                const node = document.createElement("video");
                 node.src = videoUrl;
                 node.controls = true;
                 node.width = 320;

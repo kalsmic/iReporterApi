@@ -1,4 +1,4 @@
-let authorizationHeader = "Bearer ".concat(localStorage.getItem("iReporterToken"));
+const authorizationHeader = "Bearer ".concat(localStorage.getItem("iReporterToken"));
 
 if (localStorage.getItem('iReporterToken')) {
 
