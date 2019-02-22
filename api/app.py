@@ -14,6 +14,7 @@ from api.helpers.responses import auth_response
 
 from instance.config import Config
 
+
 def create_app(config=None):
     """Set up Flask application in function"""
     app = Flask(__name__)
