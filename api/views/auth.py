@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from api.helpers.mail import send_mail
 
 from api.helpers.auth_token import (
     encode_token,

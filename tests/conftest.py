@@ -2,6 +2,7 @@ import pytest
 
 from api.app import create_app
 from database.db import Database
+from api.helpers.mail import mail
 
 db = Database()
 db.cursor.execute(open("database/schema.sql", "r").read())
@@ -17,6 +18,7 @@ def client():
     app = create_app()
 
     app.config.from_object("instance.config.TestingConfig")
+    mail.init_app(app)
 
     client = app.test_client()
 

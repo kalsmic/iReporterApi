@@ -128,7 +128,7 @@ class Incident:
         status = str(status.strip().lower().title())
         sql = (
             f"UPDATE incidents SET status='{status}' "
-            f"WHERE id='{inc_id}' returning id,status;"
+            f"WHERE id='{inc_id}' returning id,status,created_by,title;"
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchone()

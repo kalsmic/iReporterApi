@@ -124,3 +124,11 @@ class User:
         )
         self.db.cursor.execute(sql)
         return self.db.cursor.fetchall()
+
+    def get_user_mail_and_user_name(self,user_id):
+        sql = (
+            "SELECT email, user_name FROM users WHERE"
+            f" id='{user_id}';"
+        )
+        self.db.cursor.execute(sql)
+        return self.db.cursor.fetchone()

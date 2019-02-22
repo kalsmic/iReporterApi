@@ -6,6 +6,7 @@ from api.helpers.auth_token import (
     token_required,
     admin_required,
 )
+from api.helpers.mail import send_mail
 from api.helpers.responses import wrong_status
 from api.helpers.validation import (
     request_data_required,
@@ -16,6 +17,7 @@ from api.helpers.validation import (
     parse_incident_type,
 )
 from api.models.incident import Incident
+from api.models.user import User
 
 incident_obj = Incident()
 edit_bp = Blueprint("edit_bp", __name__, url_prefix="/api/v2")
@@ -44,7 +46,7 @@ def edit_incident_location(incidents, incident_id):
                 {
                     "status": 404,
                     "error": inc_type
-                    + " record with specified id does not exist",
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -56,8 +58,8 @@ def edit_incident_location(incidents, incident_id):
         )
 
     elif (
-        results["created_by"] == get_current_identity()
-        and results["status"].lower() == "draft"
+            results["created_by"] == get_current_identity()
+            and results["status"].lower() == "draft"
     ):
         location = data.get("location")
 
@@ -75,8 +77,8 @@ def edit_incident_location(incidents, incident_id):
                             "id": updated_record["id"],
                             "location": updated_record["location"],
                             "success": "Updated "
-                            + inc_type
-                            + " record’s location",
+                                       + inc_type
+                                       + " record’s location",
                         }
                     ],
                 }
@@ -121,7 +123,7 @@ def edit_red_flag_comment(incidents, incident_id):
                 {
                     "status": 404,
                     "error": incident_type
-                    + " record with specified id does not exist",
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -166,8 +168,8 @@ def edit_red_flag_comment(incidents, incident_id):
                             "id": updated_record["id"],
                             "comment": updated_record["comment"],
                             "success": "Updated "
-                            + incident_type
-                            + " record’s comment",
+                                       + incident_type
+                                       + " record’s comment",
                         }
                     ],
                 }
@@ -202,7 +204,7 @@ def edit_incident_status(incidents, incident_id):
                 {
                     "status": 404,
                     "error": incident_type
-                    + " record with specified id does not exist",
+                             + " record with specified id does not exist",
                 }
             ),
             404,
@@ -215,6 +217,15 @@ def edit_incident_status(incidents, incident_id):
         updated_record = incident_obj.update_incident_status(
             inc_id=incident_id, inc_type=incident_type, status=status
         )
+        owner = User().get_user_mail_and_user_name(user_id=updated_record["created_by"])
+        email = owner["email"]
+        user_name = owner["user_name"]
+        inc_title = updated_record["title"]
+        message = (
+            f"Hello {user_name}, the status of your {incident_type}"
+            f" record titled '{inc_title}' has been updated to {status}"
+        )
+        send_mail(message= message, receiver=email)
 
         response = (
             jsonify(
@@ -225,8 +236,8 @@ def edit_incident_status(incidents, incident_id):
                             "id": updated_record["id"],
                             "status": updated_record["status"],
                             "success": "Updated "
-                            + incident_type
-                            + " record’s status",
+                                       + incident_type
+                                       + " record’s status",
                         }
                     ],
                 }
@@ -235,4 +246,3 @@ def edit_incident_status(incidents, incident_id):
         )
 
     return response
-
