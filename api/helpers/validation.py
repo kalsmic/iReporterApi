@@ -12,6 +12,9 @@ from api.helpers.responses import (
     wrong_name,
 )
 
+ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_VIDEO_EXTENSIONS = set(['mp4', 'mpeg', '3gp', 'mov'])
+
 
 def request_data_required(func):
     @wraps(func)
@@ -60,10 +63,10 @@ def is_number(num_value):
 def is_string(str_value):
     """Checks if input is a string"""
     if (
-        str_value
-        and isinstance(str_value, str)
-        and not str(str_value).isspace()
-        and not str_value.isnumeric()
+            str_value
+            and isinstance(str_value, str)
+            and not str(str_value).isspace()
+            and not str_value.isnumeric()
     ):
         return True
     return False
@@ -101,10 +104,10 @@ def validate_name(name, required=1):
     if not required and len(str(name).strip()) == 0:
         error = None
     elif (
-        name
-        and is_string(name)
-        and not contains_space(name)
-        and not contains_number(name)
+            name
+            and is_string(name)
+            and not contains_space(name)
+            and not contains_number(name)
     ):
         error = None
     return error
@@ -113,10 +116,10 @@ def validate_name(name, required=1):
 def validate_password(password):
     error = wrong_password
     if (
-        len(password) >= 8
-        and re.search("[A-Z]", password)
-        and re.search("[0-9]", password)
-        and re.search("[a-z]", password)
+            len(password) >= 8
+            and re.search("[A-Z]", password)
+            and re.search("[0-9]", password)
+            and re.search("[a-z]", password)
     ):
         error = None
     return error
@@ -154,30 +157,6 @@ def validate_sentence(sentence, min_len=0, max_len=0):
         error = f"Field must contain a minimum of {str(min_len)} characters"
     elif max_len and len(sentence) > max_len:
         error = f"Field must contain a maximum of {str(max_len)} characters"
-
-    return error
-
-
-media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
-
-
-def is_validate_media_type(collection, media_type):
-    for media in collection:
-        if not media.endswith(media_format.get(media_type)[0]):
-            return False
-    return True
-
-
-def validate_media(media_collection, media_type):
-    media_format = {"Videos": [".mp4", "MP4"], "Images": ["jpg", "JPEG"]}
-    error = None
-    if not isinstance(media_collection, list):
-        error = f"Please provide an empty list of {media_type} if none"
-    elif not is_validate_media_type(media_collection, media_type):
-        error = (
-            f"Only {media_format.get(media_type)[1]} {media_type} are "
-            "supported"
-        )
 
     return error
 
@@ -243,10 +222,10 @@ def is_valid_status(status):
     if not status or not isinstance(status, str):
         is_valid = False
     elif str(status).lower() not in (
-        "draft",
-        "resolved",
-        "under investigation",
-        "rejected",
+            "draft",
+            "resolved",
+            "under investigation",
+            "rejected",
     ):
         is_valid = False
     return is_valid
@@ -269,3 +248,13 @@ def parse_incident_type(func):
         abort(404)
 
     return decorated_view
+
+
+def allowed_image_files(filename, ):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_IMAGE_EXTENSIONS
+
+
+def allowed_video_files(filename, ):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_VIDEO_EXTENSIONS

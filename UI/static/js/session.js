@@ -1,3 +1,3 @@
 if (localStorage.getItem('iReporterToken')) {
-   window.location.replace("./user/index.html");
+    window.location.replace("./incidents/index.html");
 }

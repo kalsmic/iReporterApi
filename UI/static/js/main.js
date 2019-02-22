@@ -1,4 +1,4 @@
-let authorizationHeader = "Bearer ".concat(localStorage.getItem("iReporterToken"));
+const authorizationHeader = "Bearer ".concat(localStorage.getItem("iReporterToken"));
 
 if (localStorage.getItem('iReporterToken')) {
 
@@ -9,30 +9,40 @@ if (localStorage.getItem('iReporterToken')) {
 }
 window.setInterval(getUserInfo, 300000);
 
+
 function getUserInfo() {
     fetch("https://ireporterapiv3.herokuapp.com/api/v2/auth/secure", {
         method: "POST",
         headers: {
             "content-type": "application/json",
-            "Authorization": "Bearer ".concat(localStorage.getItem("iReporterToken")),
+            "Authorization": authorizationHeader,
+
         },
     })
         .then((response) => response.json())
         .then((data) => {
+
             if (data.status === 401) {
                 alert(data.error);
                 redirectLoggedOut()
 
             } else if (data.status === 200) {
                 //on success
-                let userInfo = data["data"][0]["user"];
-                let sessionUserName = userInfo["username"];
-                let sessionFirstName = userInfo["firstname"];
-                let sessionLastName = userInfo["lastname"];
-                let sessionIsAdmin = userInfo["is_admin"];
-                document.getElementById('sessionUserName').innerHTML = sessionUserName;
 
-                if (sessionIsAdmin) {
+                let userInfo = data["data"][0]["user"];
+
+
+                sessionStorage.setItem('iRUsername', userInfo["username"]);
+                sessionStorage.setItem('iRFirstName', userInfo["firstname"]);
+                sessionStorage.setItem('iRlastName', userInfo["lastname"]);
+                sessionStorage.setItem('iROtherNames', userInfo["othernames"]);
+                sessionStorage.setItem('iREmail', userInfo["email"]);
+                sessionStorage.setItem('iRPhoneNumber', userInfo["phone_number"]);
+
+
+                document.getElementById('sessionUserName').innerHTML = userInfo["username"];
+
+                if (userInfo["is_admin"]) {
                     setElementDisplay(".hideAdmin", "none");
                     setElementDisplay(".showAdmin", "block");
                 } else {
@@ -41,6 +51,7 @@ function getUserInfo() {
                     setElementDisplay(".showAdmin", "none");
 
                 }
+
             }
 
 
@@ -87,6 +98,14 @@ function logOut() {
 
 function redirectLoggedOut() {
     localStorage.removeItem('iReporterToken');
+    sessionStorage.removeItem('iRUsername');
+    sessionStorage.removeItem('iRFirstName');
+    sessionStorage.removeItem('iRlastName');
+    sessionStorage.removeItem('iROtherNames');
+    sessionStorage.removeItem('iREmail');
+    sessionStorage.removeItem('iRPhoneNumber');
+    sessionStorage.removeItem('iRUsers');
     window.location.replace("../index.html");
 
 }
+

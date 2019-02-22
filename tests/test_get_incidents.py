@@ -2,8 +2,8 @@ from flask import json
 
 from api.helpers.responses import (
     invalid_token_message,
-     expired_token_message,     
-     auth_response
+    expired_token_message,
+    auth_response
 )
 from .base import (
     user2_header,
@@ -45,6 +45,28 @@ def test_get_all_red_flags(client):
     assert data["data"] == []
 
 
+def test_get_all_red_flags_by_status(client):
+    response = client.get("api/v2/red-flags?status=draft", headers=user1_header)
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["data"][0]["status"] == 'Draft'
+
+    response = client.get("api/v2/red-flags?status=resolved", headers=user2_header)
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["data"] == []
+
+    response = client.get("api/v2/red-flags?status=under_investigation", headers=admin_header)
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["data"] == []
+
+    response = client.get("api/v2/interventions?status=resolved", headers=admin_header)
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["data"][0]["status"] == 'Resolved'
+
+
 # GET A SPECIFIC RED-FLAG RECORD
 
 
@@ -57,8 +79,8 @@ def test_get_a_red_flag(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-        data["data"][0]["title"]
-        == "Vestibulum blandit ligula a mollis ullamcorper."
+            data["data"][0]["title"]
+            == "Vestibulum blandit ligula a mollis ullamcorper."
     )
 
 
@@ -70,10 +92,6 @@ def test_get_a_red_flag_with_id_which_does_not_exist(client):
     assert response.status_code == 404
     data = json.loads(response.data.decode())
     assert data["status"] == 404
-    # assert (
-    #     data["data"][0]["title"]
-    #     == "Vestibulum blandit ligula a mollis ullamcorper."
-    # )
 
 
 def test_get_a_red_flag_for_another_user(client):
@@ -96,8 +114,8 @@ def test_admin_get_a_red_flag(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-        data["data"][0]["title"]
-        == "Vestibulum blandit ligula a mollis ullamcorper."
+            data["data"][0]["title"]
+            == "Vestibulum blandit ligula a mollis ullamcorper."
     )
 
 
@@ -143,7 +161,7 @@ def test_get_a_intervention(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-        data["data"][0]["title"] == "leo vel fringilla. Egestas tellus rutru"
+            data["data"][0]["title"] == "leo vel fringilla. Egestas tellus rutru"
     )
 
 
@@ -167,5 +185,26 @@ def test_admin_get_a_intervention(client):
     data = json.loads(response.data.decode())
     assert data["status"] == 200
     assert (
-        data["data"][0]["title"] == "leo vel fringilla. Egestas tellus rutru"
+            data["data"][0]["title"] == "leo vel fringilla. Egestas tellus rutru"
     )
+
+
+def test_get_statistics(client):
+    response = client.get(
+        "api/v2/statistics",
+        headers=admin_header,
+    )
+    assert response.status_code == 200
+    data = json.loads(response.data.decode())
+    assert data["status"] == 200
+    assert (data["data"][0]["statistics"]["total"] == 9)
+    assert (data["data"][0]["statistics"]["red-flags"]["total"] == 4)
+    assert (data["data"][0]["statistics"]["red-flags"]["draft"] == 2)
+    assert (data["data"][0]["statistics"]["red-flags"]["resolved"] == 2)
+    assert (data["data"][0]["statistics"]["red-flags"]["rejected"] == 0)
+    assert (data["data"][0]["statistics"]["red-flags"]["under_investigations"] == 0)
+    assert (data["data"][0]["statistics"]["interventions"]["total"] == 5)
+    assert (data["data"][0]["statistics"]["interventions"]["draft"] == 3)
+    assert (data["data"][0]["statistics"]["interventions"]["resolved"] == 2)
+    assert (data["data"][0]["statistics"]["interventions"]["rejected"] == 0)
+    assert (data["data"][0]["statistics"]["interventions"]["under_investigations"] == 0)
