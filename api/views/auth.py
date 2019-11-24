@@ -1,6 +1,11 @@
 from flask import Blueprint, jsonify, request
 
-from api.helpers.auth_token import encode_token
+from api.helpers.auth_token import (
+    encode_token,
+    token_required,
+    blacklist_token,
+    get_current_identity
+)
 from api.helpers.validation import validate_new_user, sign_up_data_required
 from api.models.user import User
 
@@ -87,16 +92,19 @@ def login():
         user_password = user_credentials["password"]
 
         # submit credentials
-        user_id = user_obj.is_valid_credentials(user_name, user_password)
-        if user_id:
+        user_details = user_obj.is_valid_credentials(user_name, user_password)
+        if user_details:
+
+
             response = (
                 jsonify(
                     {
                         "status": 200,
                         "data": [
                             {
-                                "token": encode_token(user_id),
+                                "token": encode_token(user_details["user_id"]),
                                 "success": "Logged in successfully",
+
                             }
                         ],
                     }
@@ -120,3 +128,31 @@ def login():
             422,
         )
     return response
+
+
+@users_bp.route("/auth/logout", methods=["POST"])
+@token_required
+def logout():
+
+    blacklist_token()
+
+    return (
+        jsonify(
+            {"data": [{"success": "Logged out successfully"}], "status": 200}
+        ),
+        200,
+    )
+
+
+
+@users_bp.route("/auth/secure", methods=["POST"])
+@token_required
+def is_logged_in():
+    user_id = get_current_identity()
+    user_details = user_obj.get_user_details(user_id);
+    return (
+        jsonify(
+            {"data": [{"user": user_details}], "status": 200}
+        ),
+        200,
+    )

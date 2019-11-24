@@ -13,6 +13,18 @@ CREATE TABLE IF NOT EXISTS users
     is_admin BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE IF NOT EXISTS users_auth
+(
+    token VARCHAR(255) PRIMARY KEY,
+    user_id uuid,
+    is_blacklisted BOOLEAN DEFAULT FALSE,
+    last_login DATE DEFAULT CURRENT_TIMESTAMP,
+    constraint fk_user_id
+    foreign key (user_id)
+    REFERENCES users (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 DO $$
 BEGIN
      IF NOT EXISTS(SELECT 1 FROM pg_type WHERE typname ='incident_type') THEN

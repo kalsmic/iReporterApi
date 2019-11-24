@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iReporter | Register</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <script src="../static/js/session.js"></script>
+
+</head>
+<body>
+<div class="wrapper">
+    <header class="bg-blue">
+        <div class="logo">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
+        </div>
+    </header>
+    <div class="main-page">
+        <div class="login-register-container border-round-lg">
+            <form class="vertical-form" id="register-form" action="#"
+                  onsubmit="signUpAccount();return false">
+
+                <fieldset>
+
+                    <legend>Register Here!</legend>
+                    <span class="success" id="message"></span>
+
+
+                    <input type="text" id="username" placeholder='ENTER USER NAME' class="input-control"
+                           title="enter username" required>
+                    <span class="error" id="username-error"></span>
+
+                    <input type="email" id="email" placeholder='ENTER EMAIL ADDRESS' class="input-control"
+                           required>
+                    <span class="error" id="email-error"></span>
+                    <input type="text" id="firstname" placeholder='ENTER FIRST NAME'
+                           class="input-control" required>
+                    <i class="error" id="firstname-error"></i>
+                    <input type="text" id='lastname' placeholder='ENTER LAST NAME' class="input-control"
+                           required>
+                    <span class="error" id="lastname-error"></span>
+                    <input type="text" id='othernames' placeholder='ENTER OTHER NAMES'
+                           class="input-control">
+                    <span class="error" id="othernames-error"></span>
+
+                    <input type="tel" id="phoneNumber" maxlength="10" placeholder="ENTER PHONE NUMBER"
+                           class="input-control" required>
+                    <span class="error" id="phoneNumber-error"></span>
+
+                    <input type="password" id="password" placeholder="ENTER PASSWORD"
+                           class="input-control" required>
+                    <span class="error" id="password-error"></span>
+                    <input type="password" id="confirm_password" placeholder="REPEAT PASSWORD"
+                           class="input-control" required>
+                    <span class="error" id="confirm_pass-error"></span>
+
+                    <button type="submit" class="btn bg-lblue text-white btn-block">Register Account
+                    </button>
+
+                    <hr>
+                    <p class="text-blue">Already Registered!</p>
+                    <a href='../index.html' class="btn btn-small text-white bg-green">Click here to sign in</a>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <footer class="bg-blue">
+
+        <div class="logo center">
+            <span>i</span>
+            <span>R</span>
+            <span>e</span>
+            <span>p</span>
+            <span>o</span>
+            <span>r</span>
+            <span>t</span>
+            <span>e</span>
+            <span>r</span>
+        </div>
+
+    </footer>
+</div>
+</body>
+<script src="../static/js/signup.js"></script>
+</html>
+

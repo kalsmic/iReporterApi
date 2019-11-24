@@ -18,7 +18,11 @@ duplicate_user_name = "Username already exists"
 duplicate_phone_number = "phoneNumber already in use"
 
 invalid_token_message = "Invalid Token, verification failed"
-expired_token_message = "Signature has expired"
+expired_token_message = "Signature has expired,Please login again"
+auth_response = (
+    "Please login in again or sign up an account to access this resource"
+)
+
 
 wrong_status = (
     "Status must either be 'resolved','under investigation' or 'rejected'"

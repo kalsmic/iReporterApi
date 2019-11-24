@@ -69,8 +69,8 @@ class User:
 
     def get_user_details(self, user_id):
         user_sql = (
-            "SELECT id, user_name,first_name,last_name,other_names, "
-            "email,is_admin FROM users "
+            "SELECT user_name as username, first_name as firstname, "
+            " last_name as lastname, is_admin FROM users "
             f"WHERE id='{user_id}';"
         )
         self.db.cursor.execute(user_sql)
@@ -79,7 +79,7 @@ class User:
 
     def is_valid_credentials(self, user_name, user_password):
         sql = (
-            "SELECT id,user_name ,user_password FROM users where user_name="
+            "SELECT id,user_name ,user_password, is_admin FROM users where user_name="
             f"'{user_name}';"
         )
         self.db.cursor.execute(sql)
@@ -87,13 +87,21 @@ class User:
         user_db_details = self.db.cursor.fetchone()
 
         if (
-                user_db_details
-                and user_db_details.get("user_name") == user_name
-                and check_password_hash(
-            user_db_details.get("user_password"), user_password
-        )
+            user_db_details
+            and user_db_details.get("user_name") == user_name
+            and check_password_hash(
+                user_db_details.get("user_password"), user_password
+            )
         ):
-            user_id = user_db_details.get("id")
 
-            return user_id
+            return {
+                "user_id": user_db_details.get("id")
+            }
         return None
+
+    def add_token_in_db(self, token, user_id):
+        sql = (
+            "INSERT INTO users_auth (token,user_id) "
+            f"VALUES('{token}', '{user_id}');"
+        )
+        self.db.cursor.execute(sql)

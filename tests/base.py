@@ -36,8 +36,6 @@ new_red_flag = {
     "title": "My First red flag",
     "comment": "Lorem ipsum eiusmod temport labore et dolore magna",
     "location": [-80, -174.4],
-    "Images": ["image1.jpg", "image2.jpg"],
-    "Videos": ["vid1.mp4", "vid2.mp4"],
     "type": "red-flag",
 }
 
@@ -48,8 +46,6 @@ new_intervention = {
         "Adipiscing bibendum est ultricies integer quis auctor elit"
     ),
     "location": [-72, -154.4],
-    "Images": ["image6.jpg", "image7.jpg"],
-    "Videos": ["vid8.mp4", "vid5.mp4"],
     "type": "intervention",
 }
 
@@ -61,7 +57,16 @@ expired_token = encode(
     secret_key,
     algorithm="HS256",
 ).decode("utf-8")
+
+sql = (
+    "INSERT INTO users_auth (token,user_id) "
+    f"VALUES('{expired_token}', '{user1_id}');"
+)
+db.cursor.execute(sql)
+
 expired_token_header = generate_token_header(expired_token)
+
+
 
 invalid_id_token = encode(
     {
@@ -73,3 +78,4 @@ invalid_id_token = encode(
 ).decode("utf-8")
 
 invalid_id_token_header = generate_token_header(invalid_id_token)
+

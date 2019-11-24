@@ -1,4 +1,5 @@
 import datetime
+
 import jwt
 from flask import request, jsonify, abort
 from functools import wraps
@@ -15,9 +16,15 @@ def encode_token(user_id):
     payload = {
         "userid": user_id,
         "iat": datetime.datetime.utcnow(),
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=3),
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=6),
     }
     token = jwt.encode(payload, secret_key, algorithm="HS256").decode("utf-8")
+    # Insert token into database
+    sql = (
+        "INSERT INTO users_auth (token,user_id) "
+        f"VALUES('{token}', '{user_id}');"
+    )
+    db.cursor.execute(sql)
 
     return token
 
@@ -43,20 +50,25 @@ def token_required(func):
     def wrapper(*args, **kwargs):
         response = None
         try:
-            extract_token_from_header()
+            sql = (
+                "SELECT is_blacklisted FROM users_auth "
+                f"WHERE token='{extract_token_from_header()}';"
+            )
+            db.cursor.execute(sql)
+            result = db.cursor.fetchone()
+            if result and result["is_blacklisted"] or not result:
+                abort(401)
+
             get_current_identity()
             response = func(*args, **kwargs)
 
         except jwt.ExpiredSignatureError:
+            blacklist_token()
             response = (
                 jsonify({"error": expired_token_message, "status": 401}),
                 401,
             )
-        except jwt.InvalidTokenError:
-            response = (
-                jsonify({"error": invalid_token_message, "status": 401}),
-                401,
-            )
+
         return response
 
     return wrapper
@@ -69,8 +81,6 @@ def get_current_identity():
     results = db.cursor.fetchone()
     if results:
         return results["id"]
-    else:
-        abort(401)
 
 
 def is_admin_user():
@@ -115,3 +125,13 @@ def admin_required(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+def blacklist_token():
+    """Logs out a user"""
+    sql = (
+        "UPDATE users_auth SET is_blacklisted ="
+        f"True WHERE token='{extract_token_from_header()}';"
+    )
+    db.cursor.execute(sql)
+

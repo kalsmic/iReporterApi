@@ -10,3 +10,6 @@ omit =
     tests/*
     */api/models/*
     */database/*
+    UI/
+    *.html
+    *.js
