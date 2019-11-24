@@ -38,11 +38,13 @@ function getIncident(incidentType, incidentId) {
                     <img class="bg-blue  img-circle-small" src="../static/img/profile-pics/user1.png">${incident.owner}
                 `;
 
-                document.getElementById("incident_status").innerHTML =incident.status;
+                document.getElementById("incident_status").innerHTML = incident.status;
 
                 //Hide the edit comment button if status is not draft
                 if (incident.status !== "Draft") {
                     document.getElementById('editCommentBtn').style.display = 'none';
+                    document.getElementById('editLocationBtn').style.display = 'none';
+                    document.getElementById('editStatusBtn').style.display = 'none';
                 }
                 let locationCoords = incident.location.replace('(', '').replace(')', '').split(",");
                 let latitude = locationCoords[0];
@@ -171,7 +173,6 @@ function displayUpdateFields(incidentFieldId, updateButtonId, cancelButtonId, ed
 }
 
 
-
 document.getElementById('updateCommentBtn').onclick = updateComment;
 
 let UpdateStatusBtn = document.getElementById('updateStatusBtn');
@@ -179,15 +180,15 @@ let cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
 let editStatusBtn = document.getElementById('editStatusBtn');
 let statusField = document.getElementById('statusField');
 
-editStatusBtn.onclick = function(){
+editStatusBtn.onclick = function () {
 
-   cancelEditStatusBtn.style.display = 'block';
-   UpdateStatusBtn.style.display = 'block';
-   editStatusBtn.style.display = 'none';
-   // save origin value of status
-   sessionStorage.setItem('originalStatus',document.getElementById('incident_status').innerText);
+    cancelEditStatusBtn.style.display = 'block';
+    UpdateStatusBtn.style.display = 'block';
+    editStatusBtn.style.display = 'none';
+    // save origin value of status
+    sessionStorage.setItem('originalStatus', document.getElementById('incident_status').innerText);
 
-   let originalStatus = sessionStorage.getItem('originalStatus');
+    let originalStatus = sessionStorage.getItem('originalStatus');
 
     statusField.innerHTML = `
         <select id="incident_status" required   class="showAdmin">
@@ -201,7 +202,7 @@ editStatusBtn.onclick = function(){
 };
 
 
-function cancelEditStatus (){
+function cancelEditStatus() {
 
     cancelEditStatusBtn.style.display = 'none';
     UpdateStatusBtn.style.display = 'none';
@@ -216,9 +217,10 @@ function cancelEditStatus (){
     sessionStorage.removeItem('originalStatus');
 
 }
-cancelEditStatusBtn.onclick =cancelEditStatus;
 
-UpdateStatusBtn.onclick = function(){
+cancelEditStatusBtn.onclick = cancelEditStatus;
+
+UpdateStatusBtn.onclick = function () {
 
     cancelEditStatusBtn.style.display = 'none';
     UpdateStatusBtn.style.display = 'none';
@@ -241,7 +243,6 @@ function updateStatus() {
     incidentId = params.get('id');
     let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/status");
     let newStatus = document.getElementById('incident_status').value;
-
 
 
     fetch(url, {
@@ -299,9 +300,7 @@ function updateStatus() {
 
                 }, 3000);
 
-            }
-            else {
-
+            } else {
 
                 // if session is expired
                 alert(JSON.stringify(data.error));
@@ -312,3 +311,111 @@ function updateStatus() {
 }
 
 UpdateStatusBtn.onclick = updateStatus;
+
+let updatesLocationBtn = document.getElementById('updateLocationBtn');
+let cancelEditLocationBtn = document.getElementById('cancelEditLocationBtn');
+let editLocationBtn = document.getElementById('editLocationBtn');
+let locationError = document.getElementById('locationError');
+let locationMessage = document.getElementById('locationMessage');
+
+function editLocation() {
+
+    sessionStorage.setItem('showPopUp', 'enabled');
+    cancelEditLocationBtn.style.display = 'block';
+    updatesLocationBtn.style.display = 'block';
+    editLocationBtn.style.display = 'none';
+
+}
+
+editLocationBtn.onclick = editLocation;
+
+
+function cancelEditLocation() {
+
+    cancelEditLocationBtn.style.display = 'none';
+    updatesLocationBtn.style.display = 'none';
+    editLocationBtn.style.display = 'block';
+    sessionStorage.removeItem('showPopUp');
+}
+
+cancelEditLocationBtn.onclick = cancelEditLocation;
+
+
+function updateLocation() {
+    if (!newlocationCoordinates) {
+        locationError.style.display = 'block';
+        locationError.innerHTML = 'Please Select the new location from the map';
+
+        window.setTimeout(function () {
+            locationError.style.display = 'none';
+
+
+        }, 3000);
+    } else {
+
+        incidentType = params.get('type');
+        incidentId = params.get('id');
+        let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/location");
+
+
+        fetch(url, {
+            method: "PATCH",
+            headers: {
+                "content-type": "application/json",
+                "Authorization": authorizationHeader,
+            },
+            body: JSON.stringify({"location": newlocationCoordinates})
+
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === 200) {
+                    updatesLocationBtn.style.display = 'none';
+                    cancelEditLocationBtn.style.display = 'none';
+                    editLocationBtn.style.display = 'none';
+
+                    // Display the new value of incident record status
+                    locationMessage.style.display = 'block';
+                    locationMessage.innerHTML = data["data"][0].success;
+
+
+                    window.setTimeout(function () {
+
+                        locationMessage.style.display = 'none';
+                        editLocationBtn.style.display = 'block';
+                        cancelEditLocationBtn.style.display = 'none';
+
+                    }, 3000);
+                    //Remove show pop up  on click option from memory
+                    sessionStorage.removeItem('showPopUp');
+
+
+                } else if (data.status === 400) {
+
+                    locationError.innerHTML = data["data"][0].error;
+
+
+                    window.setTimeout(function () {
+
+                        locationError.style.display = 'none';
+                        cancelEditLocation();
+
+                    }, 3000);
+                } else if (data.status === 401) {
+
+                    // if session is expired
+                    alert(data.error);
+                    window.setTimeout(function () {
+                        localStorage.removeItem('iReporterToken');
+
+                    }, 3000);
+
+
+                }
+            })
+            .catch((error) => console.log(error.json()));
+
+    }
+}
+
+updatesLocationBtn.onclick = updateLocation;
