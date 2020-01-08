@@ -2,7 +2,8 @@ let newlocationCoordinates;
 sessionStorage.removeItem('showPopUp');
 
 function displayMap(geoCoordinates) {
-    L.mapbox.accessToken = 'pk.eyJ1Ijoia2Fsc21pYyIsImEiOiJjanJ3dnI2ZzkwZmZtNDRuMWN2Ymxkb3gyIn0.GAIeAW40W9zFy0YKCCb2Yw';
+    L.mapbox.accessToken = 'pk.eyJ1Ijoia2Fsc21pYyIsImEiOiJjanJ4N3VobmgwaXF0NDluaDZxeDZ0eGx6In0.RLQH5uKvNHuKhYZXURv58A';
+    // L.mapbox.accessToken = 'pk.eyJ1Ijoia2Fsc21pYyIsImEiOiJjanJ3dnI2ZzkwZmZtNDRuMWN2Ymxkb3gyIn0.GAIeAW40W9zFy0YKCCb2Yw';
     let map = L.mapbox.map('googleMap', 'mapbox.streets').setView(geoCoordinates, 17)
         .addControl(L.mapbox.geocoderControl('mapbox.places', {
             keepOpen: false,

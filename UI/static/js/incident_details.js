@@ -5,6 +5,16 @@ if (urlParameter === "red-flags" || urlParameter === "interventions") {
     getIncident(urlParameter, params.get('id'));
 }
 
+let UpdateStatusBtn = document.getElementById('updateStatusBtn');
+let cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
+let editStatusBtn = document.getElementById('editStatusBtn');
+let statusField = document.getElementById('statusField');
+
+let updatesLocationBtn = document.getElementById('updateLocationBtn');
+let cancelEditLocationBtn = document.getElementById('cancelEditLocationBtn');
+let editLocationBtn = document.getElementById('editLocationBtn');
+let locationError = document.getElementById('locationError');
+let locationMessage = document.getElementById('locationMessage');
 
 function getIncident(incidentType, incidentId) {
 
@@ -29,6 +39,7 @@ function getIncident(incidentType, incidentId) {
             } else if (data.status === 200) {
                 //on success
                 let incident = data["data"][0];
+                document.getElementById('incidents_output').style.display = 'block';
                 document.getElementById("created_on").innerHTML = `
                     <b><i>Date:</i> </b> ${incident.created_on}`;
                 document.getElementById("incident_title").innerHTML = incident.title;
@@ -43,13 +54,25 @@ function getIncident(incidentType, incidentId) {
                 //Hide the edit comment button if status is not draft
                 if (incident.status !== "Draft") {
                     document.getElementById('editCommentBtn').style.display = 'none';
-                    document.getElementById('editLocationBtn').style.display = 'none';
-                    document.getElementById('editStatusBtn').style.display = 'none';
+                    editLocationBtn.style.display = 'none';
+                    document.getElementById('delete_incident').style.display = 'none';
+                    document.getElementById('add_image').style.display = 'none';
                 }
+
+                document.getElementById('delete_incident').innerHTML = `
+                    <button onclick="deleteIncident('${incident.id}')">
+                            <i class="fas fa-trash-alt text-white border-radius-pct-50 bg-red">
+                        </i></button>
+                `;
                 let locationCoords = incident.location.replace('(', '').replace(')', '').split(",");
                 let latitude = locationCoords[0];
                 let longitude = locationCoords[1];
                 displayMap([latitude, longitude]);
+
+                let imagesList = incident.images;
+                for (let i in imagesList) {
+                    retrieveImage(imagesList[i]);
+                }
 
             }
             if (data.status === 400 || data.status === 404) {
@@ -63,6 +86,8 @@ function getIncident(incidentType, incidentId) {
                           
                     </section>
                 `;
+                document.getElementById("incident_status").style.display = 'block';
+
                 document.getElementById('incidents_output').innerHTML = output;
 
 
@@ -174,11 +199,6 @@ function displayUpdateFields(incidentFieldId, updateButtonId, cancelButtonId, ed
 
 
 document.getElementById('updateCommentBtn').onclick = updateComment;
-
-let UpdateStatusBtn = document.getElementById('updateStatusBtn');
-let cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
-let editStatusBtn = document.getElementById('editStatusBtn');
-let statusField = document.getElementById('statusField');
 
 editStatusBtn.onclick = function () {
 
@@ -312,11 +332,6 @@ function updateStatus() {
 
 UpdateStatusBtn.onclick = updateStatus;
 
-let updatesLocationBtn = document.getElementById('updateLocationBtn');
-let cancelEditLocationBtn = document.getElementById('cancelEditLocationBtn');
-let editLocationBtn = document.getElementById('editLocationBtn');
-let locationError = document.getElementById('locationError');
-let locationMessage = document.getElementById('locationMessage');
 
 function editLocation() {
 
@@ -419,3 +434,37 @@ function updateLocation() {
 }
 
 updatesLocationBtn.onclick = updateLocation;
+
+
+function deleteIncident(incidentId) {
+    incidentType = params.get('type');
+
+    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId);
+
+
+    fetch(url, {
+        method: "DELETE",
+        headers: {
+            "content-type": "application/json",
+            "Authorization": authorizationHeader,
+        }
+
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status == 200) {
+                document.getElementById('incident_type').innerHTML = data["data"][0].success;
+
+                alert(data["data"][0].success);
+                window.location.replace("../user/incidents.html?type=".concat(incidentType));
+            } else if (data.status == 400 || data.status == 404) {
+                alert(data.error)
+            } else if (data.status == 401) {
+                alert(data.error)
+            } else if (data.status == 403) {
+                alert(data.error)
+            }
+
+        });
+
+}
