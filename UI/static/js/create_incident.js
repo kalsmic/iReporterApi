@@ -11,14 +11,14 @@ function displayError(dataArray) {
 }
 
 
-let incidentType = document.getElementById("incident_type");
-let incidentTitle = document.getElementById("incident_title");
-let incidentComment = document.getElementById("comment");
-let incidentlocation = document.getElementById("set_location");
-let locationError = document.getElementById("location-error");
+const incidentType = document.getElementById("incident_type");
+const incidentTitle = document.getElementById("incident_title");
+const incidentComment = document.getElementById("comment");
+const incidentLocation = document.getElementById("set_location");
+const locationError = document.getElementById("location-error");
 
 incidentTitle.onkeyup = function () {
-    let titleError = document.getElementById('title-error');
+    const titleError = document.getElementById('title-error');
 
     if (incidentTitle.value.length < 4) {
         titleError.style.display = "block";
@@ -41,7 +41,7 @@ incidentTitle.onkeyup = function () {
 };
 
 incidentComment.onkeyup = function () {
-    let commentError = document.getElementById('comment-error');
+    const commentError = document.getElementById('comment-error');
     if (incidentComment.value.trim().length < 20) {
         incidentComment.setCustomValidity("Invalid comment.");
         commentError.style.display = "block";
@@ -54,30 +54,31 @@ incidentComment.onkeyup = function () {
 
 incidentComment.onblur = function () {
 
-    if (incidentlocation.value === "") {
+    if (incidentLocation.value === "") {
         locationError.style.display = "block";
         locationError.innerHTML = "Please pick a location from the map";
-        incidentlocation.setCustomValidity("Invalid location Coordinates.");
+        incidentLocation.setCustomValidity("Invalid location Coordinates.");
 
     } else {
         locationError.style.display = "none";
-        incidentlocation.setCustomValidity("");
+        incidentLocation.setCustomValidity("");
 
     }
 
 };
 
+
 document.getElementById('googleMap').onclick = function () {
     locationError.style.display = "none";
-    incidentlocation.setCustomValidity("");
+    incidentLocation.setCustomValidity("");
 
 };
-
-
 function createIncident() {
+    const submitProgress = document.getElementById("submit_progress");
+    submitProgress.style.display = 'block';
 
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/incidents";
-    let newIncident = {
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/incidents";
+    const newIncident = {
         title: incidentTitle.value,
         comment: incidentComment.value,
         location: locationCoordinates,
@@ -97,6 +98,8 @@ function createIncident() {
         .then((data) => {
             if (data.status === 400) {
                 //Bad format data
+                submitProgress.style.display = 'hide';
+
                 displayError(data.error);
 
 
@@ -109,28 +112,16 @@ function createIncident() {
 
             } else if (data.status === 201) {
                 //on success
+                submitProgress.style.display = 'hide';
+
                 let newRecord = data["data"][0][incidentType.value];
                 let successMsg = data["data"][0]["success"];
-                let newRecordDetails = `
-                       <h3 class="text-green">Successfully ${successMsg} !</h3>
+                document.getElementById('success_msg').style.display = "block";
+                document.getElementById('success_msg').innerHTML = `Successfully ${successMsg} !`;
+                window.setTimeout(function () {
+                    window.location.replace(`./details.html?type=${newRecord.type}s&id=${newRecord.id}`);
+                }, 1000);
 
-                    <hr>
-                    <section class="flex-col-sp-btn border-radius-30p border-round-lg">
-
-                        <h4>${newRecord.title}</h4>
-                        <div><b>Description : </b>
-                           ${newRecord.comment}
-                        </div>
-                     
-                        <div class="flex-row-sp-btn">
-                            <p class="text-blue"><b><i>Created On:</i> </b> ${newRecord.created_on}</p>
-                            status: <span class="text-blue">${newRecord.status}</span>
-                        </div>
-                    </section>
-
-                `;
-
-                document.getElementById('create_record').innerHTML = newRecordDetails;
 
             }
 

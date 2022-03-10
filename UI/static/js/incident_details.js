@@ -1,15 +1,24 @@
-let params = new URL(location.href).searchParams;
-let urlParameter = params.get('type');
+const params = new URL(location.href).searchParams;
+const urlParameter = params.get('type');
 
 if (urlParameter === "red-flags" || urlParameter === "interventions") {
     getIncident(urlParameter, params.get('id'));
 }
 
+const UpdateStatusBtn = document.getElementById('updateStatusBtn');
+const cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
+const editStatusBtn = document.getElementById('editStatusBtn');
+const statusField = document.getElementById('statusField');
+
+const updatesLocationBtn = document.getElementById('updateLocationBtn');
+const cancelEditLocationBtn = document.getElementById('cancelEditLocationBtn');
+const editLocationBtn = document.getElementById('editLocationBtn');
+const locationError = document.getElementById('locationError');
+const locationMessage = document.getElementById('locationMessage');
 
 function getIncident(incidentType, incidentId) {
 
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId);
-    console.log(url);
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId);
 
     fetch(url, {
         method: "GET",
@@ -29,8 +38,9 @@ function getIncident(incidentType, incidentId) {
             } else if (data.status === 200) {
                 //on success
                 let incident = data["data"][0];
+                document.getElementById('incidents_output').style.display = 'block';
                 document.getElementById("created_on").innerHTML = `
-                    <b><i>Date:</i> </b> ${incident.created_on}`;
+                    <b><i>Date:</i> </b> ${incident.created_on.substring(0, 17)}`;
                 document.getElementById("incident_title").innerHTML = incident.title;
                 document.getElementById("incident_type").innerHTML = "View " + incident.type + " Details page";
                 document.getElementById("incident_comment").innerHTML = incident.comment;
@@ -43,13 +53,38 @@ function getIncident(incidentType, incidentId) {
                 //Hide the edit comment button if status is not draft
                 if (incident.status !== "Draft") {
                     document.getElementById('editCommentBtn').style.display = 'none';
-                    document.getElementById('editLocationBtn').style.display = 'none';
-                    document.getElementById('editStatusBtn').style.display = 'none';
+                    editLocationBtn.style.display = 'none';
+                    document.getElementById('delete_incident').style.display = 'none';
+                    document.getElementById('add_image').style.display = 'none';
+                    document.getElementById('add_video').style.display = 'none';
                 }
+
+                document.getElementById('delete_incident').innerHTML = `
+                    <button onclick="deleteIncident('${incident.id}')">
+                            <i class="fas fa-trash-alt text-white border-radius-pct-50 bg-red">
+                        </i></button>
+                `;
                 let locationCoords = incident.location.replace('(', '').replace(')', '').split(",");
                 let latitude = locationCoords[0];
                 let longitude = locationCoords[1];
                 displayMap([latitude, longitude]);
+
+                let imagesList = incident.images;
+                for (let i in imagesList) {
+                    if (imagesList.hasOwnProperty(i)) {
+                        retrieveImage(imagesList[i]);
+
+                    }
+
+                }
+
+
+                let videosList = incident.videos;
+                for (let i in videosList) {
+                    if (videosList.hasOwnProperty(i)) {
+                        retrieveVideo(videosList[i]);
+                    }
+                }
 
             }
             if (data.status === 400 || data.status === 404) {
@@ -63,6 +98,8 @@ function getIncident(incidentType, incidentId) {
                           
                     </section>
                 `;
+                document.getElementById("incident_status").style.display = 'block';
+
                 document.getElementById('incidents_output').innerHTML = output;
 
 
@@ -76,11 +113,11 @@ function getIncident(incidentType, incidentId) {
 
 function updateComment() {
 
-    incidentType = params.get('type');
-    incidentId = params.get('id');
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/comment");
+    const incidentType = params.get('type');
+    const incidentId = params.get('id');
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/comment");
 
-    newComment = document.getElementById('incident_comment').innerHTML;
+    const newComment = document.getElementById('incident_comment').innerHTML;
     fetch(url, {
         method: "PATCH",
         headers: {
@@ -136,10 +173,10 @@ displayUpdateFields("incident_comment", "updateCommentBtn", "cancelEditCommentBt
 
 
 function displayUpdateFields(incidentFieldId, updateButtonId, cancelButtonId, editButtonId) {
-    let incidentField = document.getElementById(incidentFieldId);
-    let updateField = document.getElementById(updateButtonId);
-    let cancelEditField = document.getElementById(cancelButtonId);
-    let editField = document.getElementById(editButtonId);
+    const incidentField = document.getElementById(incidentFieldId);
+    const updateField = document.getElementById(updateButtonId);
+    const cancelEditField = document.getElementById(cancelButtonId);
+    const editField = document.getElementById(editButtonId);
 
     editField.onclick = function () {
         sessionStorage.setItem('originalContent', incidentField.innerHTML);
@@ -175,11 +212,6 @@ function displayUpdateFields(incidentFieldId, updateButtonId, cancelButtonId, ed
 
 document.getElementById('updateCommentBtn').onclick = updateComment;
 
-let UpdateStatusBtn = document.getElementById('updateStatusBtn');
-let cancelEditStatusBtn = document.getElementById('cancelEditStatusBtn');
-let editStatusBtn = document.getElementById('editStatusBtn');
-let statusField = document.getElementById('statusField');
-
 editStatusBtn.onclick = function () {
 
     cancelEditStatusBtn.style.display = 'block';
@@ -188,7 +220,7 @@ editStatusBtn.onclick = function () {
     // save origin value of status
     sessionStorage.setItem('originalStatus', document.getElementById('incident_status').innerText);
 
-    let originalStatus = sessionStorage.getItem('originalStatus');
+    const originalStatus = sessionStorage.getItem('originalStatus');
 
     statusField.innerHTML = `
         <select id="incident_status" required   class="showAdmin">
@@ -239,10 +271,10 @@ UpdateStatusBtn.onclick = function () {
 
 function updateStatus() {
 
-    incidentType = params.get('type');
-    incidentId = params.get('id');
-    let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/status");
-    let newStatus = document.getElementById('incident_status').value;
+    const incidentType = params.get('type');
+    const incidentId = params.get('id');
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/status");
+    const newStatus = document.getElementById('incident_status').value;
 
 
     fetch(url, {
@@ -312,11 +344,6 @@ function updateStatus() {
 
 UpdateStatusBtn.onclick = updateStatus;
 
-let updatesLocationBtn = document.getElementById('updateLocationBtn');
-let cancelEditLocationBtn = document.getElementById('cancelEditLocationBtn');
-let editLocationBtn = document.getElementById('editLocationBtn');
-let locationError = document.getElementById('locationError');
-let locationMessage = document.getElementById('locationMessage');
 
 function editLocation() {
 
@@ -353,9 +380,9 @@ function updateLocation() {
         }, 3000);
     } else {
 
-        incidentType = params.get('type');
-        incidentId = params.get('id');
-        let url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/location");
+        const incidentType = params.get('type');
+        const incidentId = params.get('id');
+        const url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId, "/location");
 
 
         fetch(url, {
@@ -419,3 +446,37 @@ function updateLocation() {
 }
 
 updatesLocationBtn.onclick = updateLocation;
+
+
+function deleteIncident(incidentId) {
+    const incidentType = params.get('type');
+
+    const url = "https://ireporterapiv3.herokuapp.com/api/v2/".concat(incidentType, "/", incidentId);
+
+
+    fetch(url, {
+        method: "DELETE",
+        headers: {
+            "content-type": "application/json",
+            "Authorization": authorizationHeader,
+        }
+
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 200) {
+                document.getElementById('incident_type').innerHTML = data["data"][0].success;
+
+                alert(data["data"][0].success);
+                window.location.replace("../incidents/records.html?type=".concat(incidentType));
+            } else if (data.status === 400 || data.status === 404) {
+                alert(data.error)
+            } else if (data.status === 401) {
+                alert(data.error)
+            } else if (data.status === 403) {
+                alert(data.error)
+            }
+
+        });
+
+}

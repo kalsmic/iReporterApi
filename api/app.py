@@ -11,6 +11,7 @@ from api.views.edit_incident import edit_bp, admin_bp
 from api.views.get_incidents import get_inc_bp
 from api.helpers.responses import auth_response
 
+
 from instance.config import Config
 
 
@@ -18,6 +19,7 @@ def create_app(config=None):
     """Set up Flask application in function"""
     app = Flask(__name__)
     CORS(app)
+
 
     @app.route("/")
     @app.route("/api/v3")

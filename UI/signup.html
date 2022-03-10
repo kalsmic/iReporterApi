@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iReporter | Register</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <script src="../static/js/session.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+    <script src="static/js/session.js"></script>
 
 </head>
 <body>
@@ -31,6 +31,8 @@
                 <fieldset>
 
                     <legend>Register Here!</legend>
+                    <img src="static/img/loading.svg" id="submit_progress" class="hide">
+
                     <span class="success" id="message"></span>
 
 
@@ -62,12 +64,12 @@
                            class="input-control" required>
                     <span class="error" id="confirm_pass-error"></span>
 
-                    <button type="submit" class="btn bg-lblue text-white btn-block">Register Account
+                    <button type="submit" class="btn bg-blue text-white btn-block">Register Account
                     </button>
 
                     <hr>
                     <p class="text-blue">Already Registered!</p>
-                    <a href='../index.html' class="btn btn-small text-white bg-green">Click here to sign in</a>
+                    <a href='index.html' class="btn btn-small text-white bg-green">Click here to sign in</a>
                 </fieldset>
             </form>
         </div>
@@ -89,6 +91,6 @@
     </footer>
 </div>
 </body>
-<script src="../static/js/signup.js"></script>
+<script src="static/js/signup.js"></script>
 </html>
 
